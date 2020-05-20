@@ -10,17 +10,8 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AppTest {
-
-
-  @AfterEach
-  void tearDown() {
-
-  }
-
   @Test
   void echoServerReturnsInput() {
-    System.out.println("Start first");
-
     var input = new BufferedReader(new StringReader("echo\n"));
     var output = new PrintWriter(new StringWriter(), true);
 
@@ -33,16 +24,10 @@ class AppTest {
     assertTrue(echoServer.closeCalled);
 
     assertEquals("echo", echoServer.sentData.get(0));
-
-    echoServer.close();
-
-    System.out.println("End first");
   }
 
   @Test
   void echoServerReturnsInputWithMultipleLines() {
-    System.out.println("Start second");
-
     var input = new BufferedReader(new StringReader("echo\nhello"));
     var output = new PrintWriter(new StringWriter(), true);
 

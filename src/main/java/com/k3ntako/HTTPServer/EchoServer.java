@@ -20,8 +20,6 @@ public class EchoServer implements EchoServerInterface {
     serverSocketWrapper = serverSocket;
     clientSocket = serverSocketWrapper.accept();
 
-    System.out.println("Connected");
-
     input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
     output = new PrintWriter(clientSocket.getOutputStream(), true);
   }

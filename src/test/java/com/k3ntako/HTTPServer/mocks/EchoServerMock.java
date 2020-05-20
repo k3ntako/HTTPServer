@@ -28,6 +28,14 @@ public class EchoServerMock implements EchoServerInterface {
 
   public void close(){
     closeCalled = true;
+
+    try {
+      input.close();
+      output.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+      throw new Error("Mock class threw error while closing");
+    }
   }
 
   public String readLine() throws IOException {
