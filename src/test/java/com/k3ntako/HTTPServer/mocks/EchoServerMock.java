@@ -6,17 +6,18 @@ import com.k3ntako.HTTPServer.ServerSocketWrapperInterface;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 public class EchoServerMock implements EchoServerInterface {
   public boolean createAndListenCalled;
   public boolean closeCalled;
-  public String sentData;
+  public ArrayList<String> sentData;
   private BufferedReader input;
   private PrintWriter output;
   public EchoServerMock(BufferedReader input, PrintWriter output) {
     createAndListenCalled = false;
     closeCalled = false;
-    sentData = null;
+    sentData = new ArrayList<>();
     this.input = input;
     this.output = output;
   }
@@ -34,6 +35,6 @@ public class EchoServerMock implements EchoServerInterface {
   }
 
   public void sendData(String data) {
-    sentData = data;
+    sentData.add(data);
   }
 }
