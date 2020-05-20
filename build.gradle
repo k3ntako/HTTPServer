@@ -4,7 +4,7 @@ plugins {
 }
 
 application {
-    mainClassName = 'com.k3ntako.HTTPServer'
+    mainClassName = 'com.k3ntako.HTTPServer.Main'
 }
 
 group 'com.k3ntako'

@@ -13,4 +13,8 @@ public class ServerSocketWrapper implements ServerSocketWrapperInterface {
   public Socket accept() throws IOException {
     return serverSocket.accept();
   }
+
+  public void close() throws IOException {
+    serverSocket.close();
+  }
 }
