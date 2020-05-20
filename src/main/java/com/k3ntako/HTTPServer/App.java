@@ -7,6 +7,7 @@ public class App {
   private EchoServerInterface echoServer;
 
   public App(EchoServerInterface echoServerInput) {
+    port = 3000;
     echoServer = echoServerInput;
   }
 

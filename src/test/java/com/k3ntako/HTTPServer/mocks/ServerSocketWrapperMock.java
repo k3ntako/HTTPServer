@@ -25,4 +25,7 @@ public class ServerSocketWrapperMock implements ServerSocketWrapperInterface {
     closeCalledNum = closeCalledNum + 1;
   }
 
+  public int port(){
+    return port;
+  }
 }

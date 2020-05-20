@@ -17,4 +17,8 @@ public class ServerSocketWrapper implements ServerSocketWrapperInterface {
   public void close() throws IOException {
     serverSocket.close();
   }
+
+  public int port() {
+    return serverSocket.getLocalPort();
+  }
 }

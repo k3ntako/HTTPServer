@@ -11,13 +11,10 @@ public class EchoServer implements EchoServerInterface {
   private PrintWriter output;
   private Socket clientSocket;
   private ServerSocketWrapperInterface serverSocketWrapper;
-//  public EchoSocket(Socket clientSocket, BufferedReader bufferedReader, PrintWriter printWriter) {
-//    input = bufferedReader;
-//    output = printWriter;
-//  }
 
-  public void createAndListen(ServerSocketWrapperInterface serverSocket) throws IOException {
-    serverSocketWrapper = serverSocket;
+  public void createAndListen(ServerSocketWrapperInterface serverSocketWrapper) throws IOException {
+    this.serverSocketWrapper = serverSocketWrapper;
+
     clientSocket = serverSocketWrapper.accept();
 
     input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
