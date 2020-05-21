@@ -1,7 +1,5 @@
 package com.k3ntako.HTTPServer;
 
-import java.io.IOException;
-
 public class App {
   private int port;
   private EchoServerInterface echoServer;

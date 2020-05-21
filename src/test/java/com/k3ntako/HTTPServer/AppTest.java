@@ -1,7 +1,6 @@
 package com.k3ntako.HTTPServer;
 
 import com.k3ntako.HTTPServer.mocks.EchoServerMock;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
@@ -28,7 +27,7 @@ class AppTest {
 
   @Test
   void echoServerReturnsInputWithMultipleLines() {
-    var input = new BufferedReader(new StringReader("echo\nhello"));
+    var input = new BufferedReader(new StringReader("echo\nhello\n"));
     var output = new PrintWriter(new StringWriter(), true);
 
     var echoServer = new EchoServerMock(input, output);
