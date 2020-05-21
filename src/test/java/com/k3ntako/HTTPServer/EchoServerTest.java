@@ -1,6 +1,6 @@
 package com.k3ntako.HTTPServer;
 
-import com.k3ntako.HTTPServer.mocks.EchoServerMock;
+import com.k3ntako.HTTPServer.mocks.IOMock;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
@@ -8,21 +8,22 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class AppTest {
+class EchoServerTest {
   @Test
   void echoServerReturnsInput() {
     var input = new BufferedReader(new StringReader("echo\n"));
     var output = new PrintWriter(new StringWriter(), true);
 
-    var echoServer = new EchoServerMock(input, output);
-    var app = new App(echoServer, 3001);
+    var ioMock = new IOMock(input, output);
+    var echoServer = new EchoServer(ioMock);
 
-    app.start();
+    echoServer.run();
 
-    assertTrue(echoServer.createAndListenCalled);
-    assertTrue(echoServer.closeCalled);
+    assertTrue(ioMock.acceptCalled);
+    assertTrue(ioMock.startConnectionCalled);
+    assertTrue(ioMock.closeCalled);
 
-    assertEquals("echo", echoServer.sentData.get(0));
+    assertEquals("echo", ioMock.sentData.get(0));
   }
 
   @Test
@@ -30,18 +31,20 @@ class AppTest {
     var input = new BufferedReader(new StringReader("echo\nhello\n"));
     var output = new PrintWriter(new StringWriter(), true);
 
-    var echoServer = new EchoServerMock(input, output);
-    var app = new App(echoServer, 3002);
+    var ioMock = new IOMock(input, output);
+    var echoServer = new EchoServer(ioMock);
 
-    app.start();
+    echoServer.run();
 
-    assertTrue(echoServer.createAndListenCalled);
-    assertTrue(echoServer.closeCalled);
+
+    assertTrue(ioMock.acceptCalled);
+    assertTrue(ioMock.startConnectionCalled);
+    assertTrue(ioMock.closeCalled);
 
     var expected = new ArrayList<String>();
     expected.add("echo");
     expected.add("hello");
 
-    assertEquals(expected, echoServer.sentData);
+    assertEquals(expected, ioMock.sentData);
   }
 }

@@ -1,9 +1,12 @@
 package com.k3ntako.HTTPServer;
 
+import com.k3ntako.HTTPServer.wrappers.ServerSocketWrapper;
+
 public class Main {
   public static void main(String[] args) {
-    var echoServer = new EchoServer();
-    var app = new App(echoServer);
-    app.start();
+    var serverSocket = new ServerSocketWrapper();
+    var io = new IO(serverSocket);
+    var app = new EchoServer(io);
+    app.run();
   }
 }
