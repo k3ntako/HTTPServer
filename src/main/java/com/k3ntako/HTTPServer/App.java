@@ -17,17 +17,14 @@ public class App {
   }
 
   public void start() {
-    try {
-      echoServer.createAndListen(new ServerSocketWrapper(port));
+    var serverSocketWrapper = new ServerSocketWrapper(port);
+    echoServer.createAndListen(serverSocketWrapper);
 
-      String clientInput;
-      while ((clientInput = echoServer.readLine()) != null) {
-        echoServer.sendData(clientInput);
-      }
-
-      echoServer.close();
-    } catch (IOException e) {
-      e.printStackTrace();
+    String clientInput;
+    while ((clientInput = echoServer.readLine()) != null) {
+      echoServer.sendData(clientInput);
     }
+
+    echoServer.close();
   }
 }

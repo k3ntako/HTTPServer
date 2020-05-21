@@ -6,16 +6,29 @@ import java.net.Socket;
 
 public class ServerSocketWrapper implements ServerSocketWrapperInterface {
   private ServerSocket serverSocket;
-  public ServerSocketWrapper(int port) throws IOException {
-    serverSocket = new ServerSocket(port);
+  public ServerSocketWrapper(int port) {
+    try {
+      serverSocket = new ServerSocket(port);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
-  public Socket accept() throws IOException {
-    return serverSocket.accept();
+  public Socket accept() {
+    try {
+      return serverSocket.accept();
+    } catch (IOException e) {
+      e.printStackTrace();
+      return null;
+    }
   }
 
-  public void close() throws IOException {
-    serverSocket.close();
+  public void close() {
+    try {
+      serverSocket.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   public int port() {

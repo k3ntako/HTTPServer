@@ -38,8 +38,13 @@ public class EchoServerMock implements EchoServerInterface {
     }
   }
 
-  public String readLine() throws IOException {
-    return input.readLine();
+  public String readLine() {
+    try {
+      return input.readLine();
+    } catch (IOException e) {
+      e.printStackTrace();
+      return null;
+    }
   }
 
   public void sendData(String data) {
