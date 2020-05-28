@@ -7,17 +7,17 @@ import java.io.*;
 import java.net.Socket;
 import java.util.HashMap;
 
-public class IOGenerator {
+public class IOGenerator implements IIOGenerator {
 
   public HashMap<String, Object> generateIO(Socket clientSocket) {
     try {
       var io = new HashMap<String, Object>();
 
       var inputStreamReader = new InputStreamReader(clientSocket.getInputStream());
-      var bufferedReader = new BufferedReaderWrapper(inputStreamReader);
+      var bufferedReader = new BufferedReader(inputStreamReader);
 
       var outputStream = clientSocket.getOutputStream();
-      var printWriter = new PrintWriterWrapper(outputStream, true);
+      var printWriter = new PrintWriter(outputStream, true);
 
       io.put("bufferedReader", bufferedReader);
       io.put("printWriter", printWriter);

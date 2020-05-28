@@ -1,23 +1,37 @@
 package com.k3ntako.HTTPServer;
 
-import java.net.Socket;
+import com.k3ntako.HTTPServer.wrappers.ServerSocketWrapperInterface;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class EchoServer {
-  private IOInterface io;
+  private IIOGenerator ioGenerator;
 
-  public EchoServer(IOInterface io) {
-    this.io = io;
+  public EchoServer(IIOGenerator ioGenerator) {
+    this.ioGenerator = ioGenerator;
   }
 
-  public void run() {
-    var clientSocket = io.accept();
-    io.startConnection(clientSocket);
+  public void run(ServerSocketWrapperInterface serverSocket) {
+    try {
+      var clientSocket = serverSocket.accept();
 
-    String clientInput;
-    while ((clientInput = io.readLine()) != null) {
-      io.sendData(clientInput);
+      var io = ioGenerator.generateIO(clientSocket);
+      BufferedReader input = (BufferedReader) io.get("bufferedReader");
+      PrintWriter output = (PrintWriter) io.get("printWriter");
+
+      String clientInput;
+      while ((clientInput = input.readLine()) != null) {
+        output.println(clientInput);
+      }
+
+      input.close();
+      output.close();
+      clientSocket.close();
+      serverSocket.close();
+    } catch (IOException e) {
+      e.printStackTrace();
     }
-
-    io.close();
   }
 }

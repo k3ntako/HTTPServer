@@ -4,9 +4,9 @@ import com.k3ntako.HTTPServer.wrappers.ServerSocketWrapper;
 
 public class Main {
   public static void main(String[] args) {
-    var serverSocket = new ServerSocketWrapper();
-    var io = new IO(serverSocket);
-    var app = new EchoServer(io);
-    app.run();
+    var ioGenerator = new IOGenerator();
+    var app = new EchoServer(ioGenerator);
+    app.run(new ServerSocketWrapper(3000));
+
   }
 }
