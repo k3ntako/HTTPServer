@@ -1,25 +1,32 @@
 package com.k3ntako.HTTPServer;
 
+import com.k3ntako.HTTPServer.wrappers.BufferedReaderWrapper;
+import com.k3ntako.HTTPServer.wrappers.PrintWriterWrapper;
+
 import java.io.*;
+import java.net.Socket;
 import java.util.HashMap;
 
 public class IOGenerator {
 
+  public HashMap<String, Object> generateIO(Socket clientSocket) {
+    try {
+      var io = new HashMap<String, Object>();
 
-  public HashMap<String, Object> generateIO(Reader reader, OutputStream writer) {
-    return generateIOReturnValue(reader, new PrintWriter(writer));
-  }
+      var inputStreamReader = new InputStreamReader(clientSocket.getInputStream());
+      var bufferedReader = new BufferedReaderWrapper(inputStreamReader);
 
-  public HashMap<String, Object> generateIO(Reader reader, Writer writer) {
-    return generateIOReturnValue(reader, new PrintWriter(writer, true));
-  }
+      var outputStream = clientSocket.getOutputStream();
+      var printWriter = new PrintWriterWrapper(outputStream, true);
 
-  private HashMap<String, Object> generateIOReturnValue(Reader reader, PrintWriter printWriter) {
-    var io = new HashMap<String, Object>();
-    io.put("printWriter", new PrintWriter(printWriter, true));
-    io.put("bufferedReader", new BufferedReader(reader));
+      io.put("bufferedReader", bufferedReader);
+      io.put("printWriter", printWriter);
 
-    return io;
+      return io;
+    } catch (IOException e) {
+      e.printStackTrace();
+      return null;
+    }
   }
 
 }
