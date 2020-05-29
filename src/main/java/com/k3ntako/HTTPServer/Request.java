@@ -18,7 +18,7 @@ public class Request implements RequestInterface {
   public void parseRequest(BufferedReader bufferedReader) {
     try {
       String line;
-      while ((line = bufferedReader.readLine()).length() > 0) {
+      while ((line = this.readLine(bufferedReader)) != null) {
         if (line.contains(":")) {
           this.parseHeaderAttributes(line);
         } else if (line.length() > 0) {
@@ -28,6 +28,16 @@ public class Request implements RequestInterface {
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  private String readLine(BufferedReader bufferedReader) throws IOException {
+    var line = bufferedReader.readLine();
+
+    if(line == null || line.length() == 0) {
+      return null;
+    }
+
+    return line;
   }
 
   private void parseRequestLine(String line) {
