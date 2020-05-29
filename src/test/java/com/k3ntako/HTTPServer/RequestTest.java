@@ -15,7 +15,7 @@ class RequestTest {
             "Host: localhost:3000\n" +
             "User-Agent: curl/7.64.1\n" +
             "Accept: */*\n" +
-            "\r\n";
+            "\n\n";
 
     var bufferedReader = new BufferedReader(new StringReader(headerStr));
 

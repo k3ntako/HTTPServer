@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
 
-public class Request {
+public class Request implements RequestInterface {
   private String method;
   private String route;
   private String protocol;

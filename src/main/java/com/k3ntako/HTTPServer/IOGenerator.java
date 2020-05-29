@@ -1,5 +1,7 @@
 package com.k3ntako.HTTPServer;
 
+import com.k3ntako.HTTPServer.wrappers.PrintWriterWrapper;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.HashMap;
@@ -14,7 +16,7 @@ public class IOGenerator implements IOGeneratorInterface {
       var bufferedReader = new BufferedReader(inputStreamReader);
 
       var outputStream = clientSocket.getOutputStream();
-      var printWriter = new PrintWriter(outputStream, true);
+      var printWriter = new PrintWriterWrapper(outputStream, true);
 
       io.put("bufferedReader", bufferedReader);
       io.put("printWriter", printWriter);

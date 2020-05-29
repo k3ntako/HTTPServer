@@ -1,16 +1,16 @@
 package com.k3ntako.HTTPServer;
 
+import com.k3ntako.HTTPServer.wrappers.PrintWriterWrapperInterface;
 import com.k3ntako.HTTPServer.wrappers.ServerSocketWrapperInterface;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 public class EchoServer {
   private IOGeneratorInterface ioGenerator;
-  private Request request;
+  private RequestInterface request;
 
-  public EchoServer(IOGeneratorInterface ioGenerator, Request request) {
+  public EchoServer(IOGeneratorInterface ioGenerator, RequestInterface request) {
     this.ioGenerator = ioGenerator;
     this.request = request;
   }
@@ -20,10 +20,12 @@ public class EchoServer {
 
     var io = ioGenerator.generateIO(clientSocket);
     BufferedReader input = (BufferedReader) io.get("bufferedReader");
-    PrintWriter output = (PrintWriter) io.get("printWriter");
+    PrintWriterWrapperInterface output = (PrintWriterWrapperInterface) io.get("printWriter");
 
     this.parseHeader(input);
     this.parseBody(input);
+
+    this.sendResponse(output);
 
     this.close(input, output);
   }
@@ -43,7 +45,14 @@ public class EchoServer {
     }
   }
 
-  private void close(BufferedReader input, PrintWriter output) {
+  private void sendResponse(PrintWriterWrapperInterface output) {
+    var response = new Response(request);
+    var responseStr = response.createResponse();
+
+    output.sendData(responseStr);
+  }
+
+  private void close(BufferedReader input, PrintWriterWrapperInterface output) {
     try {
       input.close();
       output.close();
