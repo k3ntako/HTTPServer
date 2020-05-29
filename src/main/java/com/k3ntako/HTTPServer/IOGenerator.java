@@ -1,13 +1,10 @@
 package com.k3ntako.HTTPServer;
 
-import com.k3ntako.HTTPServer.wrappers.BufferedReaderWrapper;
-import com.k3ntako.HTTPServer.wrappers.PrintWriterWrapper;
-
 import java.io.*;
 import java.net.Socket;
 import java.util.HashMap;
 
-public class IOGenerator implements IIOGenerator {
+public class IOGenerator implements IOGeneratorInterface {
 
   public HashMap<String, Object> generateIO(Socket clientSocket) {
     try {

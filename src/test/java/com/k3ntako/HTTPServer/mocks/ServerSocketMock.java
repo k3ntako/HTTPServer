@@ -14,10 +14,11 @@ public class ServerSocketMock implements ServerSocketWrapperInterface {
 
   public Socket accept() {
     acceptCalled = true;
-    return null;
+    return new SocketMock();
   }
 
   public void close() {
     closeCalled = true;
   }
 }
+

@@ -1,5 +1,7 @@
 package com.k3ntako.HTTPServer;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.HashMap;
 
 public class Request {
@@ -7,23 +9,58 @@ public class Request {
   private String route;
   private String protocol;
   private HashMap<String, String> headers;
+  private String body;
 
-  public void parseHeader(String header){
-    var headerLines = header.split("\n");
-    var requestLine = headerLines[0].split(" ");
+  public Request() {
+    this.headers = new HashMap<>();
+  }
+
+  public void parseRequest(BufferedReader bufferedReader) {
+    try {
+      String line;
+      while ((line = bufferedReader.readLine()).length() > 0) {
+        if (line.contains(":")) {
+          this.parseHeaderAttributes(line);
+        } else if (line.length() > 0) {
+          this.parseRequestLine(line);
+        }
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  private void parseRequestLine(String line) {
+    var requestLine = line.split(" ");
 
     this.method = requestLine[0];
     this.route = requestLine[1];
     this.protocol = requestLine[2];
+  }
 
-    this.headers = new HashMap<>();
-    for(String line : headerLines) {
-      var lineArr = line.split(": ");
-      if(lineArr.length > 1) {
-        var key = lineArr[0];
-        var value = lineArr[1];
-        this.headers.put(key, value);
+  private void parseHeaderAttributes(String line) {
+    var lineArr = line.split(": ");
+
+    if (lineArr.length > 1) {
+      var key = lineArr[0];
+      var value = lineArr[1];
+      this.headers.put(key, value);
+    }
+  }
+
+  public void parseBody(BufferedReader bufferedReader, int contentLength) {
+    try {
+      var bodyStr = "";
+      char character;
+
+      while (bodyStr.length() < contentLength) {
+        character = (char) (bufferedReader.read());
+        bodyStr = bodyStr.concat(String.valueOf(character));
       }
+
+      this.body = bodyStr;
+    } catch (IOException e) {
+      e.printStackTrace();
     }
   }
 
@@ -41,5 +78,9 @@ public class Request {
 
   public HashMap<String, String> getHeaders() {
     return this.headers;
+  }
+
+  public String getBody() {
+    return this.body;
   }
 }
