@@ -12,7 +12,7 @@ class RequestTest {
   @Test
   void parseRequest() {
     var headerStr = "GET / HTTP/1.1\n" +
-            "Host: localhost:3000\n" +
+            "Host: localhost:5000\n" +
             "User-Agent: curl/7.64.1\n" +
             "Accept: */*\n" +
             "\n\n";
@@ -26,7 +26,7 @@ class RequestTest {
     assertEquals("/", requestParser.getRoute());
     assertEquals("HTTP/1.1", requestParser.getProtocol());
 
-    assertEquals("localhost:3000", requestParser.getHeaders().get("Host"));
+    assertEquals("localhost:5000", requestParser.getHeaders().get("Host"));
     assertEquals("curl/7.64.1", requestParser.getHeaders().get("User-Agent"));
     assertEquals("*/*", requestParser.getHeaders().get("Accept"));
   }

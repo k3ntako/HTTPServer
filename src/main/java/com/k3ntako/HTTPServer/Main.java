@@ -6,7 +6,11 @@ public class Main {
   public static void main(String[] args) {
     var ioGenerator = new IOGenerator();
     var request = new Request();
-    var app = new EchoServer(ioGenerator, request);
-    app.run(new ServerSocketWrapper(3000));
+    var serverSocket = new ServerSocketWrapper(5000);
+    var app = new EchoServer(ioGenerator, request, serverSocket);
+
+    while(true){
+      app.run();
+    }
   }
 }

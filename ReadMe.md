@@ -9,9 +9,9 @@ Currently, it acts as an echo server, but plans are to add further features that
     ```
     $ gradle run
     ```
-4. Send a request to `localhost:3000`
+4. Send a request to `localhost:5000`
     ```
-    $ curl localhost:3000
+    $ curl localhost:5000
     ```
    
 ## Run Tests

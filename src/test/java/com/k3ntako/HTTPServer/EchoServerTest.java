@@ -10,27 +10,29 @@ class EchoServerTest {
   @Test
   void echoServerParsesHeader() {
     var clientInput = "GET / HTTP/1.1\n" +
-            "Host: localhost:3000\n" +
+            "Host: localhost:5000\n" +
             "User-Agent: curl/7.64.1\n" +
             "Accept: */*\n" +
             "\n\n";
 
     var ioGeneratorMock = new IOGeneratorMock(clientInput);
     var request = new Request();
-    var app = new EchoServer(ioGeneratorMock, request);
     var socket = new ServerSocketMock();
-    app.run(socket);
+    var app = new EchoServer(ioGeneratorMock, request, socket);
+    app.run();
 
     assertTrue(socket.acceptCalled);
 
     assertEquals("GET", request.getMethod());
-    assertEquals("localhost:3000", request.getHeaders().get("Host"));
+    assertEquals("localhost:5000", request.getHeaders().get("Host"));
+
+    app.stop();
   }
 
   @Test
   void echoServerParsesBody() {
     var clientInput = "GET / HTTP/1.1\n" +
-            "Host: localhost:3000\n" +
+            "Host: localhost:5000\n" +
             "User-Agent: curl/7.64.1\n" +
             "Accept: */*\n" +
             "Content-Length: 68\n" +
@@ -43,17 +45,19 @@ class EchoServerTest {
 
     var ioGeneratorMock = new IOGeneratorMock(clientInput.concat(bodyStr));
     var request = new Request();
-    var app = new EchoServer(ioGeneratorMock, request);
     var socket = new ServerSocketMock();
-    app.run(socket);
+    var app = new EchoServer(ioGeneratorMock, request, socket);
+    app.run();
 
     assertEquals("\n" + bodyStr, request.getBody());
+
+    app.stop();
   }
 
   @Test
   void echoServerReturnsInput() {
     var clientInput = "GET / HTTP/1.1\n" +
-            "Host: localhost:3000\n" +
+            "Host: localhost:5000\n" +
             "User-Agent: curl/7.64.1\n" +
             "Accept: */*\n" +
             "Content-Length: 68\n" +
@@ -66,21 +70,19 @@ class EchoServerTest {
 
     var ioGeneratorMock = new IOGeneratorMock(clientInput.concat(bodyStr));
     var request = new Request();
-    var app = new EchoServer(ioGeneratorMock, request);
     var socket = new ServerSocketMock();
-    app.run(socket);
+    var app = new EchoServer(ioGeneratorMock, request, socket);
+    app.run();
 
     var printWriter = ioGeneratorMock.getPrintWriter();
 
-    var expected = "HTTP/1.1 200 OK\n" +
-            "Accept: */*\n" +
-            "User-Agent: curl/7.64.1\n" +
-            "Host: localhost:3000\n" +
-            "Content-Length: 68\n" +
-            "Connection: Closed\n\n" +
+    var expected = "HTTP/1.1 200 OK\r\n" +
+            "Content-Length: 68\r\n\r\n" +
             request.getBody() +
             "\n";
 
     assertEquals(expected, printWriter.getSentData());
+
+    app.stop();
   }
 }

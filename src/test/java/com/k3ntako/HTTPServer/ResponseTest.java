@@ -27,10 +27,8 @@ class ResponseTest {
     var response = new Response(request);
     var headerStr = response.createResponse();
 
-    var expected = "HTTP/1.1 200 OK\n" +
-            "Content-Length: 17\n" +
-            "Content-Type: text/html; charset=UTF-8\n" +
-            "Connection: Closed\n\n" +
+    var expected = "HTTP/1.1 200 OK\r\n" +
+            "Content-Length: 17\r\n\r\n" +
             "This\nis\nthe\nbody!";
     assertEquals(expected, headerStr);
   }

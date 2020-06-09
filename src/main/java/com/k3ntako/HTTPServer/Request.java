@@ -3,6 +3,7 @@ package com.k3ntako.HTTPServer;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class Request implements RequestInterface {
   private String method;
@@ -33,7 +34,7 @@ public class Request implements RequestInterface {
   private String readLine(BufferedReader bufferedReader) throws IOException {
     var line = bufferedReader.readLine();
 
-    if(line == null || line.length() == 0) {
+    if (line == null || line.length() == 0) {
       return null;
     }
 
@@ -91,6 +92,10 @@ public class Request implements RequestInterface {
   }
 
   public String getBody() {
-    return this.body;
+    if (Objects.isNull(this.body)) {
+      return "";
+    } else {
+      return this.body;
+    }
   }
 }

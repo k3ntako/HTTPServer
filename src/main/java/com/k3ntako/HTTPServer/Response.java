@@ -1,7 +1,5 @@
 package com.k3ntako.HTTPServer;
 
-import java.util.Iterator;
-import java.util.Map;
 
 public class Response {
   private RequestInterface request;
@@ -11,24 +9,19 @@ public class Response {
   }
 
   public String createResponse() {
-    return this.createHeader() + request.getBody();
+    var body = request.getBody();
+    return this.createHeader(body.length()) + body;
   }
 
-  private String createHeader() {
+  private String createHeader(int contentLength) {
     var header = request.getProtocol();
-    header = header + " 200 OK\n";
+    header =  "HTTP/1.1 200 OK\r\n";
 
-
-    Iterator headerIterator = request.getHeaders().entrySet().iterator();
-    while (headerIterator.hasNext()) {
-      Map.Entry mapElement = (Map.Entry) headerIterator.next();
-      String key = (String) mapElement.getKey();
-      String value = (String) mapElement.getValue();
-
-      header = header + key + ": " + value + "\n";
+    if(contentLength > 0) {
+      header = header + "Content-Length: " + contentLength + "\r\n";
     }
 
-    header = header + "Connection: Closed\n\n";
+    header = header + "\r\n";
 
     return header;
   }

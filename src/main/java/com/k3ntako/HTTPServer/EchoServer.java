@@ -5,17 +5,20 @@ import com.k3ntako.HTTPServer.wrappers.ServerSocketWrapperInterface;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.net.Socket;
 
 public class EchoServer {
   private IOGeneratorInterface ioGenerator;
   private RequestInterface request;
+  private ServerSocketWrapperInterface serverSocket;
 
-  public EchoServer(IOGeneratorInterface ioGenerator, RequestInterface request) {
+  public EchoServer(IOGeneratorInterface ioGenerator, RequestInterface request, ServerSocketWrapperInterface serverSocket) {
     this.ioGenerator = ioGenerator;
     this.request = request;
+    this.serverSocket = serverSocket;
   }
 
-  public void run(ServerSocketWrapperInterface serverSocket) {
+  public void run() {
     var clientSocket = serverSocket.accept();
 
     var io = ioGenerator.generateIO(clientSocket);
@@ -27,7 +30,7 @@ public class EchoServer {
 
     this.sendResponse(output);
 
-    this.close(input, output);
+    this.close(input, output, clientSocket);
   }
 
   private void parseHeader(BufferedReader input) {
@@ -52,12 +55,17 @@ public class EchoServer {
     output.sendData(responseStr);
   }
 
-  private void close(BufferedReader input, PrintWriterWrapperInterface output) {
+  private void close(BufferedReader input, PrintWriterWrapperInterface output, Socket clientSocket) {
     try {
       input.close();
       output.close();
+      clientSocket.close();
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  public void stop(){
+    this.serverSocket.close();
   }
 }
