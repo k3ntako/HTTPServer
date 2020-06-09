@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class EchoServerTest {
+class ServerTest {
   @Test
   void echoServerParsesHeader() {
     var clientInput = "GET / HTTP/1.1\n" +
@@ -18,7 +18,7 @@ class EchoServerTest {
     var ioGeneratorMock = new IOGeneratorMock(clientInput);
     var request = new Request();
     var socket = new ServerSocketMock();
-    var app = new EchoServer(ioGeneratorMock, request, socket);
+    var app = new Server(ioGeneratorMock, request, socket);
     app.run();
 
     assertTrue(socket.acceptCalled);
@@ -46,7 +46,7 @@ class EchoServerTest {
     var ioGeneratorMock = new IOGeneratorMock(clientInput.concat(bodyStr));
     var request = new Request();
     var socket = new ServerSocketMock();
-    var app = new EchoServer(ioGeneratorMock, request, socket);
+    var app = new Server(ioGeneratorMock, request, socket);
     app.run();
 
     assertEquals("\n" + bodyStr, request.getBody());
@@ -71,7 +71,7 @@ class EchoServerTest {
     var ioGeneratorMock = new IOGeneratorMock(clientInput.concat(bodyStr));
     var request = new Request();
     var socket = new ServerSocketMock();
-    var app = new EchoServer(ioGeneratorMock, request, socket);
+    var app = new Server(ioGeneratorMock, request, socket);
     app.run();
 
     var printWriter = ioGeneratorMock.getPrintWriter();

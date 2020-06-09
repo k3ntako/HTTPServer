@@ -7,7 +7,7 @@ public class Main {
     var ioGenerator = new IOGenerator();
     var request = new Request();
     var serverSocket = new ServerSocketWrapper(5000);
-    var app = new EchoServer(ioGenerator, request, serverSocket);
+    var app = new Server(ioGenerator, request, serverSocket);
 
     while(true){
       app.run();

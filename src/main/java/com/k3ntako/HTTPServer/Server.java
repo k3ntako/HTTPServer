@@ -7,12 +7,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.Socket;
 
-public class EchoServer {
+public class Server {
   private IOGeneratorInterface ioGenerator;
   private RequestInterface request;
   private ServerSocketWrapperInterface serverSocket;
 
-  public EchoServer(IOGeneratorInterface ioGenerator, RequestInterface request, ServerSocketWrapperInterface serverSocket) {
+  public Server(IOGeneratorInterface ioGenerator, RequestInterface request, ServerSocketWrapperInterface serverSocket) {
     this.ioGenerator = ioGenerator;
     this.request = request;
     this.serverSocket = serverSocket;
