@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ServerTest {
   @Test
-  void echoServerParsesHeader() {
+  void serverParsesHeader() {
     var clientInput = "GET /simple_get_with_body HTTP/1.1\n" +
             "Host: localhost:5000\n" +
             "User-Agent: curl/7.64.1\n" +
@@ -34,7 +34,7 @@ class ServerTest {
   }
 
   @Test
-  void echoServerReturnsInput() {
+  void serverReturnsInput() {
     var clientInput = "GET /simple_get_with_body HTTP/1.1\n" +
             "Host: localhost:5000\n" +
             "User-Agent: curl/7.64.1\n" +
