@@ -24,12 +24,9 @@ public class Response {
     var statusMessage = statuses.get(status);
 
     var header = "HTTP/1.1 " + status + " " + statusMessage + "\r\n";
+    header = header + "Content-Length: " + contentLength + "\r\n\r\n";
 
-    if(contentLength > 0) {
-      header = header + "Content-Length: " + contentLength + "\r\n";
-    }
-
-    return header + "\r\n";
+    return header;
   }
 
   public void setBody(String body){

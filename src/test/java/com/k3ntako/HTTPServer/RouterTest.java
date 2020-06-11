@@ -33,7 +33,8 @@ class RouterTest {
     var router = new Router(routes);
     var response = router.routeRequest(request);
 
-    var expectedResponse = "HTTP/1.1 404 Not Found\r\n\r\n";
+    var expectedResponse = "HTTP/1.1 404 Not Found\r\n" +
+            "Content-Length: 0\r\n\r\n";
 
     assertEquals(expectedResponse, response.createResponse());
   }

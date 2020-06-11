@@ -13,7 +13,8 @@ class NotFoundTest {
     var notFound = new NotFound();
     var response = notFound.getResponse(new Request());
 
-    var expectedResponse = "HTTP/1.1 404 Not Found\r\n\r\n";
+    var expectedResponse = "HTTP/1.1 404 Not Found\r\n" +
+            "Content-Length: 0\r\n\r\n";
     assertEquals(expectedResponse, response.createResponse());
   }
 }

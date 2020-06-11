@@ -19,7 +19,8 @@ class ResponseTest {
 
     var headerStr = response.createResponse();
 
-    var expected = "HTTP/1.1 200 OK\r\n\r\n";
+    var expected = "HTTP/1.1 200 OK\r\n" +
+            "Content-Length: 0\r\n\r\n";
     assertEquals(expected, headerStr);
   }
 
@@ -50,7 +51,9 @@ class ResponseTest {
     response.setStatus(404);
 
     var headerStr = response.createResponse();
+    var expected = "HTTP/1.1 404 Not Found\r\n" +
+            "Content-Length: 0\r\n\r\n";
 
-    assertEquals("HTTP/1.1 404 Not Found\r\n\r\n", headerStr);
+    assertEquals(expected, headerStr);
   }
 }
