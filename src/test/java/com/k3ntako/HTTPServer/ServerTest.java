@@ -3,7 +3,7 @@ package com.k3ntako.HTTPServer;
 import com.k3ntako.HTTPServer.mocks.IOGeneratorMock;
 import com.k3ntako.HTTPServer.mocks.RequestHandlerMock;
 import com.k3ntako.HTTPServer.mocks.ServerSocketMock;
-import com.k3ntako.HTTPServer.routes.SimpleGet;
+import com.k3ntako.HTTPServer.routes.SimpleGetWithBody;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ServerTest {
   @Test
   void echoServerParsesHeader() {
-    var clientInput = "GET /simple-get HTTP/1.1\n" +
+    var clientInput = "GET /simple_get_with_body HTTP/1.1\n" +
             "Host: localhost:5000\n" +
             "User-Agent: curl/7.64.1\n" +
             "Accept: */*\n" +
@@ -24,7 +24,7 @@ class ServerTest {
     var socket = new ServerSocketMock();
 
     var routes = new HashMap<String, RouteInterface>();
-    routes.put("/simple-get", new SimpleGet());
+    routes.put("/simple_get_with_body", new SimpleGetWithBody());
     var router = new Router(routes);
 
     var app = new Server(ioGeneratorMock, requestHandlerMock, socket, router);
@@ -36,7 +36,7 @@ class ServerTest {
 
   @Test
   void echoServerReturnsInput() {
-    var clientInput = "GET /simple-get HTTP/1.1\n" +
+    var clientInput = "GET /simple_get_with_body HTTP/1.1\n" +
             "Host: localhost:5000\n" +
             "User-Agent: curl/7.64.1\n" +
             "Accept: */*\n" +
@@ -53,7 +53,7 @@ class ServerTest {
     var socket = new ServerSocketMock();
 
     var routes = new HashMap<String, RouteInterface>();
-    routes.put("/simple-get", new SimpleGet());
+    routes.put("/simple_get_with_body", new SimpleGetWithBody());
     var router = new Router(routes);
 
     var app = new Server(ioGeneratorMock, requestHandlerMock, socket, router);

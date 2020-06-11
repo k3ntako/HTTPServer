@@ -16,23 +16,9 @@ public class RequestHandlerMock implements RequestHandlerInterface  {
   private RequestInterface lastRequest;
   private boolean handleRequestCalled = false;
 
-  public RequestHandlerMock(
-          String method,
-          String route,
-          String protocol,
-          HashMap<String, String> headers,
-          String body
-  ) {
-    this.method = method;
-    this.route = route;
-    this.protocol = protocol;
-    this.headers = headers;
-    this.body = body;
-  }
-
   public RequestHandlerMock() {
     this.method = "GET";
-    this.route = "/simple-get";
+    this.route = "/simple_get_with_body";
     this.protocol = "HTTP/1.1";
     this.headers = new HashMap<>();
     this.body = "";

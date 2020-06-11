@@ -7,14 +7,14 @@ import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SimpleGetTest {
+class SimpleGetWithBodyTest {
 
   @Test
   void getResonse() {
-    var request = new RequestMock("GET", "/simple-get", "HTTP/1.1", new HashMap<>(), "");
+    var request = new RequestMock("GET", "/simple_get_with_body", "HTTP/1.1", new HashMap<>(), "");
 
-    var simpleGet = new SimpleGet();
-    var response = simpleGet.getResponse(request);
+    var simpleGetWithBody = new SimpleGetWithBody();
+    var response = simpleGetWithBody.getResponse(request);
 
     var responseStr = response.createResponse();
     var expectedResponse = "HTTP/1.1 200 OK\r\n" +

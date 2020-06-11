@@ -1,19 +1,29 @@
 package com.k3ntako.HTTPServer;
 
 
+import java.util.HashMap;
+
 public class Response {
-  private RequestInterface request;
   private String body = "";
-  public Response(RequestInterface request) {
-    this.request = request;
+  private int status = 200;
+
+  public Response() {
+    this.statuses = new HashMap<>();
+
+    this.statuses.put(200, "OK");
+    this.statuses.put(404, "Not Found");
   }
+
+  private HashMap<Integer, String> statuses;
 
   public String createResponse() {
     return this.createHeader(body.length()) + this.body;
   }
 
   private String createHeader(int contentLength) {
-    var header = "HTTP/1.1 200 OK\r\n";
+    var statusMessage = statuses.get(status);
+
+    var header = "HTTP/1.1 " + status + " " + statusMessage + "\r\n";
 
     if(contentLength > 0) {
       header = header + "Content-Length: " + contentLength + "\r\n";
@@ -24,5 +34,9 @@ public class Response {
 
   public void setBody(String body){
     this.body = body;
+  }
+
+  public void setStatus(int status){
+    this.status = status;
   }
 }

@@ -15,16 +15,7 @@ class ResponseTest {
     headers.put("Content-Length", "17");
     headers.put("Content-Type", "text/html; charset=UTF-8");
 
-
-    var request = new RequestMock(
-            "GET",
-            "/",
-            "HTTP/1.1",
-            headers,
-            "This\nis\nthe\nbody!"
-    );
-
-    var response = new Response(request);
+    var response = new Response();
 
     var headerStr = response.createResponse();
 
@@ -38,16 +29,7 @@ class ResponseTest {
     headers.put("Content-Length", "17");
     headers.put("Content-Type", "text/html; charset=UTF-8");
 
-
-    var request = new RequestMock(
-            "GET",
-            "/",
-            "HTTP/1.1",
-            headers,
-            "This\nis\nthe\nbody!"
-    );
-
-    var response = new Response(request);
+    var response = new Response();
     response.setBody("This\nis\nthe\nresponse\nbody!!");
 
     var headerStr = response.createResponse();
@@ -56,5 +38,19 @@ class ResponseTest {
             "Content-Length: 27\r\n\r\n" +
             "This\nis\nthe\nresponse\nbody!!";
     assertEquals(expected, headerStr);
+  }
+
+  @Test
+  void setStatus() {
+    HashMap<String, String> headers = new HashMap<>();
+    headers.put("Content-Length", "17");
+    headers.put("Content-Type", "text/html; charset=UTF-8");
+
+    var response = new Response();
+    response.setStatus(404);
+
+    var headerStr = response.createResponse();
+
+    assertEquals("HTTP/1.1 404 Not Found\r\n\r\n", headerStr);
   }
 }
