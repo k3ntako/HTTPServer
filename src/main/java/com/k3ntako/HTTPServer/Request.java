@@ -1,6 +1,5 @@
 package com.k3ntako.HTTPServer;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Objects;
@@ -11,14 +10,16 @@ public class Request implements RequestInterface {
   private String protocol;
   private HashMap<String, String> headers;
   private String body;
+  private ServerIOInterface serverIO;
 
-  public Request() {
+  public Request(ServerIOInterface serverIO) {
+    this.serverIO = serverIO;
     this.headers = new HashMap<>();
   }
 
-  public void parseRequest(BufferedReader bufferedReader) {
+  public void parseRequest() {
     try {
-      this.parseHeader(bufferedReader);
+      this.parseHeader();
 
       var contentLength = 0;
       if (this.headers.containsKey("Content-Length")) {
@@ -26,16 +27,16 @@ public class Request implements RequestInterface {
       }
 
       if (contentLength > 0) {
-        this.parseBody(bufferedReader, contentLength);
+        this.parseBody(contentLength);
       }
     } catch (IOException e) {
       e.printStackTrace();
     }
   }
 
-  private void parseHeader(BufferedReader bufferedReader) throws IOException {
+  private void parseHeader() throws IOException {
     String line;
-    while ((line = this.readLine(bufferedReader)) != null) {
+    while ((line = this.readLine()) != null) {
       if (line.contains(":")) {
         this.parseHeaderAttributes(line);
       } else if (line.length() > 0) {
@@ -44,8 +45,8 @@ public class Request implements RequestInterface {
     }
   }
 
-  private String readLine(BufferedReader bufferedReader) throws IOException {
-    var line = bufferedReader.readLine();
+  private String readLine() throws IOException {
+    var line = serverIO.readLine();
 
     if (line == null || line.length() == 0) {
       return null;
@@ -72,13 +73,13 @@ public class Request implements RequestInterface {
     }
   }
 
-  private void parseBody(BufferedReader bufferedReader, int contentLength) {
+  private void parseBody(int contentLength) {
     try {
       var bodyStr = "";
       char character;
 
       while (bodyStr.length() < contentLength) {
-        character = (char) (bufferedReader.read());
+        character = (serverIO.read());
         bodyStr = bodyStr.concat(String.valueOf(character));
       }
 

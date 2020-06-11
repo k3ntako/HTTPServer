@@ -1,12 +1,10 @@
 package com.k3ntako.HTTPServer;
 
-import java.io.BufferedReader;
-
 public class RequestHandler implements RequestHandlerInterface {
   @Override
-  public Request handleRequest(BufferedReader bufferedReader){
-    var request = new Request();
-    request.parseRequest(bufferedReader);
+  public Request handleRequest(ServerIOInterface serverIO){
+    var request = new Request(serverIO);
+    request.parseRequest();
     return request;
   }
 }

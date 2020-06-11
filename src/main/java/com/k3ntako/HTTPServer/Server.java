@@ -1,25 +1,23 @@
 package com.k3ntako.HTTPServer;
 
-import com.k3ntako.HTTPServer.wrappers.PrintWriterWrapperInterface;
 import com.k3ntako.HTTPServer.wrappers.ServerSocketWrapperInterface;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.Socket;
 
 public class Server {
-  private IOGeneratorInterface ioGenerator;
+  private ServerIOInterface serverIO;
   private RequestHandlerInterface requestHandler;
   private ServerSocketWrapperInterface serverSocket;
   private Router router;
 
   public Server(
-          IOGeneratorInterface ioGenerator,
+          ServerIOInterface serverIO,
           RequestHandlerInterface requestHandler,
           ServerSocketWrapperInterface serverSocket,
           Router router
   ) {
-    this.ioGenerator = ioGenerator;
+    this.serverIO = serverIO;
     this.requestHandler = requestHandler;
     this.serverSocket = serverSocket;
     this.router = router;
@@ -28,22 +26,19 @@ public class Server {
   public void run() {
     var clientSocket = serverSocket.accept();
 
-    var io = ioGenerator.generateIO(clientSocket);
-    BufferedReader input = (BufferedReader) io.get("bufferedReader");
-    PrintWriterWrapperInterface output = (PrintWriterWrapperInterface) io.get("printWriter");
+    serverIO.init(clientSocket);
 
-    var request = this.requestHandler.handleRequest(input);
+    var request = this.requestHandler.handleRequest(serverIO);
     var route = this.router.routeRequest(request);
     var response = route.createResponse();
-    output.sendData(response);
+    serverIO.sendData(response);
 
-    this.close(input, output, clientSocket);
+    this.close(clientSocket);
   }
 
-  private void close(BufferedReader input, PrintWriterWrapperInterface output, Socket clientSocket) {
+  private void close(Socket clientSocket) {
     try {
-      input.close();
-      output.close();
+      serverIO.close();
       clientSocket.close();
     } catch (IOException e) {
       e.printStackTrace();

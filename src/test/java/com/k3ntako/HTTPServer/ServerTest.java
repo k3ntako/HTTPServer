@@ -1,6 +1,6 @@
 package com.k3ntako.HTTPServer;
 
-import com.k3ntako.HTTPServer.mocks.IOGeneratorMock;
+import com.k3ntako.HTTPServer.mocks.ServerIOMock;
 import com.k3ntako.HTTPServer.mocks.RequestHandlerMock;
 import com.k3ntako.HTTPServer.mocks.ServerSocketMock;
 import com.k3ntako.HTTPServer.routes.SimpleGetWithBody;
@@ -19,7 +19,7 @@ class ServerTest {
             "Accept: */*\n" +
             "\n\n";
 
-    var ioGeneratorMock = new IOGeneratorMock(clientInput);
+    var serverIOMock = new ServerIOMock(clientInput);
     var requestHandlerMock = new RequestHandlerMock();
     var socket = new ServerSocketMock();
 
@@ -27,7 +27,7 @@ class ServerTest {
     routes.put("/simple_get_with_body", new SimpleGetWithBody());
     var router = new Router(routes);
 
-    var app = new Server(ioGeneratorMock, requestHandlerMock, socket, router);
+    var app = new Server(serverIOMock, requestHandlerMock, socket, router);
     app.run();
 
     assertTrue( requestHandlerMock.wasHandleRequestCalled());
@@ -47,7 +47,7 @@ class ServerTest {
             "Body line 3: def\n" +
             "Body line 4: def";
 
-    var ioGeneratorMock = new IOGeneratorMock(clientInput + bodyStr);
+    var serverIO = new ServerIOMock(clientInput + bodyStr);
     var requestHandlerMock = new RequestHandlerMock();
     var socket = new ServerSocketMock();
 
@@ -55,15 +55,13 @@ class ServerTest {
     routes.put("/simple_get_with_body", new SimpleGetWithBody());
     var router = new Router(routes);
 
-    var app = new Server(ioGeneratorMock, requestHandlerMock, socket, router);
+    var app = new Server(serverIO, requestHandlerMock, socket, router);
     app.run();
-
-    var printWriter = ioGeneratorMock.getPrintWriter();
 
     var expected = "HTTP/1.1 200 OK\r\n" +
             "Content-Length: 11\r\n\r\n" +
             "Hello world\n";
 
-    assertEquals(expected, printWriter.getSentData());
+    assertEquals(expected, serverIO.getSentData());
   }
 }

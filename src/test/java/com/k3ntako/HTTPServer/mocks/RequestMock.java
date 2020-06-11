@@ -2,7 +2,6 @@ package com.k3ntako.HTTPServer.mocks;
 
 import com.k3ntako.HTTPServer.RequestInterface;
 
-import java.io.BufferedReader;
 import java.util.HashMap;
 
 public class RequestMock implements RequestInterface {
@@ -26,7 +25,7 @@ public class RequestMock implements RequestInterface {
     this.body = body;
   }
 
-  public void parseRequest(BufferedReader bufferedReader) {
+  public void parseRequest() {
   }
 
   public String getMethod() {

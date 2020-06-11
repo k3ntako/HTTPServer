@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 public class Main {
   public static void main(String[] args) {
-    var ioGenerator = new IOGenerator();
+    var serverIO = new ServerServerIO();
     var requestHandler = new RequestHandler();
     var serverSocket = new ServerSocketWrapper(5000);
 
@@ -17,7 +17,7 @@ public class Main {
     routes.put("/simple_get_with_body", new SimpleGetWithBody());
     var router = new Router(routes);
 
-    var app = new Server(ioGenerator, requestHandler, serverSocket, router);
+    var app = new Server(serverIO, requestHandler, serverSocket, router);
 
     while(true){
       app.run();

@@ -1,9 +1,9 @@
 package com.k3ntako.HTTPServer;
 
+import com.k3ntako.HTTPServer.mocks.ServerIOMock;
 import org.junit.jupiter.api.Test;
 
-import java.io.BufferedReader;
-import java.io.StringReader;
+import java.net.Socket;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,18 +15,19 @@ class RequestTest {
             "Host: localhost:5000\r\n" +
             "User-Agent: curl/7.64.1\r\n" +
             "Accept: */*\r\n\r\n";
-    var bufferedReader = new BufferedReader(new StringReader(headerStr));
+    var serverIO = new ServerIOMock(headerStr);
+    serverIO.init(new Socket());
 
-    var requestParser = new Request();
+    var request = new Request(serverIO);
 
-    requestParser.parseRequest(bufferedReader);
-    assertEquals("GET", requestParser.getMethod());
-    assertEquals("/", requestParser.getRoute());
-    assertEquals("HTTP/1.1", requestParser.getProtocol());
+    request.parseRequest();
+    assertEquals("GET", request.getMethod());
+    assertEquals("/", request.getRoute());
+    assertEquals("HTTP/1.1", request.getProtocol());
 
-    assertEquals("localhost:5000", requestParser.getHeaders().get("Host"));
-    assertEquals("curl/7.64.1", requestParser.getHeaders().get("User-Agent"));
-    assertEquals("*/*", requestParser.getHeaders().get("Accept"));
+    assertEquals("localhost:5000", request.getHeaders().get("Host"));
+    assertEquals("curl/7.64.1", request.getHeaders().get("User-Agent"));
+    assertEquals("*/*", request.getHeaders().get("Accept"));
   }
 
   @Test
@@ -38,10 +39,11 @@ class RequestTest {
             "Body line 3: abc\n" +
             "Body line 4: abc\n";
 
-    var bufferedReader = new BufferedReader(new StringReader(header + bodyStr));
-    var request = new Request();
+    var serverIO = new ServerIOMock(header + bodyStr);
+    serverIO.init(new Socket());
+    var request = new Request(serverIO);
 
-    request.parseRequest(bufferedReader);
+    request.parseRequest();
 
     assertEquals(bodyStr, request.getBody());
   }
