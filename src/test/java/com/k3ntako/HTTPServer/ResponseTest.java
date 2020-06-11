@@ -1,6 +1,5 @@
 package com.k3ntako.HTTPServer;
 
-import com.k3ntako.HTTPServer.mocks.RequestMock;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
