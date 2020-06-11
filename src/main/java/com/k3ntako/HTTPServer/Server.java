@@ -9,13 +9,20 @@ import java.net.Socket;
 
 public class Server {
   private IOGeneratorInterface ioGenerator;
-  private RequestInterface request;
+  private RequestHandlerInterface requestHandler;
   private ServerSocketWrapperInterface serverSocket;
+  private Router router;
 
-  public Server(IOGeneratorInterface ioGenerator, RequestInterface request, ServerSocketWrapperInterface serverSocket) {
+  public Server(
+          IOGeneratorInterface ioGenerator,
+          RequestHandlerInterface requestHandler,
+          ServerSocketWrapperInterface serverSocket,
+          Router router
+  ) {
     this.ioGenerator = ioGenerator;
-    this.request = request;
+    this.requestHandler = requestHandler;
     this.serverSocket = serverSocket;
+    this.router = router;
   }
 
   public void run() {
@@ -25,34 +32,12 @@ public class Server {
     BufferedReader input = (BufferedReader) io.get("bufferedReader");
     PrintWriterWrapperInterface output = (PrintWriterWrapperInterface) io.get("printWriter");
 
-    this.parseHeader(input);
-    this.parseBody(input);
-
-    this.sendResponse(output);
+    var request = this.requestHandler.handleRequest(input);
+    var route = this.router.routeRequest(request);
+    var response = route.createResponse();
+    output.sendData(response);
 
     this.close(input, output, clientSocket);
-  }
-
-  private void parseHeader(BufferedReader input) {
-    request.parseRequest(input);
-  }
-
-  private void parseBody(BufferedReader input) {
-    int contentLength = 0;
-    if (request.getHeaders().containsKey("Content-Length")) {
-      contentLength = Integer.parseInt(request.getHeaders().get("Content-Length"));
-    }
-
-    if (contentLength > 0) {
-      request.parseBody(input, contentLength);
-    }
-  }
-
-  private void sendResponse(PrintWriterWrapperInterface output) {
-    var response = new Response(request);
-    var responseStr = response.createResponse();
-
-    output.sendData(responseStr);
   }
 
   private void close(BufferedReader input, PrintWriterWrapperInterface output, Socket clientSocket) {

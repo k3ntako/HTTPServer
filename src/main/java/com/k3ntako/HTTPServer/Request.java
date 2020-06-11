@@ -18,16 +18,29 @@ public class Request implements RequestInterface {
 
   public void parseRequest(BufferedReader bufferedReader) {
     try {
-      String line;
-      while ((line = this.readLine(bufferedReader)) != null) {
-        if (line.contains(":")) {
-          this.parseHeaderAttributes(line);
-        } else if (line.length() > 0) {
-          this.parseRequestLine(line);
-        }
+      this.parseHeader(bufferedReader);
+
+      var contentLength = 0;
+      if (this.headers.containsKey("Content-Length")) {
+        contentLength = Integer.parseInt(this.headers.get("Content-Length"));
+      }
+
+      if (contentLength > 0) {
+        this.parseBody(bufferedReader, contentLength);
       }
     } catch (IOException e) {
       e.printStackTrace();
+    }
+  }
+
+  private void parseHeader(BufferedReader bufferedReader) throws IOException {
+    String line;
+    while ((line = this.readLine(bufferedReader)) != null) {
+      if (line.contains(":")) {
+        this.parseHeaderAttributes(line);
+      } else if (line.length() > 0) {
+        this.parseRequestLine(line);
+      }
     }
   }
 
@@ -59,7 +72,7 @@ public class Request implements RequestInterface {
     }
   }
 
-  public void parseBody(BufferedReader bufferedReader, int contentLength) {
+  private void parseBody(BufferedReader bufferedReader, int contentLength) {
     try {
       var bodyStr = "";
       char character;

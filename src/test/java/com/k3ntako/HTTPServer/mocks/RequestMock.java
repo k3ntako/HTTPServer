@@ -29,9 +29,6 @@ public class RequestMock implements RequestInterface {
   public void parseRequest(BufferedReader bufferedReader) {
   }
 
-  public void parseBody(BufferedReader bufferedReader, int contentLength) {
-  }
-
   public String getMethod() {
     return this.method;
   }

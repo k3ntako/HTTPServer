@@ -11,12 +11,10 @@ class RequestTest {
 
   @Test
   void parseRequest() {
-    var headerStr = "GET / HTTP/1.1\n" +
-            "Host: localhost:5000\n" +
-            "User-Agent: curl/7.64.1\n" +
-            "Accept: */*\n" +
-            "\n\n";
-
+    var headerStr = "GET / HTTP/1.1\r\n" +
+            "Host: localhost:5000\r\n" +
+            "User-Agent: curl/7.64.1\r\n" +
+            "Accept: */*\r\n\r\n";
     var bufferedReader = new BufferedReader(new StringReader(headerStr));
 
     var requestParser = new Request();
@@ -33,15 +31,17 @@ class RequestTest {
 
   @Test
   void parseBody() {
+    var header = "GET / HTTP/1.1\r\n" +
+            "Content-Length: 68\r\n\r\n";
     var bodyStr = "Body line 1: abc\n" +
             "Body line 2: abc\n" +
             "Body line 3: abc\n" +
             "Body line 4: abc\n";
 
-    var bufferedReader = new BufferedReader(new StringReader(bodyStr));
+    var bufferedReader = new BufferedReader(new StringReader(header + bodyStr));
     var request = new Request();
 
-    request.parseBody(bufferedReader, 68);
+    request.parseRequest(bufferedReader);
 
     assertEquals(bodyStr, request.getBody());
   }
