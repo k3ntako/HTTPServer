@@ -31,7 +31,6 @@ class ServerTest {
     app.run();
 
     assertTrue( requestHandlerMock.wasHandleRequestCalled());
-    app.stop();
   }
 
   @Test
@@ -66,7 +65,5 @@ class ServerTest {
             "Hello world\n";
 
     assertEquals(expected, printWriter.getSentData());
-
-    app.stop();
   }
 }

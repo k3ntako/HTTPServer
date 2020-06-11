@@ -49,8 +49,4 @@ public class Server {
       e.printStackTrace();
     }
   }
-
-  public void stop(){
-    this.serverSocket.close();
-  }
 }
