@@ -2,6 +2,7 @@ package com.k3ntako.HTTPServer;
 
 import com.k3ntako.HTTPServer.routes.SimpleGet;
 import com.k3ntako.HTTPServer.routes.SimpleGetWithBody;
+import com.k3ntako.HTTPServer.routes.SimpleRedirect;
 import com.k3ntako.HTTPServer.wrappers.ServerSocketWrapper;
 
 import java.util.HashMap;
@@ -15,6 +16,7 @@ public class Main {
     var routes = new HashMap<String, RouteInterface>();
     routes.put("/simple_get", new SimpleGet());
     routes.put("/simple_get_with_body", new SimpleGetWithBody());
+    routes.put("/redirect", new SimpleRedirect());
     var router = new Router(routes);
 
     var app = new Server(serverIO, requestHandler, serverSocket, router);
