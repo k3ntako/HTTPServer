@@ -3,10 +3,7 @@ package com.k3ntako.HTTPServer;
 import com.k3ntako.HTTPServer.mocks.ServerIOMock;
 import com.k3ntako.HTTPServer.mocks.RequestHandlerMock;
 import com.k3ntako.HTTPServer.mocks.ServerSocketMock;
-import com.k3ntako.HTTPServer.routes.SimpleGetWithBody;
 import org.junit.jupiter.api.Test;
-
-import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,8 +20,9 @@ class ServerTest {
     var requestHandlerMock = new RequestHandlerMock();
     var socket = new ServerSocketMock();
 
-    var routes = new Routes();
-    var router = new Router(routes);
+    var routeRegistrar = new RouteRegistrar(new RouteRegistry());
+    var routeRegistry = routeRegistrar.registerRoutes();
+    var router = new Router(routeRegistry);
 
     var app = new Server(serverIOMock, requestHandlerMock, socket, router);
     app.run();
@@ -50,8 +48,9 @@ class ServerTest {
     var requestHandlerMock = new RequestHandlerMock();
     var socket = new ServerSocketMock();
 
-    var routes = new Routes();
-    var router = new Router(routes);
+    var routeRegistrar = new RouteRegistrar(new RouteRegistry());
+    var routeRegistry = routeRegistrar.registerRoutes();
+    var router = new Router(routeRegistry);
 
     var app = new Server(serverIO, requestHandlerMock, socket, router);
     app.run();

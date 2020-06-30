@@ -6,20 +6,22 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class RoutesTest {
+class RouteRegistrarTest {
 
   @Test
   void getSimpleGet() {
-    var routes = new Routes();
-    var simpleGet = routes.get("/simple_get");
+    var routeRegistrar = new RouteRegistrar(new RouteRegistry());
+    var routeRegistry = routeRegistrar.registerRoutes();
+    var simpleGet = routeRegistry.get("/simple_get");
 
     assertTrue(simpleGet instanceof SimpleGet);
   }
 
   @Test
   void getSimpleGetWithBody() {
-    var routes = new Routes();
-    var simpleGet = routes.get("/simple_get_with_body");
+    var routeRegistrar = new RouteRegistrar(new RouteRegistry());
+    var routeRegistry = routeRegistrar.registerRoutes();
+    var simpleGet = routeRegistry.get("/simple_get_with_body");
 
     assertTrue(simpleGet instanceof SimpleGetWithBody);
   }

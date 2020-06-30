@@ -1,11 +1,6 @@
 package com.k3ntako.HTTPServer;
 
-import com.k3ntako.HTTPServer.routes.SimpleGet;
-import com.k3ntako.HTTPServer.routes.SimpleGetWithBody;
-import com.k3ntako.HTTPServer.routes.SimpleRedirect;
 import com.k3ntako.HTTPServer.wrappers.ServerSocketWrapper;
-
-import java.util.HashMap;
 
 public class Main {
   public static void main(String[] args) {
@@ -13,12 +8,13 @@ public class Main {
     var requestHandler = new RequestHandler();
     var serverSocket = new ServerSocketWrapper(5000);
 
-    var routes = new Routes();
-    var router = new Router(routes);
+    var routeRegistrar = new RouteRegistrar(new RouteRegistry());
+    var routeRegistry = routeRegistrar.registerRoutes();
+    var router = new Router(routeRegistry);
 
     var app = new Server(serverIO, requestHandler, serverSocket, router);
 
-    while(true){
+    while (true) {
       app.run();
     }
   }
