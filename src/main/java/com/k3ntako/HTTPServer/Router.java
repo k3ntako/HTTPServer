@@ -5,9 +5,9 @@ import com.k3ntako.HTTPServer.routes.NotFound;
 import java.util.HashMap;
 
 public class Router {
-  private HashMap<String, RouteInterface> routes;
+  private Routes routes;
 
-  public Router(HashMap<String, RouteInterface> routes) {
+  public Router(Routes routes) {
     this.routes = routes;
   }
 

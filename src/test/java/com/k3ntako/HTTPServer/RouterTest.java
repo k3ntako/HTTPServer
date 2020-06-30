@@ -11,8 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class RouterTest {
   @Test
   void routeRequest() {
-    var routes = new HashMap<String, RouteInterface>();
-    routes.put("/simple_get_with_body", new SimpleGetWithBody());
+    var routes = new Routes();
 
     var request = new RequestMock("GET", "/simple_get_with_body", "HTTP/1.1", new HashMap<>(), "");
     var router = new Router(routes);
@@ -27,7 +26,7 @@ class RouterTest {
 
   @Test
   void notFoundRoute() {
-    var routes = new HashMap<String, RouteInterface>();
+    var routes = new Routes();
 
     var request = new RequestMock("GET", "/not_valid", "HTTP/1.1", new HashMap<>(), "");
     var router = new Router(routes);

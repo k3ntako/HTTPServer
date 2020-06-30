@@ -13,10 +13,7 @@ public class Main {
     var requestHandler = new RequestHandler();
     var serverSocket = new ServerSocketWrapper(5000);
 
-    var routes = new HashMap<String, RouteInterface>();
-    routes.put("/simple_get", new SimpleGet());
-    routes.put("/simple_get_with_body", new SimpleGetWithBody());
-    routes.put("/redirect", new SimpleRedirect());
+    var routes = new Routes();
     var router = new Router(routes);
 
     var app = new Server(serverIO, requestHandler, serverSocket, router);

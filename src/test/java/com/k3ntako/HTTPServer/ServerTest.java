@@ -23,8 +23,7 @@ class ServerTest {
     var requestHandlerMock = new RequestHandlerMock();
     var socket = new ServerSocketMock();
 
-    var routes = new HashMap<String, RouteInterface>();
-    routes.put("/simple_get_with_body", new SimpleGetWithBody());
+    var routes = new Routes();
     var router = new Router(routes);
 
     var app = new Server(serverIOMock, requestHandlerMock, socket, router);
@@ -51,8 +50,7 @@ class ServerTest {
     var requestHandlerMock = new RequestHandlerMock();
     var socket = new ServerSocketMock();
 
-    var routes = new HashMap<String, RouteInterface>();
-    routes.put("/simple_get_with_body", new SimpleGetWithBody());
+    var routes = new Routes();
     var router = new Router(routes);
 
     var app = new Server(serverIO, requestHandlerMock, socket, router);
