@@ -10,10 +10,6 @@ class ResponseTest {
 
   @Test
   void createEmptyResponse() {
-    HashMap<String, String> headers = new HashMap<>();
-    headers.put("Content-Length", "17");
-    headers.put("Content-Type", "text/html; charset=UTF-8");
-
     var response = new Response();
 
     var headerStr = response.createResponse();
@@ -25,10 +21,6 @@ class ResponseTest {
 
   @Test
   void createResponseWithBody() {
-    HashMap<String, String> headers = new HashMap<>();
-    headers.put("Content-Length", "17");
-    headers.put("Content-Type", "text/html; charset=UTF-8");
-
     var response = new Response();
     response.setBody("This\nis\nthe\nresponse\nbody!!");
 
@@ -42,15 +34,26 @@ class ResponseTest {
 
   @Test
   void setStatus() {
-    HashMap<String, String> headers = new HashMap<>();
-    headers.put("Content-Length", "17");
-    headers.put("Content-Type", "text/html; charset=UTF-8");
-
     var response = new Response();
     response.setStatus(404);
 
     var headerStr = response.createResponse();
     var expected = "HTTP/1.1 404 Not Found\r\n" +
+            "Content-Length: 0\r\n\r\n";
+
+    assertEquals(expected, headerStr);
+  }
+
+  @Test
+  void addHeader() {
+    var response = new Response();
+    response.setStatus(301);
+    response.addHeader("Location", "/simple_get");
+
+    var headerStr = response.createResponse();
+
+    var expected = "HTTP/1.1 301 Moved Permanently\r\n" +
+            "Location: /simple_get\r\n" +
             "Content-Length: 0\r\n\r\n";
 
     assertEquals(expected, headerStr);
