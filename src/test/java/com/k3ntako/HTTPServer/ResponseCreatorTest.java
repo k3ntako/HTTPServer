@@ -2,15 +2,13 @@ package com.k3ntako.HTTPServer;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-class ResponseTest {
+class ResponseCreatorTest {
 
   @Test
   void createEmptyResponse() {
-    var response = new Response();
+    var response = new ResponseCreator();
 
     var headerStr = response.createResponse();
 
@@ -21,7 +19,7 @@ class ResponseTest {
 
   @Test
   void createResponseWithBody() {
-    var response = new Response();
+    var response = new ResponseCreator();
     response.setBody("This\nis\nthe\nresponse\nbody!!");
 
     var headerStr = response.createResponse();
@@ -34,7 +32,7 @@ class ResponseTest {
 
   @Test
   void setStatus() {
-    var response = new Response();
+    var response = new ResponseCreator();
     response.setStatus(404);
 
     var headerStr = response.createResponse();
@@ -46,7 +44,7 @@ class ResponseTest {
 
   @Test
   void addHeader() {
-    var response = new Response();
+    var response = new ResponseCreator();
     response.setStatus(301);
     response.addHeader("Location", "/simple_get");
 
@@ -61,7 +59,7 @@ class ResponseTest {
 
   @Test
   void setRedirect() {
-    var response = new Response();
+    var response = new ResponseCreator();
     response.setRedirect("/test", 302);
 
     var headerStr = response.createResponse();

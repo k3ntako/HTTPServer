@@ -9,7 +9,7 @@ public class Router {
     this.routeRegistry = routeRegistry;
   }
 
-  public Response routeRequest(RequestInterface request) {
+  public ResponseCreator routeRequest(RequestInterface request) {
     var route = routeRegistry.get(request.getRoute());
 
     if (route == null) {

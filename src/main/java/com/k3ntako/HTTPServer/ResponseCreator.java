@@ -3,31 +3,19 @@ package com.k3ntako.HTTPServer;
 
 import java.util.HashMap;
 import java.util.Map;
+import javax.ws.rs.core.Response;
 
-public class Response {
+public class ResponseCreator {
   private String body = "";
   private int status = 200;
   private HashMap<String, String> additionalHeaders = new HashMap<>();
-
-  public Response() {
-    this.statuses = new HashMap<>();
-
-    this.statuses.put(200, "OK");
-    this.statuses.put(301, "Moved Permanently");
-    this.statuses.put(302, "Found");
-    this.statuses.put(404, "Not Found");
-  }
-
-  private HashMap<Integer, String> statuses;
-
+  
   public String createResponse() {
     return this.createHeader(body.length()) + this.body;
   }
 
   private String createHeader(int contentLength) {
-    var statusMessage = statuses.get(status);
-
-    var header = "HTTP/1.1 " + status + " " + statusMessage + "\r\n";
+    var header = "HTTP/1.1 " + status + " " + Response.Status.fromStatusCode(status) + "\r\n";
 
     var additionalHeaders = stringifyAdditionHeaders();
     header += additionalHeaders;
