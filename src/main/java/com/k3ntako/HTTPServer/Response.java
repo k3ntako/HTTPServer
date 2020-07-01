@@ -3,9 +3,9 @@ package com.k3ntako.HTTPServer;
 
 import java.util.HashMap;
 import java.util.Map;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
-public class ResponseCreator {
+public class Response {
   private String body = "";
   private int status = 200;
   private HashMap<String, String> additionalHeaders = new HashMap<>();
@@ -15,7 +15,7 @@ public class ResponseCreator {
   }
 
   private String createHeader(int contentLength) {
-    var header = "HTTP/1.1 " + status + " " + Response.Status.fromStatusCode(status) + "\r\n";
+    var header = "HTTP/1.1 " + status + " " + Status.fromStatusCode(status) + "\r\n";
 
     var additionalHeaders = stringifyAdditionHeaders();
     header += additionalHeaders;

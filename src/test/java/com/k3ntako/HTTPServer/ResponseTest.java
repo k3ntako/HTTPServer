@@ -4,11 +4,11 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ResponseCreatorTest {
+class ResponseTest {
 
   @Test
   void createEmptyResponse() {
-    var response = new ResponseCreator();
+    var response = new Response();
 
     var headerStr = response.createResponse();
 
@@ -19,7 +19,7 @@ class ResponseCreatorTest {
 
   @Test
   void createResponseWithBody() {
-    var response = new ResponseCreator();
+    var response = new Response();
     response.setBody("This\nis\nthe\nresponse\nbody!!");
 
     var headerStr = response.createResponse();
@@ -32,7 +32,7 @@ class ResponseCreatorTest {
 
   @Test
   void setStatus() {
-    var response = new ResponseCreator();
+    var response = new Response();
     response.setStatus(404);
 
     var headerStr = response.createResponse();
@@ -44,7 +44,7 @@ class ResponseCreatorTest {
 
   @Test
   void addHeader() {
-    var response = new ResponseCreator();
+    var response = new Response();
     response.setStatus(301);
     response.addHeader("Location", "/simple_get");
 
@@ -59,7 +59,7 @@ class ResponseCreatorTest {
 
   @Test
   void setRedirect() {
-    var response = new ResponseCreator();
+    var response = new Response();
     response.setRedirect("/test", 302);
 
     var headerStr = response.createResponse();

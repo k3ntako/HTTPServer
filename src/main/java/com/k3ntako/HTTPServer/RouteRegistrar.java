@@ -1,9 +1,9 @@
 package com.k3ntako.HTTPServer;
 
-import com.k3ntako.HTTPServer.routes.Account;
-import com.k3ntako.HTTPServer.routes.SimpleGet;
-import com.k3ntako.HTTPServer.routes.SimpleGetWithBody;
-import com.k3ntako.HTTPServer.routes.Admin;
+import com.k3ntako.HTTPServer.controllers.Account;
+import com.k3ntako.HTTPServer.controllers.SimpleGet;
+import com.k3ntako.HTTPServer.controllers.SimpleGetWithBody;
+import com.k3ntako.HTTPServer.controllers.Admin;
 
 public class RouteRegistrar {
   private RouteRegistry routeRegistry;

@@ -1,4 +1,4 @@
-package com.k3ntako.HTTPServer.routes;
+package com.k3ntako.HTTPServer.controllers;
 
 import com.k3ntako.HTTPServer.mocks.RequestMock;
 import org.junit.jupiter.api.Test;

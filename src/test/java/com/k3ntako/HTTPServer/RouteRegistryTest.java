@@ -1,6 +1,6 @@
 package com.k3ntako.HTTPServer;
 
-import com.k3ntako.HTTPServer.routes.SimpleGet;
+import com.k3ntako.HTTPServer.controllers.SimpleGet;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

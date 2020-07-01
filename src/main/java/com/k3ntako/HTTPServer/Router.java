@@ -1,6 +1,6 @@
 package com.k3ntako.HTTPServer;
 
-import com.k3ntako.HTTPServer.routes.NotFound;
+import com.k3ntako.HTTPServer.controllers.NotFound;
 
 public class Router {
   private RouteRegistry routeRegistry;
@@ -9,7 +9,7 @@ public class Router {
     this.routeRegistry = routeRegistry;
   }
 
-  public ResponseCreator routeRequest(RequestInterface request) {
+  public Response routeRequest(RequestInterface request) {
     var route = routeRegistry.get(request.getRoute());
 
     if (route == null) {
