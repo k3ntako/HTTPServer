@@ -58,4 +58,18 @@ class ResponseTest {
 
     assertEquals(expected, headerStr);
   }
+
+  @Test
+  void setRedirect() {
+    var response = new Response();
+    response.setRedirect("/test", 302);
+
+    var headerStr = response.createResponse();
+
+    var expected = "HTTP/1.1 302 Found\r\n" +
+            "Location: /test\r\n" +
+            "Content-Length: 0\r\n\r\n";
+
+    assertEquals(expected, headerStr);
+  }
 }

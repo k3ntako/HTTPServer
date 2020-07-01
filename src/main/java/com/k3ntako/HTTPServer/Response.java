@@ -14,6 +14,7 @@ public class Response {
 
     this.statuses.put(200, "OK");
     this.statuses.put(301, "Moved Permanently");
+    this.statuses.put(302, "Found");
     this.statuses.put(404, "Not Found");
   }
 
@@ -46,6 +47,11 @@ public class Response {
 
   public void addHeader(String key, String value) {
     additionalHeaders.put(key, value);
+  }
+
+  public void setRedirect(String url, int status) {
+    setStatus(status);
+    addHeader("Location", url);
   }
 
   private String stringifyAdditionHeaders() {

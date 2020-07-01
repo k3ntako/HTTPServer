@@ -8,8 +8,7 @@ public class SimpleRedirect implements RouteInterface {
   @Override
   public Response getResponse(RequestInterface request) {
     var response = new Response();
-    response.setStatus(301);
-    response.addHeader("Location", "http://127.0.0.1:5000/simple_get");
+    response.setRedirect("http://127.0.0.1:5000/simple_get", 301);
     return response;
   }
 }
