@@ -7,14 +7,14 @@ import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SimpleRedirectTest {
+class AdminTest {
 
   @Test
   void getResponse() {
-    var request = new RequestMock("GET", "/simple_redirect", "HTTP/1.1", new HashMap<>(), "");
+    var request = new RequestMock("GET", "/admin", "HTTP/1.1", new HashMap<>(), "");
 
-    var simpleRedirect = new SimpleRedirect();
-    var response = simpleRedirect.getResponse(request);
+    var admin = new Admin();
+    var response = admin.getResponse(request);
 
     var responseStr = response.createResponse();
     var expectedResponse = "HTTP/1.1 301 Moved Permanently\r\n" +
