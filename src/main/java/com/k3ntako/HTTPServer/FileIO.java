@@ -8,4 +8,8 @@ public class FileIO {
   public void write(Path path, String str) throws IOException {
     Files.write(path, str.getBytes());
   }
+
+  public String read(Path path) throws IOException {
+    return Files.readString(path);
+  }
 }

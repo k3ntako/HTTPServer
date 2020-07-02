@@ -25,6 +25,18 @@ class FileIOTest {
     assertEquals(str, fileContent);
   }
 
+  @Test
+  void read() throws IOException {
+    final var str = "This is a different text\nthis is a new line!\r\n And more!";
+    Files.write(path, str.getBytes());
+
+
+    final var fileIO = new FileIO();
+    final var fileContent = fileIO.read(path);
+
+    assertEquals(str, fileContent);
+  }
+
   @AfterEach
   void tearDown() throws IOException {
     Files.deleteIfExists(path);
