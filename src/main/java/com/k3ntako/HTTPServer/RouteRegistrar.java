@@ -1,9 +1,6 @@
 package com.k3ntako.HTTPServer;
 
-import com.k3ntako.HTTPServer.controllers.Account;
-import com.k3ntako.HTTPServer.controllers.SimpleGet;
-import com.k3ntako.HTTPServer.controllers.SimpleGetWithBody;
-import com.k3ntako.HTTPServer.controllers.Admin;
+import com.k3ntako.HTTPServer.controllers.*;
 
 public class RouteRegistrar {
   private RouteRegistry routeRegistry;
@@ -13,10 +10,13 @@ public class RouteRegistrar {
   }
 
   public RouteRegistry registerRoutes() {
+    var fileIO = new FileIO();
+
     routeRegistry.registerGet("/simple_get", new SimpleGet());
     routeRegistry.registerGet("/simple_get_with_body", new SimpleGetWithBody());
     routeRegistry.registerGet("/admin", new Admin());
     routeRegistry.registerGet("/account", new Account());
+    routeRegistry.registerPost("/simple_post", new SimplePost(fileIO));
 
     return routeRegistry;
   }

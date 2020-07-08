@@ -5,11 +5,13 @@ import com.k3ntako.HTTPServer.mocks.RequestHandlerMock;
 import com.k3ntako.HTTPServer.mocks.ServerSocketMock;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ServerTest {
   @Test
-  void serverParsesHeader() {
+  void serverParsesHeader() throws IOException {
     var clientInput = "GET /simple_get_with_body HTTP/1.1\n" +
             "Host: localhost:5000\n" +
             "User-Agent: curl/7.64.1\n" +
@@ -31,7 +33,7 @@ class ServerTest {
   }
 
   @Test
-  void serverReturnsInput() {
+  void serverReturnsInput() throws IOException {
     var clientInput = "GET /simple_get_with_body HTTP/1.1\n" +
             "Host: localhost:5000\n" +
             "User-Agent: curl/7.64.1\n" +

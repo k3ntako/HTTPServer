@@ -23,7 +23,7 @@ public class Server {
     this.router = router;
   }
 
-  public void run() {
+  public void run() throws IOException {
     var clientSocket = serverSocket.accept();
 
     serverIO.init(clientSocket);
