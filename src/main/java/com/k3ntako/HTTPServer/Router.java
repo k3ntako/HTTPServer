@@ -1,20 +1,18 @@
 package com.k3ntako.HTTPServer;
 
-import com.k3ntako.HTTPServer.routes.NotFound;
-
-import java.util.HashMap;
+import com.k3ntako.HTTPServer.controllers.NotFound;
 
 public class Router {
-  private HashMap<String, RouteInterface> routes;
+  private RouteRegistry routeRegistry;
 
-  public Router(HashMap<String, RouteInterface> routes) {
-    this.routes = routes;
+  public Router(RouteRegistry routeRegistry) {
+    this.routeRegistry = routeRegistry;
   }
 
-  public Response routeRequest(RequestInterface request){
-    var route = routes.get(request.getRoute());
+  public Response routeRequest(RequestInterface request) {
+    var route = routeRegistry.get(request.getRoute());
 
-    if(route == null) {
+    if (route == null) {
       route = new NotFound();
     }
 

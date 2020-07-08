@@ -2,8 +2,6 @@ package com.k3ntako.HTTPServer;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class ResponseTest {
@@ -54,6 +52,20 @@ class ResponseTest {
 
     var expected = "HTTP/1.1 301 Moved Permanently\r\n" +
             "Location: /simple_get\r\n" +
+            "Content-Length: 0\r\n\r\n";
+
+    assertEquals(expected, headerStr);
+  }
+
+  @Test
+  void setRedirect() {
+    var response = new Response();
+    response.setRedirect("/test", 302);
+
+    var headerStr = response.createResponse();
+
+    var expected = "HTTP/1.1 302 Found\r\n" +
+            "Location: /test\r\n" +
             "Content-Length: 0\r\n\r\n";
 
     assertEquals(expected, headerStr);
