@@ -17,20 +17,16 @@ public class Request implements RequestInterface {
     this.headers = new HashMap<>();
   }
 
-  public void parseRequest() {
-    try {
-      this.parseHeader();
+  public void parseRequest() throws IOException {
+    this.parseHeader();
 
-      var contentLength = 0;
-      if (this.headers.containsKey("Content-Length")) {
-        contentLength = Integer.parseInt(this.headers.get("Content-Length"));
-      }
+    var contentLength = 0;
+    if (this.headers.containsKey("Content-Length")) {
+      contentLength = Integer.parseInt(this.headers.get("Content-Length"));
+    }
 
-      if (contentLength > 0) {
-        this.parseBody(contentLength);
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
+    if (contentLength > 0) {
+      this.parseBody(contentLength);
     }
   }
 
@@ -73,20 +69,16 @@ public class Request implements RequestInterface {
     }
   }
 
-  private void parseBody(int contentLength) {
-    try {
-      var bodyStr = "";
-      char character;
+  private void parseBody(int contentLength) throws IOException {
+    var bodyStr = "";
+    char character;
 
-      while (bodyStr.length() < contentLength) {
-        character = (serverIO.read());
-        bodyStr = bodyStr.concat(String.valueOf(character));
-      }
-
-      this.body = bodyStr;
-    } catch (IOException e) {
-      e.printStackTrace();
+    while (bodyStr.length() < contentLength) {
+      character = (serverIO.read());
+      bodyStr = bodyStr.concat(String.valueOf(character));
     }
+
+    this.body = bodyStr;
   }
 
   public String getMethod() {

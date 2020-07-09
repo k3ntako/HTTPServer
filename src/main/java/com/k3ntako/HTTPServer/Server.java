@@ -12,10 +12,10 @@ public class Server {
   private Router router;
 
   public Server(
-          ServerIOInterface serverIO,
-          RequestHandlerInterface requestHandler,
-          ServerSocketWrapperInterface serverSocket,
-          Router router
+      ServerIOInterface serverIO,
+      RequestHandlerInterface requestHandler,
+      ServerSocketWrapperInterface serverSocket,
+      Router router
   ) {
     this.serverIO = serverIO;
     this.requestHandler = requestHandler;
@@ -25,23 +25,41 @@ public class Server {
 
   public void run() throws IOException {
     var clientSocket = serverSocket.accept();
+    String responseStr = "";
 
-    serverIO.init(clientSocket);
+    try {
+      serverIO.init(clientSocket);
 
-    var request = this.requestHandler.handleRequest(serverIO);
-    var route = this.router.routeRequest(request);
-    var response = route.createResponse();
-    serverIO.sendData(response);
-
-    this.close(clientSocket);
+      var request = this.requestHandler.handleRequest(serverIO);
+      var response = this.router.routeRequest(request);
+      responseStr = response.createResponse();
+    } catch (HTTPError e) {
+      var response = generateErrorResponse(e.getStatus(), e);
+      responseStr = response.createResponse();
+    } catch (Exception e) {
+      var response = generateErrorResponse(500, e);
+      responseStr = response.createResponse();
+    } finally {
+      serverIO.sendData(responseStr);
+      this.close(clientSocket);
+    }
   }
 
-  private void close(Socket clientSocket) {
-    try {
-      serverIO.close();
-      clientSocket.close();
-    } catch (IOException e) {
-      e.printStackTrace();
+  private Response generateErrorResponse(int status, Exception exception) {
+    var response = new Response();
+    response.setStatus(status);
+
+    var message = exception.getMessage();
+    if(message == null){
+      message = exception.getClass().getName();
     }
+    response.setBody(message);
+
+    return response;
+  }
+
+  private void close(Socket clientSocket) throws IOException {
+    serverIO.close();
+    clientSocket.close();
   }
 }

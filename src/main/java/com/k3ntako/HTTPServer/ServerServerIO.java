@@ -10,16 +10,12 @@ public class ServerServerIO implements ServerIOInterface {
   private BufferedReader bufferedReader;
   private PrintWriterWrapperInterface printWriter;
 
-  public void init(Socket clientSocket) {
-    try {
-      var inputStreamReader = new InputStreamReader(clientSocket.getInputStream());
-      bufferedReader = new BufferedReader(inputStreamReader);
+  public void init(Socket clientSocket) throws IOException {
+    var inputStreamReader = new InputStreamReader(clientSocket.getInputStream());
+    bufferedReader = new BufferedReader(inputStreamReader);
 
-      var outputStream = clientSocket.getOutputStream();
-      printWriter = new PrintWriterWrapper(outputStream, true);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+    var outputStream = clientSocket.getOutputStream();
+    printWriter = new PrintWriterWrapper(outputStream, true);
   }
 
   public String readLine() throws IOException {
