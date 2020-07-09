@@ -17,6 +17,7 @@ public class RouteRegistrar {
     routeRegistry.registerGet("/admin", new Admin());
     routeRegistry.registerGet("/account", new Account());
     routeRegistry.registerPost("/simple_post", new SimplePost(fileIO));
+    routeRegistry.registerGet("/text_file_content", new GetTextFileContent(fileIO));
 
     return routeRegistry;
   }

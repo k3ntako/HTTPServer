@@ -24,7 +24,7 @@ public class FileIOMock implements FileIOInterface {
     @Override
     public String read(Path path) {
         lastReadPath = path;
-        return null;
+        return mockFileContent;
     }
 
     public String getLastWrite() {
