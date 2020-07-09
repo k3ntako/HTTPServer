@@ -19,6 +19,11 @@ public class FileIO implements FileIOInterface {
 
   @Override
   public String read(Path path) throws IOException {
+    var file = new File(path.toString());
+    if (!file.exists()) {
+      return null;
+    }
+
     return Files.readString(path);
   }
 }
