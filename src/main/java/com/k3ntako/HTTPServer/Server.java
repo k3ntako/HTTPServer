@@ -34,9 +34,11 @@ public class Server {
       var response = this.router.routeRequest(request);
       responseStr = response.createResponse();
     } catch (HTTPError e) {
+      e.printStackTrace();
       var response = generateErrorResponse(e.getStatus(), e);
       responseStr = response.createResponse();
     } catch (Exception e) {
+      e.printStackTrace();
       var response = generateErrorResponse(500, e);
       responseStr = response.createResponse();
     } finally {
