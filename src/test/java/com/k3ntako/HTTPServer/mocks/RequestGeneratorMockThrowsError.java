@@ -1,13 +1,13 @@
 package com.k3ntako.HTTPServer.mocks;
 
 import com.k3ntako.HTTPServer.HTTPError;
-import com.k3ntako.HTTPServer.RequestHandlerInterface;
+import com.k3ntako.HTTPServer.RequestGeneratorInterface;
 import com.k3ntako.HTTPServer.RequestInterface;
 import com.k3ntako.HTTPServer.ServerIOInterface;
 
 import java.util.HashMap;
 
-public class RequestHandlerMockThrowsError implements RequestHandlerInterface  {
+public class RequestGeneratorMockThrowsError implements RequestGeneratorInterface {
   private String method;
   private String route;
   private String protocol;
@@ -15,7 +15,7 @@ public class RequestHandlerMockThrowsError implements RequestHandlerInterface  {
   private String body;
   private boolean handleRequestCalled = false;
 
-  public RequestHandlerMockThrowsError() {
+  public RequestGeneratorMockThrowsError() {
     this.method = "GET";
     this.route = "/simple_get_with_body";
     this.protocol = "HTTP/1.1";
@@ -23,7 +23,7 @@ public class RequestHandlerMockThrowsError implements RequestHandlerInterface  {
     this.body = "";
   }
 
-  public RequestInterface handleRequest(ServerIOInterface serverIO) throws HTTPError {
+  public RequestInterface generateRequest(ServerIOInterface serverIO) throws HTTPError {
     throw new HTTPError(500, "This is a test error");
   }
 

@@ -7,18 +7,18 @@ import java.net.Socket;
 
 public class Server {
   private ServerIOInterface serverIO;
-  private RequestHandlerInterface requestHandler;
+  private RequestGeneratorInterface requestGenerator;
   private ServerSocketWrapperInterface serverSocket;
   private Router router;
 
   public Server(
       ServerIOInterface serverIO,
-      RequestHandlerInterface requestHandler,
+      RequestGeneratorInterface requestGenerator,
       ServerSocketWrapperInterface serverSocket,
       Router router
   ) {
     this.serverIO = serverIO;
-    this.requestHandler = requestHandler;
+    this.requestGenerator = requestGenerator;
     this.serverSocket = serverSocket;
     this.router = router;
   }
@@ -30,7 +30,7 @@ public class Server {
     try {
       serverIO.init(clientSocket);
 
-      var request = this.requestHandler.handleRequest(serverIO);
+      var request = this.requestGenerator.generateRequest(serverIO);
       var response = this.router.routeRequest(request);
       responseStr = response.createResponse();
     } catch (HTTPError e) {

@@ -15,17 +15,17 @@ class ServerTest {
             "\n\n";
 
     var serverIOMock = new ServerIOMock(clientInput);
-    var requestHandlerMock = new RequestHandlerMock();
+    var requestGeneratorMock = new RequestGeneratorMock();
     var socket = new ServerSocketMock();
 
     var routeRegistrar = new RouteRegistrar(new RouteRegistry(), new FileIOMock());
     var routeRegistry = routeRegistrar.registerRoutes();
     var router = new Router(routeRegistry);
 
-    var app = new Server(serverIOMock, requestHandlerMock, socket, router);
+    var app = new Server(serverIOMock, requestGeneratorMock, socket, router);
     app.run();
 
-    assertTrue( requestHandlerMock.wasHandleRequestCalled());
+    assertTrue( requestGeneratorMock.wasHandleRequestCalled());
   }
 
   @Test
@@ -43,14 +43,14 @@ class ServerTest {
             "Body line 4: def";
 
     var serverIO = new ServerIOMock(clientInput + bodyStr);
-    var requestHandlerMock = new RequestHandlerMock();
+    var requestGeneratorMock = new RequestGeneratorMock();
     var socket = new ServerSocketMock();
 
     var routeRegistrar = new RouteRegistrar(new RouteRegistry(), new FileIOMock());
     var routeRegistry = routeRegistrar.registerRoutes();
     var router = new Router(routeRegistry);
 
-    var app = new Server(serverIO, requestHandlerMock, socket, router);
+    var app = new Server(serverIO, requestGeneratorMock, socket, router);
     app.run();
 
     var expected = "HTTP/1.1 200 OK\r\n" +
@@ -75,14 +75,14 @@ class ServerTest {
         "Body line 4: def";
 
     var serverIO = new ServerIOMock(clientInput + bodyStr);
-    var requestHandlerMock = new RequestHandlerMockThrowsError();
+    var requestGeneratorMock = new RequestGeneratorMockThrowsError();
     var socket = new ServerSocketMock();
 
     var routeRegistrar = new RouteRegistrar(new RouteRegistry(), new FileIOMock());
     var routeRegistry = routeRegistrar.registerRoutes();
     var router = new Router(routeRegistry);
 
-    var app = new Server(serverIO, requestHandlerMock, socket, router);
+    var app = new Server(serverIO, requestGeneratorMock, socket, router);
     app.run();
 
     var expected = "HTTP/1.1 500 Internal Server Error\r\n" +
