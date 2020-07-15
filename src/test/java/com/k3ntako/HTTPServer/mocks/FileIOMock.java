@@ -2,7 +2,6 @@ package com.k3ntako.HTTPServer.mocks;
 
 import com.k3ntako.HTTPServer.FileIOInterface;
 
-import java.io.IOException;
 import java.nio.file.Path;
 
 public class FileIOMock implements FileIOInterface {
@@ -10,6 +9,10 @@ public class FileIOMock implements FileIOInterface {
     private Path lastWritePath;
     private Path lastReadPath;
     private String mockFileContent;
+
+    public FileIOMock() {
+        this.mockFileContent = "Mock file content was not set";
+    }
 
     public FileIOMock(String mockFileContent) {
         this.mockFileContent = mockFileContent;

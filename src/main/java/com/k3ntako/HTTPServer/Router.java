@@ -13,12 +13,7 @@ public class Router {
 
   public Response routeRequest(RequestInterface request) throws IOException {
 
-    ControllerInterface controller = null;
-    if (request.getMethod().equals("GET")) {
-      controller = routeRegistry.get(request.getRoute());
-    } else if (request.getMethod().equals("POST")) {
-      controller = routeRegistry.post(request.getRoute());
-    }
+    ControllerInterface controller = routeRegistry.getController(request.getMethod(), request.getRoute());
 
     if (controller == null) {
       controller = new NotFound();
