@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.LinkedHashMap;
 
-public class YamlIO {
+public class YamlIO implements YamlIOInterface {
   private FileIOInterface fileIO;
   private Yaml yaml;
 
@@ -15,6 +15,7 @@ public class YamlIO {
     this.yaml = yaml;
   }
 
+  @Override
   public LinkedHashMap<String, Object> read(String fileName) throws IOException, URISyntaxException {
     var yamlStr = fileIO.getResource(fileName);
 
