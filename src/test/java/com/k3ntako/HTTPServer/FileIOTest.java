@@ -16,6 +16,18 @@ class FileIOTest {
   final private Path path = Paths.get("./file.txt");
   final private Path pathInFolder = Paths.get("./data/test/file.txt");
 
+  @AfterEach
+  void tearDown() throws IOException {
+    Files.deleteIfExists(path);
+
+    if (Files.exists(pathInFolder.getParent())) {
+      Files.walk(pathInFolder.getParent())
+          .sorted(Comparator.reverseOrder())
+          .map(Path::toFile)
+          .forEach(File::delete);
+    }
+  }
+
   @Test
   void write() throws IOException {
     final var str = "This is text\nthis is a new line!";
@@ -51,16 +63,16 @@ class FileIOTest {
     assertEquals(str, fileContent);
   }
 
+  @Test
+  void append() throws IOException {
+    final var str = "This is a different text\nthis is a new line!\r\n And more!";
+    Files.write(path, str.getBytes());
 
-  @AfterEach
-  void tearDown() throws IOException {
-    Files.deleteIfExists(path);
+    final var fileIO = new FileIO();
+    fileIO.append(path, "Appended string!");
 
-    if (Files.exists(pathInFolder.getParent())) {
-      Files.walk(pathInFolder.getParent())
-          .sorted(Comparator.reverseOrder())
-          .map(Path::toFile)
-          .forEach(File::delete);
-    }
+    final var fileContent = Files.readString(path);
+
+    assertEquals(str + "Appended string!", fileContent);
   }
 }

@@ -26,4 +26,11 @@ public class FileIO implements FileIOInterface {
 
     return Files.readString(path);
   }
+
+  @Override
+  public void append(Path path, String appendStr) throws IOException {
+    var fileStr = this.read(path);
+    var newStr = fileStr + appendStr;
+    this.write(path, newStr);
+  }
 }
