@@ -17,6 +17,7 @@ public class RouteRegistrar {
     routeRegistry.registerRoute("GET","/admin", new Admin());
     routeRegistry.registerRoute("GET","/account", new Account());
     routeRegistry.registerRoute("POST","/simple_post", new SimplePost(fileIO));
+    routeRegistry.registerRoute("PATCH","/simple_post", new PatchSimplePost(fileIO));
     routeRegistry.registerRoute("GET","/text_file_content", new GetTextFileContent(fileIO));
 
     return routeRegistry;
