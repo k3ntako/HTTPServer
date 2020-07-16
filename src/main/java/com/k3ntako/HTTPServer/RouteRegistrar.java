@@ -1,22 +1,23 @@
 package com.k3ntako.HTTPServer;
 
-import com.k3ntako.HTTPServer.controllers.Account;
-import com.k3ntako.HTTPServer.controllers.SimpleGet;
-import com.k3ntako.HTTPServer.controllers.SimpleGetWithBody;
-import com.k3ntako.HTTPServer.controllers.Admin;
+import com.k3ntako.HTTPServer.controllers.*;
 
 public class RouteRegistrar {
   private RouteRegistry routeRegistry;
+  private FileIOInterface fileIO;
 
-  public RouteRegistrar(RouteRegistry routeRegistry) {
+  public RouteRegistrar(RouteRegistry routeRegistry, FileIOInterface fileIO) {
     this.routeRegistry = routeRegistry;
+    this.fileIO = fileIO;
   }
 
-  public RouteRegistry registerRoutes() {
-    routeRegistry.registerGet("/simple_get", new SimpleGet());
-    routeRegistry.registerGet("/simple_get_with_body", new SimpleGetWithBody());
-    routeRegistry.registerGet("/admin", new Admin());
-    routeRegistry.registerGet("/account", new Account());
+  public RouteRegistry registerRoutes() throws Exception {
+    routeRegistry.registerRoute("GET","/simple_get", new SimpleGet());
+    routeRegistry.registerRoute("GET","/simple_get_with_body", new SimpleGetWithBody());
+    routeRegistry.registerRoute("GET","/admin", new Admin());
+    routeRegistry.registerRoute("GET","/account", new Account());
+    routeRegistry.registerRoute("POST","/simple_post", new SimplePost(fileIO));
+    routeRegistry.registerRoute("GET","/text_file_content", new GetTextFileContent(fileIO));
 
     return routeRegistry;
   }

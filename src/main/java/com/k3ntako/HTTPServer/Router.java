@@ -2,6 +2,8 @@ package com.k3ntako.HTTPServer;
 
 import com.k3ntako.HTTPServer.controllers.NotFound;
 
+import java.io.IOException;
+
 public class Router {
   private RouteRegistry routeRegistry;
 
@@ -9,13 +11,14 @@ public class Router {
     this.routeRegistry = routeRegistry;
   }
 
-  public Response routeRequest(RequestInterface request) {
-    var route = routeRegistry.get(request.getRoute());
+  public Response routeRequest(RequestInterface request) throws IOException {
 
-    if (route == null) {
-      route = new NotFound();
+    ControllerInterface controller = routeRegistry.getController(request.getMethod(), request.getRoute());
+
+    if (controller == null) {
+      controller = new NotFound();
     }
 
-    return route.getResponse(request);
+    return controller.getResponse(request);
   }
 }
