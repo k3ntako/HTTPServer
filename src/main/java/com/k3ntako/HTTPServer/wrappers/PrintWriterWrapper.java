@@ -16,10 +16,6 @@ public class PrintWriterWrapper implements PrintWriterWrapperInterface {
   }
 
   public void close() {
-    try {
-      printerWriter.close();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+    printerWriter.close();
   }
 }

@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.Socket;
 
 public interface ServerIOInterface {
-  void init(Socket clientSocket);
+  void init(Socket clientSocket) throws IOException;
   String readLine() throws IOException;
   char read() throws IOException;
   void sendData(String data);

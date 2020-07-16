@@ -1,12 +1,12 @@
 package com.k3ntako.HTTPServer.mocks;
 
 import com.k3ntako.HTTPServer.ServerIOInterface;
-import com.k3ntako.HTTPServer.RequestHandlerInterface;
+import com.k3ntako.HTTPServer.RequestGeneratorInterface;
 import com.k3ntako.HTTPServer.RequestInterface;
 
 import java.util.HashMap;
 
-public class RequestHandlerMock implements RequestHandlerInterface  {
+public class RequestGeneratorMock implements RequestGeneratorInterface {
   private String method;
   private String route;
   private String protocol;
@@ -14,7 +14,7 @@ public class RequestHandlerMock implements RequestHandlerInterface  {
   private String body;
   private boolean handleRequestCalled = false;
 
-  public RequestHandlerMock() {
+  public RequestGeneratorMock() {
     this.method = "GET";
     this.route = "/simple_get_with_body";
     this.protocol = "HTTP/1.1";
@@ -22,7 +22,7 @@ public class RequestHandlerMock implements RequestHandlerInterface  {
     this.body = "";
   }
 
-  public RequestInterface handleRequest(ServerIOInterface serverIO){
+  public RequestInterface generateRequest(ServerIOInterface serverIO){
     var request = new RequestMock(method, route, protocol, headers, body);
     handleRequestCalled = true;
     return request;

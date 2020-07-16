@@ -1,9 +1,10 @@
 package com.k3ntako.HTTPServer;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 public interface RequestInterface {
-  void parseRequest();
+  void parseRequest() throws IOException;
 
   String getMethod();
 

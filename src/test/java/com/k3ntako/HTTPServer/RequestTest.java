@@ -3,6 +3,7 @@ package com.k3ntako.HTTPServer;
 import com.k3ntako.HTTPServer.mocks.ServerIOMock;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.net.Socket;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -10,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class RequestTest {
 
   @Test
-  void parseRequest() {
+  void parseRequest() throws IOException {
     var headerStr = "GET / HTTP/1.1\r\n" +
         "Host: localhost:5000\r\n" +
         "User-Agent: curl/7.64.1\r\n" +
@@ -31,7 +32,7 @@ class RequestTest {
   }
 
   @Test
-  void parseBody() {
+  void parseBody() throws IOException {
     var header = "GET / HTTP/1.1\r\n" +
         "Content-Length: 68\r\n\r\n";
     var bodyStr = "Body line 1: abc\n" +
