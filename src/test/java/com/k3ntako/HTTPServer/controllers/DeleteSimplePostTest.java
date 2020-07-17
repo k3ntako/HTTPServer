@@ -1,5 +1,6 @@
 package com.k3ntako.HTTPServer.controllers;
 
+import com.k3ntako.HTTPServer.HTTPError;
 import com.k3ntako.HTTPServer.mocks.FileIOMock;
 import com.k3ntako.HTTPServer.mocks.RequestMock;
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class DeleteSimplePostTest {
 
   @Test
-  void getResponse() throws IOException {
+  void getResponse() throws IOException, HTTPError {
     var request = new RequestMock("DELETE", "/simple_post", "HTTP/1.1", new HashMap<>(), null);
     var fileIOMock = new FileIOMock();
 

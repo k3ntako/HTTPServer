@@ -40,7 +40,12 @@ public class FileIO implements FileIOInterface {
   }
 
   @Override
-  public void delete(Path path) throws IOException {
-    Files.delete(path);
+  public void delete(Path path) throws HTTPError {
+    var file = new File(path.toString());
+    if (!file.exists()) {
+      throw new HTTPError(404, "File was not found");
+    }
+
+    file.delete();
   }
 }

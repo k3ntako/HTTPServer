@@ -90,7 +90,7 @@ class FileIOTest {
   }
 
   @Test
-  void delete() throws IOException {
+  void delete() throws IOException, HTTPError {
     Files.write(path, "File text to delete".getBytes());
 
     final var fileIO = new FileIO();
@@ -98,5 +98,19 @@ class FileIOTest {
 
     var file = new File(path.toString());
     assertFalse(file.exists());
+  }
+
+  @Test
+  void deleteShouldThrowIfFileDoesNotExist() {
+    final var fileIO = new FileIO();
+
+
+    HTTPError exception = assertThrows(
+        HTTPError.class,
+        () -> fileIO.delete(path)
+    );
+
+    assertEquals("File was not found", exception.getMessage());
+    assertEquals(404, exception.getStatus());
   }
 }

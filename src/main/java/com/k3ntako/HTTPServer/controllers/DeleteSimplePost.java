@@ -13,7 +13,7 @@ public class DeleteSimplePost implements ControllerInterface {
     this.fileIO = fileIO;
   }
 
-  public Response getResponse(RequestInterface request) throws IOException {
+  public Response getResponse(RequestInterface request) throws IOException, HTTPError {
     Path path = FileSystems.getDefault().getPath("./data/simple_post.txt");
     fileIO.delete(path);
 
