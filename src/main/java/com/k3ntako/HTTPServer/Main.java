@@ -11,6 +11,7 @@ public class Main {
     var routeRegistry = routeRegistrar.registerRoutes();
     var router = new Router(routeRegistry);
     var requestHandler = new RequestHandler(router, new RequestGenerator());
+    requestHandler.useErrorHandler(new ErrorHandler());
 
     var app = new Server(serverIO, requestHandler, serverSocket, router);
 

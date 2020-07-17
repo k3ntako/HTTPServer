@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Comparator;
@@ -64,7 +65,7 @@ class FileIOTest {
   }
 
   @Test
-  void append() throws IOException {
+  void append() throws IOException, HTTPError {
     final var str = "This is a different text\nthis is a new line!\r\n And more!";
     Files.write(path, str.getBytes());
 
@@ -74,5 +75,18 @@ class FileIOTest {
     final var fileContent = Files.readString(path);
 
     assertEquals(str + "Appended string!", fileContent);
+  }
+
+  @Test
+  void appendShouldThrowIfFileDoesNotExist() {
+    final var fileIO = new FileIO();
+
+    HTTPError exception = assertThrows(
+        HTTPError.class,
+        () -> fileIO.append(path, "Appended string!")
+    );
+
+    assertEquals("File to be appended was not found", exception.getMessage());
+    assertEquals(404, exception.getStatus());
   }
 }

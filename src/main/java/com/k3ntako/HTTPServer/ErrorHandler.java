@@ -1,14 +1,11 @@
 package com.k3ntako.HTTPServer;
 
 public class ErrorHandler implements ErrorHandlerInterface {
-  @Override
-  public Response handleError(HTTPError e){
-    return generateErrorResponse(e.getStatus(), e);
-  }
 
   @Override
-  public Response handleError(Exception e){
-    return generateErrorResponse(500, e);
+  public Response handleError(Exception e) {
+    var status = this.getStatus(e);
+    return generateErrorResponse(status, e);
   }
 
   private Response generateErrorResponse(int status, Exception exception) {
@@ -16,11 +13,19 @@ public class ErrorHandler implements ErrorHandlerInterface {
     response.setStatus(status);
 
     var message = exception.getMessage();
-    if(message == null){
+    if (message == null) {
       message = exception.getClass().getName();
     }
     response.setBody(message);
 
     return response;
+  }
+
+  private int getStatus(Exception e) {
+    if (e instanceof HTTPError) {
+      return ((HTTPError) e).getStatus();
+    }
+
+    return 500;
   }
 }

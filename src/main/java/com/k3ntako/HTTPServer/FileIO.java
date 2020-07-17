@@ -3,6 +3,7 @@ package com.k3ntako.HTTPServer;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 
 public class FileIO implements FileIOInterface {
@@ -28,8 +29,13 @@ public class FileIO implements FileIOInterface {
   }
 
   @Override
-  public void append(Path path, String appendStr) throws IOException {
+  public void append(Path path, String appendStr) throws IOException, HTTPError {
     var fileStr = this.read(path);
+
+    if (fileStr == null) {
+      throw new HTTPError(404, "File to be appended was not found");
+    }
+
     var newStr = fileStr + appendStr;
     this.write(path, newStr);
   }
