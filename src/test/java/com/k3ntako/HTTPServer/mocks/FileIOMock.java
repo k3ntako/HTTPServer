@@ -11,6 +11,7 @@ public class FileIOMock implements FileIOInterface {
   private String mockFileContent;
   private String lastAppend;
   private Path lastAppendPath;
+  private Path lastDeletePath;
 
   public FileIOMock() {
     this.mockFileContent = "Mock file content was not set";
@@ -38,6 +39,11 @@ public class FileIOMock implements FileIOInterface {
     lastAppend = appendStr;
   }
 
+  @Override
+  public void delete(Path path) {
+    lastDeletePath = path;
+  }
+
   public String getLastWrite() {
     return lastWrite;
   }
@@ -56,5 +62,9 @@ public class FileIOMock implements FileIOInterface {
 
   public String getLastAppend() {
     return lastAppend;
+  }
+
+  public Path getLastDeletePath() {
+    return lastDeletePath;
   }
 }

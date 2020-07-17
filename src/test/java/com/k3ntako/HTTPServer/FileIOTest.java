@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Comparator;
@@ -88,5 +87,16 @@ class FileIOTest {
 
     assertEquals("File to be appended was not found", exception.getMessage());
     assertEquals(404, exception.getStatus());
+  }
+
+  @Test
+  void delete() throws IOException {
+    Files.write(path, "File text to delete".getBytes());
+
+    final var fileIO = new FileIO();
+    fileIO.delete(path);
+
+    var file = new File(path.toString());
+    assertFalse(file.exists());
   }
 }

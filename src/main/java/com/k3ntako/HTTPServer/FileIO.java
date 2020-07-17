@@ -3,7 +3,6 @@ package com.k3ntako.HTTPServer;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 
 public class FileIO implements FileIOInterface {
@@ -38,5 +37,10 @@ public class FileIO implements FileIOInterface {
 
     var newStr = fileStr + appendStr;
     this.write(path, newStr);
+  }
+
+  @Override
+  public void delete(Path path) throws IOException {
+    Files.delete(path);
   }
 }
