@@ -17,7 +17,7 @@ public class ServerGenerator {
 
   public Server generate() throws Exception {
     var config = this.getConfig();
-    var serverSocket = new ServerSocketWrapper((int) config.get("port"));
+    final var serverSocket = new ServerSocketWrapper((int) config.get("port"));
 
     var router = this.registerRoutes();
     var requestHandler = new RequestHandler(router, new RequestGenerator());
