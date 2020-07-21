@@ -1,21 +1,18 @@
 package com.k3ntako.HTTPServer;
 
-import com.k3ntako.HTTPServer.wrappers.ServerSocketWrapper;
+import org.yaml.snakeyaml.Yaml;
 
 public class Main {
   public static void main(String[] args) throws Exception {
-    var serverIO = new ServerServerIO();
-    var serverSocket = new ServerSocketWrapper(5000);
+    var fileIO = new FileIO();
+    var yamlIO = new YamlIO(fileIO, new Yaml());
 
-    var routeRegistrar = new RouteRegistrar(new RouteRegistry(), new FileIO());
-    var routeRegistry = routeRegistrar.registerRoutes();
-    var router = new Router(routeRegistry);
-    var requestHandler = new RequestHandler(router, new RequestGenerator());
+    var serverGenerator = new ServerGenerator(fileIO, yamlIO);
 
-    var app = new Server(serverIO, requestHandler, serverSocket, router);
+    var server = serverGenerator.generate();
 
     while (true) {
-      app.run();
+      server.run();
     }
   }
 }
