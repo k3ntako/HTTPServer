@@ -3,14 +3,12 @@ package com.k3ntako.HTTPServer;
 import com.k3ntako.HTTPServer.mocks.*;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class RequestHandlerTest {
   @Test
   void handleRequest() throws Exception {
-    var routeRegistrar = new RouteRegistrar(new RouteRegistry(), new FileIOMock());
+    var routeRegistrar = new RouteRegistrar(new RouteRegistry(), new FileIOMock(), new UUID());
     var routeRegistry = routeRegistrar.registerRoutes();
 
     var router = new Router(routeRegistry);
@@ -27,7 +25,7 @@ class RequestHandlerTest {
 
   @Test
   void useErrorHandler() throws Exception {
-    var routeRegistrar = new RouteRegistrar(new RouteRegistry(), new FileIOMock());
+    var routeRegistrar = new RouteRegistrar(new RouteRegistry(), new FileIOMock(), new UUID());
     var routeRegistry = routeRegistrar.registerRoutes();
 
     var router = new Router(routeRegistry);

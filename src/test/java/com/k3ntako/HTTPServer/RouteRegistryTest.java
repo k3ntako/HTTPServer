@@ -22,7 +22,7 @@ class RouteRegistryTest {
   @Test
   void registerAPostRoute() throws Exception {
     var routeRegistry = new RouteRegistry();
-    routeRegistry.registerRoute("POST", "/simple_post", new SimplePost(new FileIOMock()));
+    routeRegistry.registerRoute("POST", "/simple_post", new SimplePost(new FileIOMock(), new UUID()));
 
     var simplePost = routeRegistry.getController("POST", "/simple_post");
     assertTrue(simplePost instanceof SimplePost);
@@ -31,7 +31,7 @@ class RouteRegistryTest {
   @Test
   void registerALowercaseMethod() throws Exception {
     var routeRegistry = new RouteRegistry();
-    routeRegistry.registerRoute("post", "/simple_post", new SimplePost(new FileIOMock()));
+    routeRegistry.registerRoute("post", "/simple_post", new SimplePost(new FileIOMock(), new UUID()));
 
     var simplePost = routeRegistry.getController("POST", "/simple_post");
     assertTrue(simplePost instanceof SimplePost);
