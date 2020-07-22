@@ -27,7 +27,24 @@ class SimplePostTest {
   }
 
   @Test
-  void getResponseThrowsErrorIfBodyIsMultipleLines() throws IOException {
+  void getResponseReturnsFileName() throws IOException, HTTPError {
+    var postBody = "hello post!";
+    var request = new RequestMock("POST", "/simple_post", "HTTP/1.1", new HashMap<>(), postBody);
+    var fileIOMock = new FileIOMock(postBody);
+
+    var simplePost = new SimplePost(fileIOMock, new UUIDMock("8d142d80-565f-417d-8334-a8a19caadadb"));
+    var response = simplePost.getResponse(request);
+    var responseStr = response.createResponse();
+
+    var expectedResponse = "HTTP/1.1 200 OK\r\n" +
+        "Content-Length: 36\r\n\r\n" +
+        "8d142d80-565f-417d-8334-a8a19caadadb";
+
+    assertEquals(expectedResponse, responseStr);
+  }
+
+  @Test
+  void getResponseThrowsErrorIfBodyIsMultipleLines() {
     var postBody = "hello post!\nsecond line";
     var request = new RequestMock("POST", "/simple_post", "HTTP/1.1", new HashMap<>(), postBody);
     var fileIOMock = new FileIOMock(postBody);

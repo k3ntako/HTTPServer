@@ -7,7 +7,7 @@ public class RouteRegistrar {
   private FileIOInterface fileIO;
   private UUIDInterface uuid;
 
-  public RouteRegistrar(RouteRegistry routeRegistry, FileIOInterface fileIO, UUID uuid) {
+  public RouteRegistrar(RouteRegistry routeRegistry, FileIOInterface fileIO, UUIDInterface uuid) {
     this.routeRegistry = routeRegistry;
     this.fileIO = fileIO;
     this.uuid = uuid;

@@ -19,12 +19,16 @@ public class SimplePost implements ControllerInterface {
     var body = request.getBody();
     validateBody(body);
 
-    var filePath = "./data/" + uuid.generate() + ".txt";
+    var fileUUID = uuid.generate();
+    var filePath = "./data/" + fileUUID + ".txt";
     Path path = FileSystems.getDefault().getPath(filePath);
 
     fileIO.write(path, body);
 
-    return new Response();
+    var response = new Response();
+    response.setBody(fileUUID);
+
+    return response;
   }
 
   private void validateBody(String body) throws HTTPError {
