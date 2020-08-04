@@ -11,16 +11,16 @@ import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ReminderPostTest {
+class RemindersTest {
 
   @Test
   void getResponse() throws IOException, HTTPError {
     var postBody = "hello post!";
-    var request = new RequestMock("POST", "/reminder_post", "HTTP/1.1", new HashMap<>(), postBody);
+    var request = new RequestMock("POST", "/reminders", "HTTP/1.1", new HashMap<>(), postBody);
     var fileIOMock = new FileIOMock(postBody);
 
-    var reminderPost = new ReminderPost(fileIOMock, new UUIDMock("8d142d80-565f-417d-8334-a8a19caadadb"));
-    reminderPost.getResponse(request);
+    var reminders = new Reminders(fileIOMock, new UUIDMock("8d142d80-565f-417d-8334-a8a19caadadb"));
+    reminders.getResponse(request);
 
     assertEquals(postBody, fileIOMock.getLastWrite());
     assertEquals("./data/8d142d80-565f-417d-8334-a8a19caadadb.txt", fileIOMock.getLastWritePath().toString());
@@ -29,11 +29,11 @@ class ReminderPostTest {
   @Test
   void getResponseReturnsFileName() throws IOException, HTTPError {
     var postBody = "hello post!";
-    var request = new RequestMock("POST", "/reminder_post", "HTTP/1.1", new HashMap<>(), postBody);
+    var request = new RequestMock("POST", "/reminders", "HTTP/1.1", new HashMap<>(), postBody);
     var fileIOMock = new FileIOMock(postBody);
 
-    var reminderPost = new ReminderPost(fileIOMock, new UUIDMock("8d142d80-565f-417d-8334-a8a19caadadb"));
-    var response = reminderPost.getResponse(request);
+    var reminders = new Reminders(fileIOMock, new UUIDMock("8d142d80-565f-417d-8334-a8a19caadadb"));
+    var response = reminders.getResponse(request);
     var responseStr = response.createResponse();
 
     var expectedResponse = "HTTP/1.1 200 OK\r\n" +
@@ -46,14 +46,14 @@ class ReminderPostTest {
   @Test
   void getResponseThrowsErrorIfBodyIsMultipleLines() {
     var postBody = "hello post!\nsecond line";
-    var request = new RequestMock("POST", "/reminder_post", "HTTP/1.1", new HashMap<>(), postBody);
+    var request = new RequestMock("POST", "/reminders", "HTTP/1.1", new HashMap<>(), postBody);
     var fileIOMock = new FileIOMock(postBody);
 
-    var reminderPost = new ReminderPost(fileIOMock, new UUIDMock("8d142d80-565f-417d-8334-a8a19caadadb"));
+    var reminders = new Reminders(fileIOMock, new UUIDMock("8d142d80-565f-417d-8334-a8a19caadadb"));
 
     HTTPError exception = assertThrows(
         HTTPError.class,
-        () -> reminderPost.getResponse(request)
+        () -> reminders.getResponse(request)
     );
 
     assertEquals("Request body should not be multiline", exception.getMessage());

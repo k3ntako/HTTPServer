@@ -2,7 +2,7 @@ package com.k3ntako.HTTPServer;
 
 import com.k3ntako.HTTPServer.controllers.SimpleGet;
 import com.k3ntako.HTTPServer.controllers.SimpleGetWithBody;
-import com.k3ntako.HTTPServer.controllers.ReminderPost;
+import com.k3ntako.HTTPServer.controllers.Reminders;
 import com.k3ntako.HTTPServer.mocks.FileIOMock;
 import org.junit.jupiter.api.Test;
 
@@ -22,19 +22,19 @@ class RouteRegistryTest {
   @Test
   void registerAPostRoute() throws Exception {
     var routeRegistry = new RouteRegistry();
-    routeRegistry.registerRoute("POST", "/reminder_post", new ReminderPost(new FileIOMock(), new UUID()));
+    routeRegistry.registerRoute("POST", "/reminders", new Reminders(new FileIOMock(), new UUID()));
 
-    var reminderPost = routeRegistry.getController("POST", "/reminder_post");
-    assertTrue(reminderPost instanceof ReminderPost);
+    var reminders = routeRegistry.getController("POST", "/reminders");
+    assertTrue(reminders instanceof Reminders);
   }
 
   @Test
   void registerALowercaseMethod() throws Exception {
     var routeRegistry = new RouteRegistry();
-    routeRegistry.registerRoute("post", "/reminder_post", new ReminderPost(new FileIOMock(), new UUID()));
+    routeRegistry.registerRoute("post", "/reminders", new Reminders(new FileIOMock(), new UUID()));
 
-    var reminderPost = routeRegistry.getController("POST", "/reminder_post");
-    assertTrue(reminderPost instanceof ReminderPost);
+    var reminders = routeRegistry.getController("POST", "/reminders");
+    assertTrue(reminders instanceof Reminders);
   }
 
   @Test

@@ -17,7 +17,7 @@ public class GetTextFileContent implements ControllerInterface {
   }
 
   public Response getResponse(RequestInterface request) throws IOException {
-    Path path = FileSystems.getDefault().getPath("./data/reminder_post.txt");
+    Path path = FileSystems.getDefault().getPath("./data/reminders.txt");
     var content = fileIO.read(path);
 
     var response = new Response();
