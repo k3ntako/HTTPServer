@@ -1,32 +1,27 @@
 package com.k3ntako.HTTPServer.controllers;
 
 import com.k3ntako.HTTPServer.*;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
 public class Reminders {
-  private FileIOInterface fileIO;
-  private UUIDInterface uuid;
+  private TextFile textFile;
 
-  public Reminders(FileIOInterface fileIO, UUIDInterface uuid) {
-    this.fileIO = fileIO;
-    this.uuid = uuid;
+  public Reminders(TextFile textFile) {
+    this.textFile = textFile;
   }
 
   public Response post(RequestInterface request) throws IOException, HTTPError {
     var body = request.getBody();
     validateBody(body);
 
-    var fileUUID = uuid.generate();
-    var filePath = "./data/" + fileUUID + ".txt";
-    Path path = FileSystems.getDefault().getPath(filePath);
-
-    fileIO.write(path, body);
+    var fileName = textFile.saveFile(body);
 
     var response = new Response();
-    response.setBody(fileUUID);
+    response.setBody(fileName);
 
     return response;
   }

@@ -18,8 +18,8 @@ class AccountTest {
 
     var responseStr = response.createResponse();
     var expectedResponse = "HTTP/1.1 302 Found\r\n" +
-            "Location: http://127.0.0.1:5000/\r\n" +
-            "Content-Length: 0\r\n\r\n";
+        "Location: http://127.0.0.1:5000/\r\n" +
+        "Content-Length: 0\r\n\r\n";
     assertEquals(expectedResponse, responseStr);
   }
 }

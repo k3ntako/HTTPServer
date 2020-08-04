@@ -18,7 +18,7 @@ class SimpleGetTest {
 
     var responseStr = response.createResponse();
     var expectedResponse = "HTTP/1.1 200 OK\r\n" +
-            "Content-Length: 0\r\n\r\n";
+        "Content-Length: 0\r\n\r\n";
     assertEquals(expectedResponse, responseStr);
   }
 }

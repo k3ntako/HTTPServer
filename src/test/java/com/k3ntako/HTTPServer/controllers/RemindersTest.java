@@ -1,6 +1,7 @@
 package com.k3ntako.HTTPServer.controllers;
 
 import com.k3ntako.HTTPServer.HTTPError;
+import com.k3ntako.HTTPServer.TextFile;
 import com.k3ntako.HTTPServer.mocks.FileIOMock;
 import com.k3ntako.HTTPServer.mocks.RequestMock;
 import com.k3ntako.HTTPServer.mocks.UUIDMock;
@@ -17,9 +18,10 @@ class RemindersTest {
   void post() throws IOException, HTTPError {
     var postBody = "hello post!";
     var request = new RequestMock("POST", "/reminders", "HTTP/1.1", new HashMap<>(), postBody);
-    var fileIOMock = new FileIOMock(postBody);
+    var fileIOMock = new FileIOMock();
 
-    var reminders = new Reminders(fileIOMock, new UUIDMock("8d142d80-565f-417d-8334-a8a19caadadb"));
+    var textFile = new TextFile(fileIOMock, new UUIDMock());
+    var reminders = new Reminders(textFile);
     reminders.post(request);
 
     assertEquals(postBody, fileIOMock.getLastWrite());
@@ -30,9 +32,9 @@ class RemindersTest {
   void postReturnsFileName() throws IOException, HTTPError {
     var postBody = "hello post!";
     var request = new RequestMock("POST", "/reminders", "HTTP/1.1", new HashMap<>(), postBody);
-    var fileIOMock = new FileIOMock(postBody);
 
-    var reminders = new Reminders(fileIOMock, new UUIDMock("8d142d80-565f-417d-8334-a8a19caadadb"));
+    var textFile = new TextFile(new FileIOMock(), new UUIDMock());
+    var reminders = new Reminders(textFile);
     var response = reminders.post(request);
     var responseStr = response.createResponse();
 
@@ -47,9 +49,9 @@ class RemindersTest {
   void postThrowsErrorIfBodyIsMultipleLines() {
     var postBody = "hello post!\nsecond line";
     var request = new RequestMock("POST", "/reminders", "HTTP/1.1", new HashMap<>(), postBody);
-    var fileIOMock = new FileIOMock(postBody);
 
-    var reminders = new Reminders(fileIOMock, new UUIDMock("8d142d80-565f-417d-8334-a8a19caadadb"));
+    var textFile = new TextFile(new FileIOMock(), new UUIDMock());
+    var reminders = new Reminders(textFile);
 
     HTTPError exception = assertThrows(
         HTTPError.class,

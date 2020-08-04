@@ -29,7 +29,7 @@ class GetTextFileContentTest {
 
     assertEquals("./data/reminders.txt", fileIOMock.getLastReadPath().toString());
 
-    var expectedResponse =  "HTTP/1.1 200 OK\r\n" +
+    var expectedResponse = "HTTP/1.1 200 OK\r\n" +
         "Content-Length: 18\r\n\r\n" +
         content;
 

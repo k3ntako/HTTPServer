@@ -18,7 +18,8 @@ class ServerTest {
     var requestGeneratorMock = new RequestGeneratorMock();
     var socket = new ServerSocketMock();
 
-    var routeRegistrar = new RouteRegistrar(new RouteRegistry(), new FileIOMock(), new UUID());
+    var textFile = new TextFile(new FileIOMock(), new UUID());
+    var routeRegistrar = new RouteRegistrar(new RouteRegistry(), new FileIOMock(), textFile);
     var routeRegistry = routeRegistrar.registerRoutes();
     var router = new Router(routeRegistry);
     var requestHandler = new RequestHandler(router, requestGeneratorMock);
@@ -47,7 +48,8 @@ class ServerTest {
     var requestGeneratorMock = new RequestGeneratorMock();
     var socket = new ServerSocketMock();
 
-    var routeRegistrar = new RouteRegistrar(new RouteRegistry(), new FileIOMock(), new UUID());
+    var textFile = new TextFile(new FileIOMock(), new UUID());
+    var routeRegistrar = new RouteRegistrar(new RouteRegistry(), new FileIOMock(), textFile);
     var routeRegistry = routeRegistrar.registerRoutes();
     var router = new Router(routeRegistry);
     var requestHandler = new RequestHandler(router, requestGeneratorMock);
@@ -80,7 +82,8 @@ class ServerTest {
     var requestGeneratorMock = new RequestGeneratorMockThrowsError();
     var socket = new ServerSocketMock();
 
-    var routeRegistrar = new RouteRegistrar(new RouteRegistry(), new FileIOMock(), new UUID());
+    var textFile = new TextFile(new FileIOMock(), new UUID());
+    var routeRegistrar = new RouteRegistrar(new RouteRegistry(), new FileIOMock(), textFile);
     var routeRegistry = routeRegistrar.registerRoutes();
     var router = new Router(routeRegistry);
     var requestHandler = new RequestHandler(router, requestGeneratorMock);

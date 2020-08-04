@@ -30,7 +30,8 @@ public class ServerGenerator {
   }
 
   private Router registerRoutes() throws Exception {
-    var routeRegistrar = new RouteRegistrar(new RouteRegistry(), fileIO, new UUID());
+    var textFile = new TextFile(new FileIO(), new UUID());
+    var routeRegistrar = new RouteRegistrar(new RouteRegistry(), fileIO, textFile);
     var routeRegistry = routeRegistrar.registerRoutes();
     return new Router(routeRegistry);
   }

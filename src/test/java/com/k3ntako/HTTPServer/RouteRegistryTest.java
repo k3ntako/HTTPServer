@@ -22,7 +22,8 @@ class RouteRegistryTest {
   @Test
   void registerAPostRoute() throws Exception {
     var routeRegistry = new RouteRegistry();
-    routeRegistry.registerRoute("POST", "/reminders", (RequestInterface req) -> new Reminders(new FileIOMock(), new UUID()).post(req));
+    var textFile = new TextFile(new FileIOMock(), new UUID());
+    routeRegistry.registerRoute("POST", "/reminders", (RequestInterface req) -> new Reminders(textFile).post(req));
 
     var remindersPost = routeRegistry.getController("POST", "/reminders");
     assertNotNull(remindersPost);
@@ -31,7 +32,8 @@ class RouteRegistryTest {
   @Test
   void registerALowercaseMethod() throws Exception {
     var routeRegistry = new RouteRegistry();
-    routeRegistry.registerRoute("post", "/reminders", (RequestInterface req) -> new Reminders(new FileIOMock(), new UUID()).post(req));
+    var textFile = new TextFile(new FileIOMock(), new UUID());
+    routeRegistry.registerRoute("post", "/reminders", (RequestInterface req) -> new Reminders(textFile).post(req));
 
     var remindersPost = routeRegistry.getController("POST", "/reminders");
     assertNotNull(remindersPost);
@@ -63,7 +65,7 @@ class RouteRegistryTest {
   @Test
   void getControllerThatDoesNotExist() {
     var routeRegistry = new RouteRegistry();
-    var simpleGet = routeRegistry.getController("GET","/simple_get");
+    var simpleGet = routeRegistry.getController("GET", "/simple_get");
 
     assertNull(simpleGet);
   }
