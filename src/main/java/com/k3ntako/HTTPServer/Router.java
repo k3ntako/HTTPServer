@@ -11,14 +11,14 @@ public class Router {
     this.routeRegistry = routeRegistry;
   }
 
-  public Response routeRequest(RequestInterface request) throws IOException {
+  public Response routeRequest(RequestInterface request) throws IOException, HTTPError {
 
-    ControllerInterface controller = routeRegistry.getController(request.getMethod(), request.getRoute());
+    ControllerMethodInterface controllerMethod = routeRegistry.getController(request.getMethod(), request.getRoute());
 
-    if (controller == null) {
-      controller = new NotFound();
+    if (controllerMethod == null) {
+      controllerMethod = (RequestInterface req) -> new NotFound().handleNotFound(req);
     }
 
-    return controller.getResponse(request);
+    return controllerMethod.getResponse(request);
   }
 }

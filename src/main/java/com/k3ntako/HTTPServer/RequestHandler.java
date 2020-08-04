@@ -5,31 +5,31 @@ public class RequestHandler {
   private RequestGeneratorInterface requestGenerator;
   private ErrorHandlerInterface errorHandler;
 
-  public RequestHandler(Router router, RequestGeneratorInterface requestGenerator) {
+  public RequestHandler(
+      Router router,
+      RequestGeneratorInterface requestGenerator,
+      ErrorHandlerInterface errorHandler
+  ) {
     this.router = router;
     this.requestGenerator = requestGenerator;
-  }
-
-  public String handleRequest(ServerIOInterface serverIO) throws Exception {
-    try {
-      var request = this.requestGenerator.generateRequest(serverIO);
-      var response = this.router.routeRequest(request);
-      return response.createResponse();
-    } catch (Exception e) {
-      return this.handleError(e);
-    }
-  }
-
-  public void useErrorHandler(ErrorHandlerInterface errorHandler) {
     this.errorHandler = errorHandler;
   }
 
-  private String handleError(Exception e) throws Exception {
-    if(this.errorHandler == null){
-      throw e;
+  public String handleRequest(ServerIOInterface serverIO) throws Exception {
+    Response response;
+    try {
+      var request = this.requestGenerator.generateRequest(serverIO);
+      response = this.router.routeRequest(request);
+    } catch (HTTPError httpError) {
+      response = this.errorHandler.handleError(httpError);
+    } catch (Exception exception) {
+      response = this.errorHandler.handleError(exception);
     }
 
-    var response = this.errorHandler.handleError(e);
+    if(response == null){
+      throw new Exception("Response is null");
+    }
+
     return response.createResponse();
   }
 }
