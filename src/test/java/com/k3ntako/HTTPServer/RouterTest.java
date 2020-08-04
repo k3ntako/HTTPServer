@@ -33,7 +33,7 @@ class RouterTest {
     var routeRegistrar = new RouteRegistrar(new RouteRegistry(), new FileIOMock(), uuidMock);
     var routeRegistry = routeRegistrar.registerRoutes();
 
-    var request = new RequestMock("POST", "/simple_post", "HTTP/1.1", new HashMap<>(), "");
+    var request = new RequestMock("POST", "/reminder_post", "HTTP/1.1", new HashMap<>(), "");
     var router = new Router(routeRegistry);
     var response = router.routeRequest(request);
 

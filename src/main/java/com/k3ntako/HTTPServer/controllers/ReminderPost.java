@@ -6,11 +6,11 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
-public class SimplePost implements ControllerInterface {
+public class ReminderPost implements ControllerInterface {
   private FileIOInterface fileIO;
   private UUIDInterface uuid;
 
-  public SimplePost(FileIOInterface fileIO, UUIDInterface uuid) {
+  public ReminderPost(FileIOInterface fileIO, UUIDInterface uuid) {
     this.fileIO = fileIO;
     this.uuid = uuid;
   }

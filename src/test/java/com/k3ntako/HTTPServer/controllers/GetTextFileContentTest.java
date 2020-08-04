@@ -27,7 +27,7 @@ class GetTextFileContentTest {
     var getTextFileContent = new GetTextFileContent(fileIOMock);
     var response = getTextFileContent.getResponse(request);
 
-    assertEquals("./data/simple_post.txt", fileIOMock.getLastReadPath().toString());
+    assertEquals("./data/reminder_post.txt", fileIOMock.getLastReadPath().toString());
 
     var expectedResponse =  "HTTP/1.1 200 OK\r\n" +
         "Content-Length: 18\r\n\r\n" +

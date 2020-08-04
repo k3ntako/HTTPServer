@@ -18,7 +18,7 @@ public class RouteRegistrar {
     routeRegistry.registerRoute("GET","/simple_get_with_body", new SimpleGetWithBody());
     routeRegistry.registerRoute("GET","/admin", new Admin());
     routeRegistry.registerRoute("GET","/account", new Account());
-    routeRegistry.registerRoute("POST","/simple_post", new SimplePost(fileIO, uuid));
+    routeRegistry.registerRoute("POST","/reminder_post", new ReminderPost(fileIO, uuid));
     routeRegistry.registerRoute("GET","/text_file_content", new GetTextFileContent(fileIO));
 
     return routeRegistry;
