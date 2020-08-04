@@ -22,4 +22,11 @@ public class TextFile {
 
     return fileUUID;
   }
+
+  public String readFile(String fileUUID) throws IOException {
+    var filePath = "./data/" + fileUUID + ".txt";
+    Path path = FileSystems.getDefault().getPath(filePath);
+
+    return fileIO.read(path);
+  }
 }

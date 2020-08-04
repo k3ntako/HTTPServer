@@ -13,14 +13,24 @@ class TextFileTest {
   @Test
   void saveFile() throws IOException {
     var fileIO = new FileIOMock();
-    var textFile = new TextFile(fileIO, new UUIDMock("test_file_name"));
+    var textFile = new TextFile(fileIO, new UUIDMock());
 
     var fileName = textFile.saveFile("hello!");
 
-    assertEquals("test_file_name", fileName);
+    assertEquals("8d142d80-565f-417d-8334-a8a19caadadb", fileName);
 
     var pathStr = fileIO.getLastWritePath().toString();
-    assertEquals("./data/test_file_name.txt", pathStr);
+    assertEquals("./data/8d142d80-565f-417d-8334-a8a19caadadb.txt", pathStr);
     assertEquals("hello!", fileIO.getLastWrite());
+  }
+
+  @Test
+  void readFile() throws IOException {
+    var fileIO = new FileIOMock("test file str");
+    var textFile = new TextFile(fileIO, new UUIDMock());
+
+    var fileStr = textFile.readFile("8d142d80-565f-417d-8334-a8a19caadadb");
+    assertEquals("test file str", fileStr);
+    assertEquals("./data/8d142d80-565f-417d-8334-a8a19caadadb.txt", fileIO.getLastReadPath().toString());
   }
 }
