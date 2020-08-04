@@ -14,7 +14,7 @@ class SimpleGetTest {
     var request = new RequestMock("GET", "/simple_get", "HTTP/1.1", new HashMap<>(), "");
 
     var simpleGet = new SimpleGet();
-    var response = simpleGet.getResponse(request);
+    var response = simpleGet.get(request);
 
     var responseStr = response.createResponse();
     var expectedResponse = "HTTP/1.1 200 OK\r\n" +

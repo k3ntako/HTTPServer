@@ -14,7 +14,7 @@ class SimpleGetWithBodyTest {
     var request = new RequestMock("GET", "/simple_get_with_body", "HTTP/1.1", new HashMap<>(), "");
 
     var simpleGetWithBody = new SimpleGetWithBody();
-    var response = simpleGetWithBody.getResponse(request);
+    var response = simpleGetWithBody.get(request);
 
     var responseStr = response.createResponse();
     var expectedResponse = "HTTP/1.1 200 OK\r\n" +

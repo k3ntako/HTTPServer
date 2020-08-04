@@ -9,12 +9,12 @@ public class RouteRegistry {
       "GET", "HEAD", "POST", "PUT", "DELETE",
       "CONNECT", "OPTIONS", "TRACE", "PATCH"
   ));
-  private HashMap<String, HashMap<String, ControllerInterface>> routes = new HashMap<>();
+  private HashMap<String, HashMap<String, ControllerMethodInterface>> routes = new HashMap<>();
 
-  public void registerRoute(String method, String url, ControllerInterface controller) throws Exception {
+  public void registerRoute(String method, String url, ControllerMethodInterface controller) throws Exception {
     method = method.toUpperCase();
 
-    if(!HTTP_METHODS.contains(method)){
+    if (!HTTP_METHODS.contains(method)) {
       throw new Exception("Unknown method: " + method);
     }
 
@@ -28,10 +28,10 @@ public class RouteRegistry {
     routes.put(method, routesForMethod);
   }
 
-  public ControllerInterface getController(String method, String url) {
+  public ControllerMethodInterface getController(String method, String url) {
     var routesForMethod = routes.get(method);
 
-    if(routesForMethod == null) {
+    if (routesForMethod == null) {
       return null;
     }
 

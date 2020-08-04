@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
-public class Reminders implements ControllerInterface {
+public class Reminders {
   private FileIOInterface fileIO;
   private UUIDInterface uuid;
 
@@ -15,7 +15,7 @@ public class Reminders implements ControllerInterface {
     this.uuid = uuid;
   }
 
-  public Response getResponse(RequestInterface request) throws IOException, HTTPError {
+  public Response post(RequestInterface request) throws IOException, HTTPError {
     var body = request.getBody();
     validateBody(body);
 
@@ -32,7 +32,7 @@ public class Reminders implements ControllerInterface {
   }
 
   private void validateBody(String body) throws HTTPError {
-    if(body.contains("\n")){
+    if (body.contains("\n")) {
       throw new HTTPError(400, "Request body should not be multiline");
     }
   }

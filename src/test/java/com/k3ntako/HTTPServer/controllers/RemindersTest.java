@@ -14,26 +14,26 @@ import static org.junit.jupiter.api.Assertions.*;
 class RemindersTest {
 
   @Test
-  void getResponse() throws IOException, HTTPError {
+  void post() throws IOException, HTTPError {
     var postBody = "hello post!";
     var request = new RequestMock("POST", "/reminders", "HTTP/1.1", new HashMap<>(), postBody);
     var fileIOMock = new FileIOMock(postBody);
 
     var reminders = new Reminders(fileIOMock, new UUIDMock("8d142d80-565f-417d-8334-a8a19caadadb"));
-    reminders.getResponse(request);
+    reminders.post(request);
 
     assertEquals(postBody, fileIOMock.getLastWrite());
     assertEquals("./data/8d142d80-565f-417d-8334-a8a19caadadb.txt", fileIOMock.getLastWritePath().toString());
   }
 
   @Test
-  void getResponseReturnsFileName() throws IOException, HTTPError {
+  void postReturnsFileName() throws IOException, HTTPError {
     var postBody = "hello post!";
     var request = new RequestMock("POST", "/reminders", "HTTP/1.1", new HashMap<>(), postBody);
     var fileIOMock = new FileIOMock(postBody);
 
     var reminders = new Reminders(fileIOMock, new UUIDMock("8d142d80-565f-417d-8334-a8a19caadadb"));
-    var response = reminders.getResponse(request);
+    var response = reminders.post(request);
     var responseStr = response.createResponse();
 
     var expectedResponse = "HTTP/1.1 200 OK\r\n" +
@@ -44,7 +44,7 @@ class RemindersTest {
   }
 
   @Test
-  void getResponseThrowsErrorIfBodyIsMultipleLines() {
+  void postThrowsErrorIfBodyIsMultipleLines() {
     var postBody = "hello post!\nsecond line";
     var request = new RequestMock("POST", "/reminders", "HTTP/1.1", new HashMap<>(), postBody);
     var fileIOMock = new FileIOMock(postBody);
@@ -53,7 +53,7 @@ class RemindersTest {
 
     HTTPError exception = assertThrows(
         HTTPError.class,
-        () -> reminders.getResponse(request)
+        () -> reminders.post(request)
     );
 
     assertEquals("Request body should not be multiline", exception.getMessage());

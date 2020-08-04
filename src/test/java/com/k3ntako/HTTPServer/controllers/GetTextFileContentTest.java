@@ -25,7 +25,7 @@ class GetTextFileContentTest {
     var fileIOMock = new FileIOMock(content);
 
     var getTextFileContent = new GetTextFileContent(fileIOMock);
-    var response = getTextFileContent.getResponse(request);
+    var response = getTextFileContent.get(request);
 
     assertEquals("./data/reminders.txt", fileIOMock.getLastReadPath().toString());
 
