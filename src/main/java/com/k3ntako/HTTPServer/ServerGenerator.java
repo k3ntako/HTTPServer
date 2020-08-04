@@ -20,7 +20,7 @@ public class ServerGenerator {
     final var serverSocket = new ServerSocketWrapper((int) config.get("port"));
 
     var router = this.registerRoutes();
-    var requestHandler = new RequestHandler(router, new RequestGenerator());
+    var requestHandler = new RequestHandler(router, new RequestGenerator(), new ErrorHandler());
 
     return new Server(new ServerServerIO(), requestHandler, serverSocket, router);
   }

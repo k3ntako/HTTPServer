@@ -14,33 +14,13 @@ class RequestHandlerTest {
 
     var router = new Router(routeRegistry);
 
-    var requestHandler = new RequestHandler(router, new RequestGeneratorMock());
+    var requestHandler = new RequestHandler(router, new RequestGeneratorMock(), new ErrorHandler());
 
     var expectedResponse = "HTTP/1.1 200 OK\r\n" +
         "Content-Length: 11\r\n\r\n" +
         "Hello world";
 
     var responseStr = requestHandler.handleRequest(new ServerIOMock(""));
-    assertEquals(expectedResponse, responseStr);
-  }
-
-  @Test
-  void useErrorHandler() throws Exception {
-    var textFile = new TextFile(new FileIOMock(), new UUID());
-    var routeRegistrar = new RouteRegistrar(new RouteRegistry(), new FileIOMock(), textFile);
-    var routeRegistry = routeRegistrar.registerRoutes();
-
-    var router = new Router(routeRegistry);
-
-    var requestHandler = new RequestHandler(router, new RequestGeneratorMockThrowsError());
-    requestHandler.useErrorHandler(new ErrorHandler());
-
-    var responseStr = requestHandler.handleRequest(new ServerIOMock(""));
-
-    var expectedResponse = "HTTP/1.1 500 Internal Server Error\r\n" +
-        "Content-Length: 20\r\n\r\n" +
-        "This is a test error";
-
     assertEquals(expectedResponse, responseStr);
   }
 }

@@ -22,7 +22,7 @@ class ServerTest {
     var routeRegistrar = new RouteRegistrar(new RouteRegistry(), new FileIOMock(), textFile);
     var routeRegistry = routeRegistrar.registerRoutes();
     var router = new Router(routeRegistry);
-    var requestHandler = new RequestHandler(router, requestGeneratorMock);
+    var requestHandler = new RequestHandler(router, requestGeneratorMock, new ErrorHandler());
 
     var app = new Server(serverIOMock, requestHandler, socket, router);
     app.run();
@@ -52,7 +52,7 @@ class ServerTest {
     var routeRegistrar = new RouteRegistrar(new RouteRegistry(), new FileIOMock(), textFile);
     var routeRegistry = routeRegistrar.registerRoutes();
     var router = new Router(routeRegistry);
-    var requestHandler = new RequestHandler(router, requestGeneratorMock);
+    var requestHandler = new RequestHandler(router, requestGeneratorMock, new ErrorHandler());
 
     var app = new Server(serverIO, requestHandler, socket, router);
     app.run();
@@ -86,8 +86,7 @@ class ServerTest {
     var routeRegistrar = new RouteRegistrar(new RouteRegistry(), new FileIOMock(), textFile);
     var routeRegistry = routeRegistrar.registerRoutes();
     var router = new Router(routeRegistry);
-    var requestHandler = new RequestHandler(router, requestGeneratorMock);
-    requestHandler.useErrorHandler(new ErrorHandler());
+    var requestHandler = new RequestHandler(router, requestGeneratorMock, new ErrorHandler());
 
     var app = new Server(serverIO, requestHandler, socket, router);
     app.run();
