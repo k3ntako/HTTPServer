@@ -29,13 +29,7 @@ public class RouteRegistry {
   }
 
   public Route getController(RequestInterface request) {
-    var routesForMethod = routes.get(request.getMethod());
-
-    if (routesForMethod == null) {
-      return null;
-    }
-
     var routeMatcher = new RouteMatcher();
-    return routeMatcher.matchRoute(routesForMethod, request);
+    return routeMatcher.matchRoute(routes, request);
   }
 }

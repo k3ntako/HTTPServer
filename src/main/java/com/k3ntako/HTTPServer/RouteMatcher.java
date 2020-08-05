@@ -6,16 +6,23 @@ import java.util.HashMap;
 public class RouteMatcher {
 
   public Route matchRoute(
-      HashMap<String, ControllerMethodInterface> routes,
+      HashMap<String, HashMap<String, ControllerMethodInterface>> routes,
       RequestInterface request
   ) {
-    var exactMatch = this.getExactMatch(routes, request);
+    var verb = request.getMethod();
+    var routesForMethod = routes.get(verb);
+
+    if (routesForMethod == null) {
+      return null;
+    }
+
+    var exactMatch = this.getExactMatch(routesForMethod, request);
 
     if (exactMatch != null) {
       return exactMatch;
     }
 
-    return getVariableRoute(routes, request.getRoute());
+    return getVariableRoute(routesForMethod, request.getRoute());
   }
 
   private Route getExactMatch(
@@ -36,13 +43,14 @@ public class RouteMatcher {
 
 
   private Route getVariableRoute(
-      HashMap<String, ControllerMethodInterface> routesForMethod, String requestRoute
+      HashMap<String, ControllerMethodInterface> routesForMethod,
+      String requestRoute
   ) {
     var route = new Route(requestRoute);
-    var requestParts = removeBlanks(requestRoute.split("/"));
+    var requestParts = convertToArray(requestRoute);
 
     for (String registeredRoute : routesForMethod.keySet()) {
-      var registeredParts = removeBlanks(registeredRoute.split("/"));
+      var registeredParts = convertToArray(registeredRoute);
 
       if (registeredParts.length != requestParts.length) {
         continue;
@@ -62,6 +70,12 @@ public class RouteMatcher {
     }
 
     return null;
+  }
+
+  private String[] convertToArray(String route) {
+    var strArr = route.split("/");
+
+    return removeBlanks(strArr);
   }
 
   private String[] removeBlanks(String[] strArr) {
@@ -97,8 +111,8 @@ public class RouteMatcher {
   private HashMap<String, String> getParams(String registeredRoute, String requestRoute) {
     var params = new HashMap<String, String>();
 
-    var registeredParts = removeBlanks(registeredRoute.split("/"));
-    var requestParts = removeBlanks(requestRoute.split("/"));
+    var registeredParts = convertToArray(registeredRoute);
+    var requestParts = convertToArray(requestRoute);
 
     for (int i = 0; i < registeredParts.length; i++) {
       var registeredPart = registeredParts[i];
