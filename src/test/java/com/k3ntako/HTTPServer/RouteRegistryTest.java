@@ -8,8 +8,6 @@ import com.k3ntako.HTTPServer.mocks.FileIOMock;
 import com.k3ntako.HTTPServer.mocks.RequestMock;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class RouteRegistryTest {
@@ -19,7 +17,8 @@ class RouteRegistryTest {
     var routeRegistry = new RouteRegistry();
     routeRegistry.registerRoute("GET", "/simple_get", (RequestInterface req) -> new SimpleGet().get(req));
 
-    var simpleGet = routeRegistry.getController("GET", "/simple_get");
+    var request = new RequestMock("GET", "/simple_get");
+    var simpleGet = routeRegistry.getController(request);
     assertNotNull(simpleGet);
   }
 
@@ -29,7 +28,8 @@ class RouteRegistryTest {
     var textFile = new TextFile(new FileIOMock(), new UUID());
     routeRegistry.registerRoute("POST", "/reminders", (RequestInterface req) -> new Reminders(textFile).post(req));
 
-    var remindersPost = routeRegistry.getController("POST", "/reminders");
+    var request = new RequestMock("POST", "/reminders");
+    var remindersPost = routeRegistry.getController(request);
     assertNotNull(remindersPost);
   }
 
@@ -39,7 +39,8 @@ class RouteRegistryTest {
     var textFile = new TextFile(new FileIOMock(), new UUID());
     routeRegistry.registerRoute("post", "/reminders", (RequestInterface req) -> new Reminders(textFile).post(req));
 
-    var remindersPost = routeRegistry.getController("POST", "/reminders");
+    var request = new RequestMock("POST", "/reminders");
+    var remindersPost = routeRegistry.getController(request);
     assertNotNull(remindersPost);
   }
 
@@ -49,10 +50,13 @@ class RouteRegistryTest {
     routeRegistry.registerRoute("GET", "/simple_get", (RequestInterface req) -> new SimpleGet().get(req));
     routeRegistry.registerRoute("GET", "/simple_get_with_body", (RequestInterface req) -> new SimpleGetWithBody().get(req));
 
-    var simpleGet = routeRegistry.getController("GET", "/simple_get");
+
+    var request = new RequestMock("GET", "/simple_get");
+    var simpleGet = routeRegistry.getController(request);
     assertNotNull(simpleGet);
 
-    var simpleGetWithBody = routeRegistry.getController("GET", "/simple_get_with_body");
+    var requestWithBody = new RequestMock("GET", "/simple_get_with_body");
+    var simpleGetWithBody = routeRegistry.getController(requestWithBody);
     assertNotNull(simpleGetWithBody);
   }
 
@@ -69,7 +73,8 @@ class RouteRegistryTest {
   @Test
   void getControllerThatDoesNotExist() {
     var routeRegistry = new RouteRegistry();
-    var simpleGet = routeRegistry.getController("GET", "/simple_get");
+    var request = new RequestMock("GET", "/simple_get");
+    var simpleGet = routeRegistry.getController(request);
 
     assertNull(simpleGet);
   }
@@ -82,13 +87,13 @@ class RouteRegistryTest {
     var routeRegistry = new RouteRegistry();
     routeRegistry.registerRoute("GET", "/reminders/:id", (RequestInterface req) -> new GetTextFileContent(fileIO).get(req));
 
-    var remindersGet = routeRegistry.getController("GET", "/reminders/8d142d80-565f-417d-8334-a8a19caadadb");
+    var request = new RequestMock("GET", "/reminders/8d142d80-565f-417d-8334-a8a19caadadb");
+    var remindersGet = routeRegistry.getController(request);
 
     assertNotNull(remindersGet);
 
-    var request = new RequestMock("GET", "/reminders/8d142d80-565f-417d-8334-a8a19caadadb", "HTTP/1.1", new HashMap<>(), "");
 
-    ControllerMethodInterface controllerMethod = (ControllerMethodInterface) remindersGet.get("controllerMethod");
+    ControllerMethodInterface controllerMethod = remindersGet.getControllerMethod();
     var response = controllerMethod.getResponse(request);
 
     var expectedResponse = "HTTP/1.1 200 OK\r\n" +

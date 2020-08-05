@@ -1,5 +1,6 @@
 package com.k3ntako.HTTPServer;
 
+import com.k3ntako.HTTPServer.controllers.GetTextFileContent;
 import com.k3ntako.HTTPServer.controllers.Reminders;
 import com.k3ntako.HTTPServer.mocks.FileIOMock;
 import com.k3ntako.HTTPServer.mocks.RequestMock;
@@ -20,12 +21,26 @@ class RouteMatcherTest {
     routes.put("/reminders", (RequestInterface req) -> new Reminders(textFile).post(req));
 
     var routeMatcher = new RouteMatcher();
-    var hash = routeMatcher.matchRoute(routes, request);
+    var route = routeMatcher.matchRoute(routes, request);
 
-    ControllerMethodInterface controllerMethod = (ControllerMethodInterface) hash.get("controllerMethod");
-    assertNotNull(controllerMethod);
+    assertNotNull(route.getControllerMethod());
+    assertNotNull(route.getParams());
+  }
 
-    HashMap<String, String> params = (HashMap<String, String>) hash.get("params");
+  @Test
+  void matchVariableRoute() {
+    var request = new RequestMock("GET", "/reminders/8d142d80-565f-417d-8334-a8a19caadadb", "HTTP/1.1", new HashMap<>(), "");
+    var routes = new HashMap<String, ControllerMethodInterface>();
+    routes.put("/reminders/:id", (RequestInterface req) -> new GetTextFileContent(new FileIOMock()).get(req));
+
+    var routeMatcher = new RouteMatcher();
+    var route = routeMatcher.matchRoute(routes, request);
+
+    assertNotNull(route.getControllerMethod());
+    assertEquals("/reminders/8d142d80-565f-417d-8334-a8a19caadadb", route.getRoutePath());
+
+    var params = route.getParams();
     assertNotNull(params);
+    assertEquals("8d142d80-565f-417d-8334-a8a19caadadb", params.get("id"));
   }
 }

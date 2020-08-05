@@ -14,6 +14,14 @@ public class RequestMock implements RequestInterface {
 
   public RequestMock(
       String method,
+      String route
+  ) {
+    this.method = method;
+    this.route = route;
+  }
+
+  public RequestMock(
+      String method,
       String route,
       String protocol,
       HashMap<String, String> headers,
