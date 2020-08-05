@@ -1,10 +1,14 @@
 package com.k3ntako.HTTPServer;
 
+import com.k3ntako.HTTPServer.controllers.GetTextFileContent;
 import com.k3ntako.HTTPServer.controllers.SimpleGet;
 import com.k3ntako.HTTPServer.controllers.SimpleGetWithBody;
 import com.k3ntako.HTTPServer.controllers.Reminders;
 import com.k3ntako.HTTPServer.mocks.FileIOMock;
+import com.k3ntako.HTTPServer.mocks.RequestMock;
 import org.junit.jupiter.api.Test;
+
+import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -68,5 +72,28 @@ class RouteRegistryTest {
     var simpleGet = routeRegistry.getController("GET", "/simple_get");
 
     assertNull(simpleGet);
+  }
+
+  @Test
+  void getControllerForVariableRoute() throws Exception {
+    var mockFileContent = "Hello!";
+    var fileIO = new FileIOMock(mockFileContent);
+
+    var routeRegistry = new RouteRegistry();
+    routeRegistry.registerRoute("GET", "/reminders/:id", (RequestInterface req) -> new GetTextFileContent(fileIO).get(req));
+
+    var remindersGet = routeRegistry.getController("GET", "/reminders/8d142d80-565f-417d-8334-a8a19caadadb");
+
+    assertNotNull(remindersGet);
+
+    var request = new RequestMock("GET", "/reminders/8d142d80-565f-417d-8334-a8a19caadadb", "HTTP/1.1", new HashMap<>(), "");
+
+    ControllerMethodInterface controllerMethod = (ControllerMethodInterface) remindersGet.get("controllerMethod");
+    var response = controllerMethod.getResponse(request);
+
+    var expectedResponse = "HTTP/1.1 200 OK\r\n" +
+        "Content-Length: 6\r\n\r\n" +
+        "Hello!";
+    assertEquals(expectedResponse, response.createResponse());
   }
 }

@@ -6,6 +6,8 @@ import java.util.HashMap;
 public interface RequestInterface {
   void parseRequest() throws IOException;
 
+  void setParams(HashMap<String, String> params);
+
   String getMethod();
 
   String getRoute();

@@ -3,6 +3,7 @@ package com.k3ntako.HTTPServer;
 import com.k3ntako.HTTPServer.controllers.NotFound;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 public class Router {
   private RouteRegistry routeRegistry;
@@ -13,9 +14,15 @@ public class Router {
 
   public Response routeRequest(RequestInterface request) throws IOException, HTTPError {
 
-    ControllerMethodInterface controllerMethod = routeRegistry.getController(request.getMethod(), request.getRoute());
+    HashMap<String, Object> hash = routeRegistry.getController(request.getMethod(), request.getRoute());
 
-    if (controllerMethod == null) {
+    ControllerMethodInterface controllerMethod = null;
+    if(hash != null){
+      controllerMethod = (ControllerMethodInterface) hash.get("controllerMethod");
+      request.setParams((HashMap<String, String>) hash.get("params"));
+    }
+
+    if(controllerMethod == null){
       controllerMethod = (RequestInterface req) -> new NotFound().handleNotFound(req);
     }
 

@@ -31,4 +31,14 @@ public class Reminders {
       throw new HTTPError(400, "Request body should not be multiline");
     }
   }
+
+//  public Response get(RequestInterface request) {
+//    Path path = FileSystems.getDefault().getPath("./data/reminders.txt");
+//    var content = fileIO.read(path);
+//
+//    var response = new Response();
+//    response.setBody(content);
+//
+//    return response;
+//  }
 }

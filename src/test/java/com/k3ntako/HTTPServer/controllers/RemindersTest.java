@@ -61,4 +61,30 @@ class RemindersTest {
     assertEquals("Request body should not be multiline", exception.getMessage());
     assertEquals(400, exception.getStatus());
   }
+
+//  @Test
+//  void get() throws IOException {
+//    var content = "text file content!";
+//    var request = new RequestMock(
+//        "GET",
+//        "/text_file_content",
+//        "HTTP/1.1",
+//        new HashMap<>(),
+//        ""
+//    );
+//
+//    var fileIOMock = new FileIOMock(content);
+//
+//    var textFile = new TextFile(new FileIOMock(), new UUIDMock());
+//    var reminders = new Reminders(textFile);
+//    var response = reminders.get(request);
+//
+//    assertEquals("./data/reminders.txt", fileIOMock.getLastReadPath().toString());
+//
+//    var expectedResponse = "HTTP/1.1 200 OK\r\n" +
+//        "Content-Length: 18\r\n\r\n" +
+//        content;
+//
+//    assertEquals(expectedResponse, response.createResponse());
+//  }
 }
