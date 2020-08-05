@@ -32,13 +32,19 @@ public class Reminders {
     }
   }
 
-//  public Response get(RequestInterface request) {
-//    Path path = FileSystems.getDefault().getPath("./data/reminders.txt");
-//    var content = fileIO.read(path);
-//
-//    var response = new Response();
-//    response.setBody(content);
-//
-//    return response;
-//  }
+  public Response get(RequestInterface request) throws IOException, HTTPError {
+    var params = request.getParams();
+
+    var id = params.get("id");
+    if (id == null || id.isBlank()) {
+      throw new HTTPError(400, "ID must be specified");
+    }
+
+    var response = new Response();
+
+    var content = textFile.readFile(id);
+    response.setBody(content);
+
+    return response;
+  }
 }

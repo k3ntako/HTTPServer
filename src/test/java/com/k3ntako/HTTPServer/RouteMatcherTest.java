@@ -1,6 +1,5 @@
 package com.k3ntako.HTTPServer;
 
-import com.k3ntako.HTTPServer.controllers.GetTextFileContent;
 import com.k3ntako.HTTPServer.controllers.Reminders;
 import com.k3ntako.HTTPServer.mocks.FileIOMock;
 import com.k3ntako.HTTPServer.mocks.RequestMock;
@@ -31,7 +30,8 @@ class RouteMatcherTest {
   void matchVariableRoute() {
     var request = new RequestMock("GET", "/reminders/8d142d80-565f-417d-8334-a8a19caadadb", "HTTP/1.1", new HashMap<>(), "");
     var routes = new HashMap<String, ControllerMethodInterface>();
-    routes.put("/reminders/:id", (RequestInterface req) -> new GetTextFileContent(new FileIOMock()).get(req));
+    var textFile = new TextFile(new FileIOMock(), new UUID());
+    routes.put("/reminders/:id", (RequestInterface req) -> new Reminders(textFile).get(req));
 
     var routeMatcher = new RouteMatcher();
     var route = routeMatcher.matchRoute(routes, request);

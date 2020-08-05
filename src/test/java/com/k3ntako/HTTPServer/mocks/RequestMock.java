@@ -41,6 +41,11 @@ public class RequestMock implements RequestInterface {
     this.params = params;
   }
 
+  @Override
+  public HashMap<String, String> getParams() {
+    return params;
+  }
+
   public String getMethod() {
     return this.method;
   }

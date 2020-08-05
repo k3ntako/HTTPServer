@@ -1,12 +1,14 @@
 package com.k3ntako.HTTPServer;
 
-import com.k3ntako.HTTPServer.controllers.GetTextFileContent;
 import com.k3ntako.HTTPServer.controllers.SimpleGet;
 import com.k3ntako.HTTPServer.controllers.SimpleGetWithBody;
 import com.k3ntako.HTTPServer.controllers.Reminders;
 import com.k3ntako.HTTPServer.mocks.FileIOMock;
 import com.k3ntako.HTTPServer.mocks.RequestMock;
+import com.k3ntako.HTTPServer.mocks.UUIDMock;
 import org.junit.jupiter.api.Test;
+
+import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -81,24 +83,27 @@ class RouteRegistryTest {
 
   @Test
   void getControllerForVariableRoute() throws Exception {
-    var mockFileContent = "Hello!";
-    var fileIO = new FileIOMock(mockFileContent);
+    var mockContent = "Hello!";
 
+    var mockUUID = new UUIDMock();
     var routeRegistry = new RouteRegistry();
-    routeRegistry.registerRoute("GET", "/reminders/:id", (RequestInterface req) -> new GetTextFileContent(fileIO).get(req));
+    var textFile = new TextFile(new FileIOMock(mockContent), mockUUID);
+    routeRegistry.registerRoute("GET", "/reminders/:id", (RequestInterface req) -> new Reminders(textFile).get(req));
 
-    var request = new RequestMock("GET", "/reminders/8d142d80-565f-417d-8334-a8a19caadadb");
+    var request = new RequestMock("GET", "/reminders/" + mockUUID.getDefaultUUID());
+    var params = new HashMap<String, String>();
+    params.put("id", mockUUID.getDefaultUUID());
+    request.setParams(params);
     var remindersGet = routeRegistry.getController(request);
 
     assertNotNull(remindersGet);
-
 
     ControllerMethodInterface controllerMethod = remindersGet.getControllerMethod();
     var response = controllerMethod.getResponse(request);
 
     var expectedResponse = "HTTP/1.1 200 OK\r\n" +
         "Content-Length: 6\r\n\r\n" +
-        "Hello!";
+        mockContent;
     assertEquals(expectedResponse, response.createResponse());
   }
 }

@@ -8,6 +8,8 @@ public interface RequestInterface {
 
   void setParams(HashMap<String, String> params);
 
+  HashMap<String, String> getParams();
+
   String getMethod();
 
   String getRoute();

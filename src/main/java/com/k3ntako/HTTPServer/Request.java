@@ -86,6 +86,10 @@ public class Request implements RequestInterface {
     this.params = params;
   }
 
+  public HashMap<String, String> getParams() {
+    return this.params;
+  }
+
   public String getMethod() {
     return this.method;
   }

@@ -19,7 +19,7 @@ public class RouteRegistrar {
     routeRegistry.registerRoute("GET", "/admin", (RequestInterface req) -> new Admin().get(req));
     routeRegistry.registerRoute("GET", "/account", (RequestInterface req) -> new Account().get(req));
     routeRegistry.registerRoute("POST", "/reminders", (RequestInterface req) -> new Reminders(textFile).post(req));
-    routeRegistry.registerRoute("GET", "/text_file_content", (RequestInterface req) -> new GetTextFileContent(fileIO).get(req));
+    routeRegistry.registerRoute("GET", "/reminders/:id", (RequestInterface req) -> new Reminders(textFile).get(req));
 
     return routeRegistry;
   }

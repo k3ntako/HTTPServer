@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -47,5 +48,28 @@ class RequestTest {
     request.parseRequest();
 
     assertEquals(bodyStr, request.getBody());
+  }
+
+  @Test
+  void getAndSetParams() {
+    var headerStr = "GET / HTTP/1.1\r\n" +
+        "Host: localhost:5000\r\n" +
+        "User-Agent: curl/7.64.1\r\n" +
+        "Accept: */*\r\n\r\n";
+    var serverIO = new ServerIOMock(headerStr);
+    serverIO.init(new Socket());
+
+    var request = new Request(serverIO);
+
+    var params = new HashMap<String, String>();
+    params.put("id", "123");
+    params.put("event_id", "345");
+
+    request.setParams(params);
+
+    var requestParams = request.getParams();
+
+    assertEquals("123", requestParams.get("id"));
+    assertEquals("345", requestParams.get("event_id"));
   }
 }
