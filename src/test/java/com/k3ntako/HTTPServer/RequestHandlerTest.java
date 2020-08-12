@@ -23,4 +23,22 @@ class RequestHandlerTest {
     var responseStr = requestHandler.handleRequest(new ServerIOMock(""));
     assertEquals(expectedResponse, responseStr);
   }
+
+  @Test
+  void handlesError() throws Exception {
+    var textFile = new TextFile(new FileIOMock(), new UUID());
+    var routeRegistrar = new RouteRegistrar(new RouteRegistry(), new FileIOMock(), textFile);
+    var routeRegistry = routeRegistrar.registerRoutes();
+
+    var router = new Router(routeRegistry);
+
+    var requestHandler = new RequestHandler(router, new RequestGeneratorMockThrowsError(), new ErrorHandler());
+
+    var expectedResponse = "HTTP/1.1 500 Internal Server Error\r\n" +
+        "Content-Length: 20\r\n\r\n" +
+        "This is a test error";
+
+    var responseStr = requestHandler.handleRequest(new ServerIOMock(""));
+    assertEquals(expectedResponse, responseStr);
+  }
 }

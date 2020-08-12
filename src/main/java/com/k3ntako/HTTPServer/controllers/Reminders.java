@@ -32,13 +32,10 @@ public class Reminders {
     }
   }
 
-  public Response get(RequestInterface request) throws IOException, HTTPError {
+  public Response get(RequestInterface request) throws IOException {
     var params = request.getParams();
 
     var id = params.get("id");
-    if (id == null || id.isBlank()) {
-      throw new HTTPError(400, "ID must be specified");
-    }
 
     var response = new Response();
 

@@ -1,5 +1,6 @@
 package com.k3ntako.HTTPServer.controllers;
 
+import com.k3ntako.HTTPServer.HTTPError;
 import com.k3ntako.HTTPServer.Request;
 import com.k3ntako.HTTPServer.mocks.ServerIOMock;
 import org.junit.jupiter.api.Test;
@@ -9,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class NotFoundTest {
 
   @Test
-  void getResponse() {
+  void getResponse() throws HTTPError {
     var notFound = new NotFound();
     var serverIO = new ServerIOMock("GET / HTTP/1.1");
     var response = notFound.handleNotFound(new Request(serverIO));

@@ -1,5 +1,6 @@
 package com.k3ntako.HTTPServer.controllers;
 
+import com.k3ntako.HTTPServer.HTTPError;
 import com.k3ntako.HTTPServer.mocks.RequestMock;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class AdminTest {
 
   @Test
-  void getResponse() {
+  void getResponse() throws HTTPError {
     var request = new RequestMock("GET", "/admin", "HTTP/1.1", new HashMap<>(), "");
 
     var admin = new Admin();
