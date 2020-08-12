@@ -31,4 +31,20 @@ public class Reminders {
       throw new HTTPError(400, "Request body should not be multiline");
     }
   }
+
+  public Response get(RequestInterface request) throws IOException, HTTPError {
+    var params = request.getParams();
+
+    var id = params.get("id");
+    if (id == null || id.isBlank()) {
+      throw new HTTPError(400, "ID must be specified");
+    }
+
+    var response = new Response();
+
+    var content = textFile.readFile(id);
+    response.setBody(content);
+
+    return response;
+  }
 }

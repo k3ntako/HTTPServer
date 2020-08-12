@@ -9,14 +9,23 @@ public class RequestMock implements RequestInterface {
   private String route;
   private String protocol;
   private HashMap<String, String> headers;
+  private HashMap<String, String> params;
   private String body;
 
   public RequestMock(
-          String method,
-          String route,
-          String protocol,
-          HashMap<String, String> headers,
-          String body
+      String method,
+      String route
+  ) {
+    this.method = method;
+    this.route = route;
+  }
+
+  public RequestMock(
+      String method,
+      String route,
+      String protocol,
+      HashMap<String, String> headers,
+      String body
   ) {
     this.method = method;
     this.route = route;
@@ -26,6 +35,15 @@ public class RequestMock implements RequestInterface {
   }
 
   public void parseRequest() {
+  }
+
+  public void setParams(HashMap<String, String> params) {
+    this.params = params;
+  }
+
+  @Override
+  public HashMap<String, String> getParams() {
+    return params;
   }
 
   public String getMethod() {

@@ -4,8 +4,10 @@ import com.k3ntako.HTTPServer.UUIDInterface;
 
 public class UUIDMock implements UUIDInterface {
   private String mockReturn;
+  private final String defaultUUID = "8d142d80-565f-417d-8334-a8a19caadadb";
+
   public UUIDMock() {
-    this.mockReturn = "8d142d80-565f-417d-8334-a8a19caadadb";
+    this.mockReturn = defaultUUID;
   }
 
   public UUIDMock(String mockReturn) {
@@ -15,5 +17,9 @@ public class UUIDMock implements UUIDInterface {
   @Override
   public String generate() {
     return mockReturn;
+  }
+
+  public String getDefaultUUID() {
+    return defaultUUID;
   }
 }

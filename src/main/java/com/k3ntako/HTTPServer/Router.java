@@ -13,10 +13,12 @@ public class Router {
 
   public Response routeRequest(RequestInterface request) throws IOException, HTTPError {
 
-    ControllerMethodInterface controllerMethod = routeRegistry.getController(request.getMethod(), request.getRoute());
+    Route route = routeRegistry.getController(request);
+    ControllerMethodInterface controllerMethod = (RequestInterface req) -> new NotFound().handleNotFound(req);
 
-    if (controllerMethod == null) {
-      controllerMethod = (RequestInterface req) -> new NotFound().handleNotFound(req);
+    if(route != null) {
+      controllerMethod = route.getControllerMethod();
+      request.setParams(route.getParams());
     }
 
     return controllerMethod.getResponse(request);

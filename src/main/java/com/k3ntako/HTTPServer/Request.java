@@ -11,6 +11,7 @@ public class Request implements RequestInterface {
   private HashMap<String, String> headers;
   private String body;
   private ServerIOInterface serverIO;
+  private HashMap<String, String> params;
 
   public Request(ServerIOInterface serverIO) {
     this.serverIO = serverIO;
@@ -79,6 +80,14 @@ public class Request implements RequestInterface {
     }
 
     this.body = bodyStr;
+  }
+
+  public void setParams(HashMap<String, String> params) {
+    this.params = params;
+  }
+
+  public HashMap<String, String> getParams() {
+    return this.params;
   }
 
   public String getMethod() {

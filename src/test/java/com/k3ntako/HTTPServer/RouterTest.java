@@ -5,7 +5,6 @@ import com.k3ntako.HTTPServer.mocks.RequestMock;
 import com.k3ntako.HTTPServer.mocks.UUIDMock;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;

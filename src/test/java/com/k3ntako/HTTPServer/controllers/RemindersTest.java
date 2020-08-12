@@ -2,6 +2,7 @@ package com.k3ntako.HTTPServer.controllers;
 
 import com.k3ntako.HTTPServer.HTTPError;
 import com.k3ntako.HTTPServer.TextFile;
+import com.k3ntako.HTTPServer.UUID;
 import com.k3ntako.HTTPServer.mocks.FileIOMock;
 import com.k3ntako.HTTPServer.mocks.RequestMock;
 import com.k3ntako.HTTPServer.mocks.UUIDMock;
@@ -60,5 +61,34 @@ class RemindersTest {
 
     assertEquals("Request body should not be multiline", exception.getMessage());
     assertEquals(400, exception.getStatus());
+  }
+
+  @Test
+  void get() throws IOException, HTTPError {
+    var mockUUID = new UUIDMock();
+
+    var content = "text file content!";
+    var request = new RequestMock(
+        "GET",
+        "/reminders/" + mockUUID.getDefaultUUID()
+    );
+
+    var params = new HashMap<String, String>();
+    params.put("id", mockUUID.getDefaultUUID());
+    request.setParams(params);
+
+    var fileIOMock = new FileIOMock(content);
+
+    var textFile = new TextFile(fileIOMock, mockUUID);
+    var reminders = new Reminders(textFile);
+    var response = reminders.get(request);
+
+    assertEquals("./data/" + mockUUID.getDefaultUUID() + ".txt", fileIOMock.getLastReadPath().toString());
+
+    var expectedResponse = "HTTP/1.1 200 OK\r\n" +
+        "Content-Length: 18\r\n\r\n" +
+        content;
+
+    assertEquals(expectedResponse, response.createResponse());
   }
 }

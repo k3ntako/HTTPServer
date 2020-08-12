@@ -28,13 +28,8 @@ public class RouteRegistry {
     routes.put(method, routesForMethod);
   }
 
-  public ControllerMethodInterface getController(String method, String url) {
-    var routesForMethod = routes.get(method);
-
-    if (routesForMethod == null) {
-      return null;
-    }
-
-    return routesForMethod.get(url);
+  public Route getController(RequestInterface request) {
+    var routeMatcher = new RouteMatcher();
+    return routeMatcher.matchRoute(routes, request);
   }
 }
