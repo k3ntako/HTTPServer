@@ -91,4 +91,30 @@ class RemindersTest {
 
     assertEquals(expectedResponse, response.createResponse());
   }
+
+
+  @Test
+  void getThrows404IfFileIsNotFound() {
+    var request = new RequestMock(
+        "GET",
+        "/reminders/not-an-id"
+    );
+
+    var params = new HashMap<String, String>();
+    params.put("id", "not-an-id");
+    request.setParams(params);
+
+    var fileIOMock = new FileIOMock(null);
+
+    var textFile = new TextFile(fileIOMock, new UUID());
+    var reminders = new Reminders(textFile);
+
+    HTTPError exception = assertThrows(
+        HTTPError.class,
+        () -> reminders.get(request)
+    );
+
+    assertEquals("Reminder was not found", exception.getMessage());
+    assertEquals(404, exception.getStatus());
+  }
 }

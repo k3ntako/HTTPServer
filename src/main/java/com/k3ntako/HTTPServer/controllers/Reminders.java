@@ -32,7 +32,7 @@ public class Reminders {
     }
   }
 
-  public Response get(RequestInterface request) throws IOException {
+  public Response get(RequestInterface request) throws IOException, HTTPError {
     var params = request.getParams();
 
     var id = params.get("id");
@@ -40,6 +40,10 @@ public class Reminders {
     var response = new Response();
 
     var content = textFile.readFile(id);
+    if (content == null) {
+      throw new HTTPError(404, "Reminder was not found");
+    }
+
     response.setBody(content);
 
     return response;
