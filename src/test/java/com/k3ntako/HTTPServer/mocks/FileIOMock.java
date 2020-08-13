@@ -16,7 +16,7 @@ public class FileIOMock implements FileIOInterface {
   private IOException mockException;
 
   public FileIOMock() {
-     this.mockFileContent = "Mock file content was not set";
+    this.mockFileContent = "Mock file content was not set";
   }
 
   public FileIOMock(IOException exception) {
