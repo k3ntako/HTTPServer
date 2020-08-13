@@ -51,6 +51,7 @@ public class Reminders {
 
   public Response patch(RequestInterface request) throws HTTPError {
     var body = request.getBody();
+    validateBody(body);
 
     var params = request.getParams();
     var id = params.get("id");

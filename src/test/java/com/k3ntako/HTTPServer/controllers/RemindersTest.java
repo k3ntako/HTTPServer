@@ -128,7 +128,7 @@ class RemindersTest {
 
   @Test
   void patchReturns404IfFileNotFound() {
-    var request = new RequestMock("GET", "/reminders/not-an-id");
+    var request = new RequestMock("PATCH", "/reminders/not-an-id");
 
     var params = new HashMap<String, String>();
     params.put("id", "not-an-id");
@@ -143,5 +143,24 @@ class RemindersTest {
 
     assertEquals("Reminder was not found", exception.getMessage());
     assertEquals(404, exception.getStatus());
+  }
+
+  @Test
+  void patchThrowsErrorIfBodyIsMultipleLines() {
+    var mockUUID = new UUIDMock();
+    var patchBody = "hello post!\nsecond line";
+    var request = new RequestMock("PATCH", "/reminders", patchBody);
+
+    var params = new HashMap<String, String>();
+    params.put("id", mockUUID.getDefaultUUID());
+    request.setParams(params);
+
+    var textFile = new TextFile(new FileIOMock(), mockUUID);
+    var reminders = new Reminders(textFile);
+
+    HTTPError exception = assertThrows(HTTPError.class, () -> reminders.patch(request));
+
+    assertEquals("Request body should not be multiline", exception.getMessage());
+    assertEquals(400, exception.getStatus());
   }
 }
