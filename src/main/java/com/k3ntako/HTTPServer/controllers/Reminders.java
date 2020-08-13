@@ -49,14 +49,17 @@ public class Reminders {
     return response;
   }
 
-  public Response patch(RequestInterface request) throws IOException, HTTPError {
+  public Response patch(RequestInterface request) throws HTTPError {
     var body = request.getBody();
-    validateBody(body);
 
     var params = request.getParams();
     var id = params.get("id");
 
-    textFile.patchFile(id, body);
+    try {
+      textFile.patchFile(id, body);
+    } catch (IOException e) {
+      throw new HTTPError(404, "Reminder was not found");
+    }
 
     return new Response();
   }

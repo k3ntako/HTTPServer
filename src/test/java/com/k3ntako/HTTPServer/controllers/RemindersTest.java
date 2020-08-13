@@ -39,9 +39,7 @@ class RemindersTest {
     var response = reminders.post(request);
     var responseStr = response.createResponse();
 
-    var expectedResponse = "HTTP/1.1 200 OK\r\n" +
-        "Content-Length: 36\r\n\r\n" +
-        "8d142d80-565f-417d-8334-a8a19caadadb";
+    var expectedResponse = "HTTP/1.1 200 OK\r\n" + "Content-Length: 36\r\n\r\n" + "8d142d80-565f-417d-8334-a8a19caadadb";
 
     assertEquals(expectedResponse, responseStr);
   }
@@ -54,10 +52,7 @@ class RemindersTest {
     var textFile = new TextFile(new FileIOMock(), new UUIDMock());
     var reminders = new Reminders(textFile);
 
-    HTTPError exception = assertThrows(
-        HTTPError.class,
-        () -> reminders.post(request)
-    );
+    HTTPError exception = assertThrows(HTTPError.class, () -> reminders.post(request));
 
     assertEquals("Request body should not be multiline", exception.getMessage());
     assertEquals(400, exception.getStatus());
@@ -68,10 +63,7 @@ class RemindersTest {
     var mockUUID = new UUIDMock();
 
     var content = "text file content!";
-    var request = new RequestMock(
-        "GET",
-        "/reminders/" + mockUUID.getDefaultUUID()
-    );
+    var request = new RequestMock("GET", "/reminders/" + mockUUID.getDefaultUUID());
 
     var params = new HashMap<String, String>();
     params.put("id", mockUUID.getDefaultUUID());
@@ -85,9 +77,7 @@ class RemindersTest {
 
     assertEquals("./data/" + mockUUID.getDefaultUUID() + ".txt", fileIOMock.getLastReadPath().toString());
 
-    var expectedResponse = "HTTP/1.1 200 OK\r\n" +
-        "Content-Length: 18\r\n\r\n" +
-        content;
+    var expectedResponse = "HTTP/1.1 200 OK\r\n" + "Content-Length: 18\r\n\r\n" + content;
 
     assertEquals(expectedResponse, response.createResponse());
   }
@@ -95,39 +85,29 @@ class RemindersTest {
 
   @Test
   void getThrows404IfFileIsNotFound() {
-    var request = new RequestMock(
-        "GET",
-        "/reminders/not-an-id"
-    );
+    var request = new RequestMock("GET", "/reminders/not-an-id");
 
     var params = new HashMap<String, String>();
     params.put("id", "not-an-id");
     request.setParams(params);
 
-    var fileIOMock = new FileIOMock(null);
+    var fileIOMock = new FileIOMock((String) null);
 
     var textFile = new TextFile(fileIOMock, new UUID());
     var reminders = new Reminders(textFile);
 
-    HTTPError exception = assertThrows(
-        HTTPError.class,
-        () -> reminders.get(request)
-    );
+    HTTPError exception = assertThrows(HTTPError.class, () -> reminders.get(request));
 
     assertEquals("Reminder was not found", exception.getMessage());
     assertEquals(404, exception.getStatus());
   }
 
   @Test
-  void patch() throws IOException, HTTPError {
+  void patch() throws HTTPError {
     var mockUUID = new UUIDMock();
 
     var content = "text file content!";
-    var request = new RequestMock(
-        "PATCH",
-        "/reminders/" + mockUUID.getDefaultUUID(),
-        "Hello world"
-    );
+    var request = new RequestMock("PATCH", "/reminders/" + mockUUID.getDefaultUUID(), "Hello world");
 
     var params = new HashMap<String, String>();
     params.put("id", mockUUID.getDefaultUUID());
@@ -141,9 +121,27 @@ class RemindersTest {
 
     assertEquals("./data/" + mockUUID.getDefaultUUID() + ".txt", fileIOMock.getLastPatchPath().toString());
 
-    var expectedResponse = "HTTP/1.1 200 OK\r\n" +
-        "Content-Length: 0\r\n\r\n";
+    var expectedResponse = "HTTP/1.1 200 OK\r\n" + "Content-Length: 0\r\n\r\n";
 
     assertEquals(expectedResponse, response.createResponse());
+  }
+
+  @Test
+  void patchReturns404IfFileNotFound() {
+    var request = new RequestMock("GET", "/reminders/not-an-id");
+
+    var params = new HashMap<String, String>();
+    params.put("id", "not-an-id");
+    request.setParams(params);
+
+    var fileIOMock = new FileIOMock(new IOException("File does not exist"));
+
+    var textFile = new TextFile(fileIOMock, new UUID());
+    var reminders = new Reminders(textFile);
+
+    HTTPError exception = assertThrows(HTTPError.class, () -> reminders.patch(request));
+
+    assertEquals("Reminder was not found", exception.getMessage());
+    assertEquals(404, exception.getStatus());
   }
 }
