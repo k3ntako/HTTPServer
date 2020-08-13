@@ -121,7 +121,8 @@ class RemindersTest {
 
     assertEquals("./data/" + mockUUID.getDefaultUUID() + ".txt", fileIOMock.getLastPatchPath().toString());
 
-    var expectedResponse = "HTTP/1.1 200 OK\r\n" + "Content-Length: 0\r\n\r\n";
+    var expectedResponse = "HTTP/1.1 204 No Content\r\n" +
+        "Content-Length: 0\r\n\r\n";
 
     assertEquals(expectedResponse, response.createResponse());
   }

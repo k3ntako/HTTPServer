@@ -12,7 +12,7 @@ class ResponseTest {
 
     var headerStr = response.createResponse();
 
-    var expected = "HTTP/1.1 200 OK\r\n" +
+    var expected = "HTTP/1.1 204 No Content\r\n" +
         "Content-Length: 0\r\n\r\n";
     assertEquals(expected, headerStr);
   }
