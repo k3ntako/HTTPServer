@@ -33,4 +33,17 @@ class TextFileTest {
     assertEquals("test file str", fileStr);
     assertEquals("./data/8d142d80-565f-417d-8334-a8a19caadadb.txt", fileIO.getLastReadPath().toString());
   }
+
+  @Test
+  void patchFile() throws IOException {
+    var fileIO = new FileIOMock();
+    var uuid = new UUIDMock();
+    var textFile = new TextFile(fileIO, uuid);
+
+    textFile.patchFile(uuid.getDefaultUUID(), "Here is the patch text");
+
+    var pathStr = fileIO.getLastPatchPath().toString();
+    assertEquals("./data/8d142d80-565f-417d-8334-a8a19caadadb.txt", pathStr);
+    assertEquals("Here is the patch text", fileIO.getLastPatch());
+  }
 }
