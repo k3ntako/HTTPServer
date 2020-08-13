@@ -90,6 +90,10 @@ public class Request implements RequestInterface {
     return this.params;
   }
 
+  public String getParam(String key) {
+    return this.params.get(key);
+  }
+
   public String getMethod() {
     return this.method;
   }

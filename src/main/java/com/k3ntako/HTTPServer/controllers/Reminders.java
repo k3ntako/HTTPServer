@@ -33,9 +33,7 @@ public class Reminders {
   }
 
   public Response get(RequestInterface request) throws IOException, HTTPError {
-    var params = request.getParams();
-
-    var id = params.get("id");
+    var id = request.getParam("id");
 
     var response = new Response();
 
@@ -53,8 +51,7 @@ public class Reminders {
     var body = request.getBody();
     validateBody(body);
 
-    var params = request.getParams();
-    var id = params.get("id");
+    var id = request.getParam("id");
 
     try {
       textFile.patchFile(id, body);

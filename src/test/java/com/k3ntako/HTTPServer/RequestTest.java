@@ -72,4 +72,25 @@ class RequestTest {
     assertEquals("123", requestParams.get("id"));
     assertEquals("345", requestParams.get("event_id"));
   }
+
+  @Test
+  void getParam() {
+    var headerStr = "GET / HTTP/1.1\r\n" +
+        "Host: localhost:5000\r\n" +
+        "User-Agent: curl/7.64.1\r\n" +
+        "Accept: */*\r\n\r\n";
+    var serverIO = new ServerIOMock(headerStr);
+    serverIO.init(new Socket());
+
+    var request = new Request(serverIO);
+
+    var params = new HashMap<String, String>();
+    params.put("id", "123");
+    params.put("event_id", "345");
+
+    request.setParams(params);
+
+    assertEquals("123", request.getParam("id"));
+    assertEquals("345", request.getParam("event_id"));
+  }
 }

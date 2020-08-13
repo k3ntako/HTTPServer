@@ -10,6 +10,8 @@ public interface RequestInterface {
 
   HashMap<String, String> getParams();
 
+  String getParam(String key);
+
   String getMethod();
 
   String getRoute();
