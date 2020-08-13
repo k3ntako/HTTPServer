@@ -2,13 +2,13 @@ package com.k3ntako.HTTPServer.mocks;
 
 import com.k3ntako.HTTPServer.FileIOInterface;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.file.Path;
 
 public class FileIOMock implements FileIOInterface {
   private String lastWrite;
   private Path lastWritePath;
+  private String lastPatch;
+  private Path lastPatchPath;
   private Path lastReadPath;
   private String lastGetResourceFileName;
   private String mockFileContent;
@@ -34,6 +34,12 @@ public class FileIOMock implements FileIOInterface {
   }
 
   @Override
+  public void patchNewLine(Path path, String str) {
+    lastPatchPath = path;
+    lastPatch = str;
+  }
+
+  @Override
   public String getResource(String fileName) {
     lastGetResourceFileName = fileName;
     return mockFileContent;
@@ -45,6 +51,14 @@ public class FileIOMock implements FileIOInterface {
 
   public Path getLastWritePath() {
     return lastWritePath;
+  }
+
+  public String getLastPatch() {
+    return lastPatch;
+  }
+
+  public Path getLastPatchPath() {
+    return lastPatchPath;
   }
 
   public Path getLastReadPath() {
