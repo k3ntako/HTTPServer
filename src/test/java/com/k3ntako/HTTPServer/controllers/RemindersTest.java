@@ -117,4 +117,33 @@ class RemindersTest {
     assertEquals("Reminder was not found", exception.getMessage());
     assertEquals(404, exception.getStatus());
   }
+
+  @Test
+  void patch() throws IOException, HTTPError {
+    var mockUUID = new UUIDMock();
+
+    var content = "text file content!";
+    var request = new RequestMock(
+        "PATCH",
+        "/reminders/" + mockUUID.getDefaultUUID(),
+        "Hello world"
+    );
+
+    var params = new HashMap<String, String>();
+    params.put("id", mockUUID.getDefaultUUID());
+    request.setParams(params);
+
+    var fileIOMock = new FileIOMock(content);
+
+    var textFile = new TextFile(fileIOMock, mockUUID);
+    var reminders = new Reminders(textFile);
+    var response = reminders.patch(request);
+
+    assertEquals("./data/" + mockUUID.getDefaultUUID() + ".txt", fileIOMock.getLastPatchPath().toString());
+
+    var expectedResponse = "HTTP/1.1 200 OK\r\n" +
+        "Content-Length: 0\r\n\r\n";
+
+    assertEquals(expectedResponse, response.createResponse());
+  }
 }

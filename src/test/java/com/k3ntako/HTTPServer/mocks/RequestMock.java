@@ -7,10 +7,10 @@ import java.util.HashMap;
 public class RequestMock implements RequestInterface {
   private String method;
   private String route;
-  private String protocol;
-  private HashMap<String, String> headers;
+  private String protocol = "HTTP/1.1";
+  private HashMap<String, String> headers = new HashMap<>();
   private HashMap<String, String> params;
-  private String body;
+  private String body = "";
 
   public RequestMock(
       String method,
@@ -18,6 +18,16 @@ public class RequestMock implements RequestInterface {
   ) {
     this.method = method;
     this.route = route;
+  }
+
+  public RequestMock(
+      String method,
+      String route,
+      String body
+  ) {
+    this.method = method;
+    this.route = route;
+    this.body = body;
   }
 
   public RequestMock(

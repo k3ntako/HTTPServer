@@ -48,4 +48,16 @@ public class Reminders {
 
     return response;
   }
+
+  public Response patch(RequestInterface request) throws IOException, HTTPError {
+    var body = request.getBody();
+    validateBody(body);
+
+    var params = request.getParams();
+    var id = params.get("id");
+
+    textFile.patchFile(id, body);
+
+    return new Response();
+  }
 }
