@@ -58,4 +58,12 @@ public class FileIO implements FileIOInterface {
 
     Files.write(path, str.getBytes());
   }
+
+  public void delete(Path path) throws IOException {
+    if (!Files.exists(path)) {
+      throw new IOException("File does not exist");
+    }
+
+    Files.delete(path);
+  }
 }

@@ -119,6 +119,31 @@ class FileIOTest {
     assertEquals("File does not exist", exception.getMessage());
   }
 
+  @Test
+  void delete() throws IOException {
+    var file = new File(path.toString());
+    file.createNewFile();
+
+    assertTrue(Files.exists(path));
+
+    final var fileIO = new FileIO();
+    fileIO.delete(path);
+
+    assertFalse(Files.exists(path));
+  }
+
+  @Test
+  void deleteThrowsErrorIfFileDoesNotExist() {
+    final var fileIO = new FileIO();
+
+    IOException exception = assertThrows(
+        IOException.class,
+        () -> fileIO.delete(path)
+    );
+
+    assertEquals("File does not exist", exception.getMessage());
+  }
+
   @AfterEach
   void tearDown() throws IOException {
     Files.deleteIfExists(path);
