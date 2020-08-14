@@ -165,4 +165,67 @@ class RemindersTest {
     assertEquals("Request body should not be multiline", exception.getMessage());
     assertEquals(400, exception.getStatus());
   }
+
+  @Test
+  void put() throws HTTPError {
+    var mockUUID = new UUIDMock();
+
+    var content = "text file content!";
+    var request = new RequestMock("PUT", "/reminders/" + mockUUID.getDefaultUUID(), "Hello world");
+
+    var params = new HashMap<String, String>();
+    params.put("id", mockUUID.getDefaultUUID());
+    request.setParams(params);
+
+    var fileIOMock = new FileIOMock(content);
+
+    var textFile = new TextFile(fileIOMock, mockUUID);
+    var reminders = new Reminders(textFile);
+    var response = reminders.put(request);
+
+    assertEquals("./data/" + mockUUID.getDefaultUUID() + ".txt", fileIOMock.getLastOverwritePath().toString());
+
+    var expectedResponse = "HTTP/1.1 204 No Content\r\n" +
+        "Content-Length: 0\r\n\r\n";
+
+    assertEquals(expectedResponse, response.createResponse());
+  }
+
+  @Test
+  void putReturns404IfFileNotFound() {
+    var request = new RequestMock("PUT", "/reminders/not-an-id");
+
+    var params = new HashMap<String, String>();
+    params.put("id", "not-an-id");
+    request.setParams(params);
+
+    var fileIOMock = new FileIOMock(new IOException("File does not exist"));
+
+    var textFile = new TextFile(fileIOMock, new UUID());
+    var reminders = new Reminders(textFile);
+
+    HTTPError exception = assertThrows(HTTPError.class, () -> reminders.put(request));
+
+    assertEquals("Reminder was not found", exception.getMessage());
+    assertEquals(404, exception.getStatus());
+  }
+
+  @Test
+  void putThrowsErrorIfBodyIsMultipleLines() {
+    var mockUUID = new UUIDMock();
+    var putBody = "hello post!\nsecond line";
+    var request = new RequestMock("PUT", "/reminders", putBody);
+
+    var params = new HashMap<String, String>();
+    params.put("id", mockUUID.getDefaultUUID());
+    request.setParams(params);
+
+    var textFile = new TextFile(new FileIOMock(), mockUUID);
+    var reminders = new Reminders(textFile);
+
+    HTTPError exception = assertThrows(HTTPError.class, () -> reminders.put(request));
+
+    assertEquals("Request body should not be multiline", exception.getMessage());
+    assertEquals(400, exception.getStatus());
+  }
 }
