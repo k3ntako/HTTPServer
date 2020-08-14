@@ -61,9 +61,7 @@ public class Reminders {
 
   public Response put(RequestInterface request) throws HTTPError {
     var body = request.getBody();
-    validateBody(body);
-
-    var id = request.getParam("id");
+    var id = request.getRouteParam("id");
 
     try {
       textFile.overwriteFile(id, body);
