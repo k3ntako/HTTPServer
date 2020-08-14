@@ -33,7 +33,7 @@ public class FileIO implements FileIOInterface {
   public String getResource(String fileName) throws IOException, URISyntaxException {
     var fileURL = this.getClass().getClassLoader().getResource(fileName);
 
-    if(fileURL == null) {
+    if (fileURL == null) {
       return null;
     }
 
@@ -51,5 +51,11 @@ public class FileIO implements FileIOInterface {
 
     str = System.lineSeparator() + str;
     Files.write(path, str.getBytes(), StandardOpenOption.APPEND);
+  }
+
+  public void overwrite(Path path, String str) throws IOException {
+    new File(path.toString());
+
+    Files.write(path, str.getBytes());
   }
 }
