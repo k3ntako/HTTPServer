@@ -16,20 +16,23 @@ public class RequestHandler {
   }
 
   public String handleRequest(ServerIOInterface serverIO) throws Exception {
-    Response response;
+    String responseStr;
     try {
       var request = this.requestGenerator.generateRequest(serverIO);
-      response = this.router.routeRequest(request);
+      var response = this.router.routeRequest(request);
+      responseStr = response.createResponse();
     } catch (HTTPError httpError) {
-      response = this.errorHandler.handleError(httpError);
+      var response = this.errorHandler.handleError(httpError);
+      responseStr = response.createResponse();
     } catch (Exception exception) {
-      response = this.errorHandler.handleError(exception);
+      var response = this.errorHandler.handleError(exception);
+      responseStr = response.createResponse();
     }
 
-    if(response == null){
+    if (responseStr == null) {
       throw new Exception("Response is null");
     }
 
-    return response.createResponse();
+    return responseStr;
   }
 }

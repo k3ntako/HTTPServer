@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ErrorHandlerTest {
 
   @Test
-  void handleHTTPError() {
+  void handleHTTPError() throws HTTPError {
     var httpError = new HTTPError(404, "File was not found");
     var errorHandler = new ErrorHandler();
 
@@ -22,7 +22,7 @@ class ErrorHandlerTest {
   }
 
   @Test
-  void handleServerError() {
+  void handleServerError() throws HTTPError {
     var error = new Exception("Something went wrong");
     var errorHandler = new ErrorHandler();
 

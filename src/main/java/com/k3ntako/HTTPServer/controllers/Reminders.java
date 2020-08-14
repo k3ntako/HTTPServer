@@ -36,13 +36,14 @@ public class Reminders {
     var params = request.getParams();
 
     var id = params.get("id");
-    if (id == null || id.isBlank()) {
-      throw new HTTPError(400, "ID must be specified");
-    }
 
     var response = new Response();
 
     var content = textFile.readFile(id);
+    if (content == null) {
+      throw new HTTPError(404, "Reminder was not found");
+    }
+
     response.setBody(content);
 
     return response;

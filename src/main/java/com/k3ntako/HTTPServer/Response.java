@@ -9,8 +9,13 @@ public class Response {
   private String body = "";
   private int status = 200;
   private HashMap<String, String> additionalHeaders = new HashMap<>();
-  
-  public String createResponse() {
+
+  public String createResponse() throws HTTPError {
+    if (body == null) {
+      throw new HTTPError(500, "Response body cannot be null");
+    }
+
+
     return this.createHeader(body.length()) + this.body;
   }
 
