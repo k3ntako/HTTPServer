@@ -10,6 +10,8 @@ public class FileIOMock implements FileIOInterface {
   private Path lastWritePath;
   private String lastPatch;
   private Path lastPatchPath;
+  private String lastOverwrite;
+  private Path lastOverwritePath;
   private Path lastReadPath;
   private String lastGetResourceFileName;
   private String mockFileContent;
@@ -49,6 +51,13 @@ public class FileIOMock implements FileIOInterface {
   }
 
   @Override
+  public void overwrite(Path path, String str) throws IOException {
+    throwIfExceptionExists();
+    lastOverwritePath = path;
+    lastOverwrite = str;
+  }
+
+  @Override
   public String getResource(String fileName) throws IOException {
     throwIfExceptionExists();
     lastGetResourceFileName = fileName;
@@ -69,6 +78,14 @@ public class FileIOMock implements FileIOInterface {
 
   public Path getLastPatchPath() {
     return lastPatchPath;
+  }
+
+  public String getLastOverwrite() {
+    return lastOverwrite;
+  }
+
+  public Path getLastOverwritePath() {
+    return lastOverwritePath;
   }
 
   public Path getLastReadPath() {
