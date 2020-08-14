@@ -107,19 +107,20 @@ class RemindersTest {
     var mockUUID = new UUIDMock();
 
     var content = "text file content!";
-    var request = new RequestMock("PATCH", "/reminders/" + mockUUID.getDefaultUUID(), "Hello world");
+    var request = new RequestMock("PATCH", "/reminders/" + mockUUID.getDefaultUUID(), content);
 
     var params = new HashMap<String, String>();
     params.put("id", mockUUID.getDefaultUUID());
     request.setParams(params);
 
-    var fileIOMock = new FileIOMock(content);
+    var fileIOMock = new FileIOMock();
 
     var textFile = new TextFile(fileIOMock, mockUUID);
     var reminders = new Reminders(textFile);
     var response = reminders.patch(request);
 
     assertEquals("./data/" + mockUUID.getDefaultUUID() + ".txt", fileIOMock.getLastPatchPath().toString());
+    assertEquals(content, fileIOMock.getLastPatch());
 
     var expectedResponse = "HTTP/1.1 204 No Content\r\n" +
         "Content-Length: 0\r\n\r\n";
