@@ -40,6 +40,26 @@ class FileIOTest {
   }
 
   @Test
+  void readingEmptyFileReturnsEmptyString() throws IOException {
+    var file = new File(path.toString());
+    file.createNewFile();
+
+    final var fileIO = new FileIO();
+    final var fileContent = fileIO.read(path);
+
+    assertNotNull(fileContent);
+    assertEquals("", fileContent);
+  }
+
+  @Test
+  void readReturnsNullIfFileNotFound() throws IOException {
+    final var fileIO = new FileIO();
+    final var fileContent = fileIO.read(path);
+
+    assertNull(fileContent);
+  }
+
+  @Test
   void writeToFileInFolder() throws IOException {
     final var str = "This is text\nthis is a new line!";
 
@@ -50,7 +70,6 @@ class FileIOTest {
 
     assertEquals(str, fileContent);
   }
-
 
   @AfterEach
   void tearDown() throws IOException {
