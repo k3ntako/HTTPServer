@@ -9,7 +9,7 @@ public class RequestMock implements RequestInterface {
   private String route;
   private String protocol = "HTTP/1.1";
   private HashMap<String, String> headers = new HashMap<>();
-  private HashMap<String, String> params;
+  private HashMap<String, String> routeParams;
   private String body = "";
 
   public RequestMock(
@@ -47,18 +47,18 @@ public class RequestMock implements RequestInterface {
   public void parseRequest() {
   }
 
-  public void setParams(HashMap<String, String> params) {
-    this.params = params;
+  public void setRouteParams(HashMap<String, String> routeParams) {
+    this.routeParams = routeParams;
   }
 
   @Override
-  public HashMap<String, String> getParams() {
-    return params;
+  public HashMap<String, String> getRouteParams() {
+    return routeParams;
   }
 
   @Override
-  public String getParam(String key) {
-    return this.params.get(key);
+  public String getRouteParam(String key) {
+    return this.routeParams.get(key);
   }
 
   public String getMethod() {

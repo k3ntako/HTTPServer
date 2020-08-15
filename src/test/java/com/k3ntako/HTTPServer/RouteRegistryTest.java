@@ -91,9 +91,9 @@ class RouteRegistryTest {
     routeRegistry.registerRoute("GET", "/reminders/:id", (RequestInterface req) -> new Reminders(textFile).get(req));
 
     var request = new RequestMock("GET", "/reminders/" + mockUUID.getDefaultUUID());
-    var params = new HashMap<String, String>();
-    params.put("id", mockUUID.getDefaultUUID());
-    request.setParams(params);
+    var routeParams = new HashMap<String, String>();
+    routeParams.put("id", mockUUID.getDefaultUUID());
+    request.setRouteParams(routeParams);
     var remindersGet = routeRegistry.getController(request);
 
     assertNotNull(remindersGet);

@@ -5,7 +5,7 @@ import java.util.HashMap;
 public class Route {
   private String path;
   private ControllerMethodInterface controllerMethod;
-  private HashMap<String, String> params = new HashMap<>();
+  private HashMap<String, String> routeParams = new HashMap<>();
 
   public Route(String path) {
     this.path = path;
@@ -23,11 +23,11 @@ public class Route {
     return this.controllerMethod;
   }
 
-  public void setParams(HashMap<String, String> params) {
-    this.params = params;
+  public void setRouteParams(HashMap<String, String> routeParams) {
+    this.routeParams = routeParams;
   }
 
-  public HashMap<String, String> getParams() {
-    return this.params;
+  public HashMap<String, String> getRouteParams() {
+    return this.routeParams;
   }
 }

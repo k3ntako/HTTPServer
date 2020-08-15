@@ -51,7 +51,7 @@ class RequestTest {
   }
 
   @Test
-  void getAndSetParams() {
+  void getAndSetRouteParams() {
     var headerStr = "GET / HTTP/1.1\r\n" +
         "Host: localhost:5000\r\n" +
         "User-Agent: curl/7.64.1\r\n" +
@@ -61,20 +61,20 @@ class RequestTest {
 
     var request = new Request(serverIO);
 
-    var params = new HashMap<String, String>();
-    params.put("id", "123");
-    params.put("event_id", "345");
+    var routeParams = new HashMap<String, String>();
+    routeParams.put("id", "123");
+    routeParams.put("event_id", "345");
 
-    request.setParams(params);
+    request.setRouteParams(routeParams);
 
-    var requestParams = request.getParams();
+    var requestParams = request.getRouteParams();
 
     assertEquals("123", requestParams.get("id"));
     assertEquals("345", requestParams.get("event_id"));
   }
 
   @Test
-  void getParam() {
+  void getRouteParam() {
     var headerStr = "GET / HTTP/1.1\r\n" +
         "Host: localhost:5000\r\n" +
         "User-Agent: curl/7.64.1\r\n" +
@@ -84,13 +84,13 @@ class RequestTest {
 
     var request = new Request(serverIO);
 
-    var params = new HashMap<String, String>();
-    params.put("id", "123");
-    params.put("event_id", "345");
+    var routeParams = new HashMap<String, String>();
+    routeParams.put("id", "123");
+    routeParams.put("event_id", "345");
 
-    request.setParams(params);
+    request.setRouteParams(routeParams);
 
-    assertEquals("123", request.getParam("id"));
-    assertEquals("345", request.getParam("event_id"));
+    assertEquals("123", request.getRouteParam("id"));
+    assertEquals("345", request.getRouteParam("event_id"));
   }
 }

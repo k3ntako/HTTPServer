@@ -1,11 +1,8 @@
 package com.k3ntako.HTTPServer.controllers;
 
 import com.k3ntako.HTTPServer.*;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
 
 public class Reminders {
   private TextFile textFile;
@@ -33,7 +30,7 @@ public class Reminders {
   }
 
   public Response get(RequestInterface request) throws IOException, HTTPError {
-    var id = request.getParam("id");
+    var id = request.getRouteParam("id");
 
     var response = new Response();
 
@@ -51,7 +48,7 @@ public class Reminders {
     var body = request.getBody();
     validateBody(body);
 
-    var id = request.getParam("id");
+    var id = request.getRouteParam("id");
 
     try {
       textFile.patchFile(id, body);

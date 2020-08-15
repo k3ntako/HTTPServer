@@ -27,16 +27,16 @@ class RouteTest {
   }
 
   @Test
-  void getAndSetParams() {
+  void getAndSetRouteParams() {
     var route = new Route("/reminders/123");
     var textFile = new TextFile(new   FileIOMock(), new UUID());
     route.setControllerMethod((RequestInterface req) -> new Reminders(textFile).get(req));
 
-    var params = new HashMap<String, String>();
-    params.put("id", "123");
-    route.setParams(params);
+    var routeParams = new HashMap<String, String>();
+    routeParams.put("id", "123");
+    route.setRouteParams(routeParams);
 
-    var paramFromRoute = route.getParams();
+    var paramFromRoute = route.getRouteParams();
     assertEquals("123", paramFromRoute.get("id"));
   }
 }

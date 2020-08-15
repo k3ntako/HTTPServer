@@ -65,9 +65,9 @@ class RemindersTest {
     var content = "text file content!";
     var request = new RequestMock("GET", "/reminders/" + mockUUID.getDefaultUUID());
 
-    var params = new HashMap<String, String>();
-    params.put("id", mockUUID.getDefaultUUID());
-    request.setParams(params);
+    var routeParams = new HashMap<String, String>();
+    routeParams.put("id", mockUUID.getDefaultUUID());
+    request.setRouteParams(routeParams);
 
     var fileIOMock = new FileIOMock(content);
 
@@ -87,9 +87,9 @@ class RemindersTest {
   void getThrows404IfFileIsNotFound() {
     var request = new RequestMock("GET", "/reminders/not-an-id");
 
-    var params = new HashMap<String, String>();
-    params.put("id", "not-an-id");
-    request.setParams(params);
+    var routeParams = new HashMap<String, String>();
+    routeParams.put("id", "not-an-id");
+    request.setRouteParams(routeParams);
 
     var fileIOMock = new FileIOMock((String) null);
 
@@ -109,9 +109,9 @@ class RemindersTest {
     var content = "text file content!";
     var request = new RequestMock("PATCH", "/reminders/" + mockUUID.getDefaultUUID(), content);
 
-    var params = new HashMap<String, String>();
-    params.put("id", mockUUID.getDefaultUUID());
-    request.setParams(params);
+    var routeParams = new HashMap<String, String>();
+    routeParams.put("id", mockUUID.getDefaultUUID());
+    request.setRouteParams(routeParams);
 
     var fileIOMock = new FileIOMock();
 
@@ -132,9 +132,9 @@ class RemindersTest {
   void patchReturns404IfFileNotFound() {
     var request = new RequestMock("PATCH", "/reminders/not-an-id");
 
-    var params = new HashMap<String, String>();
-    params.put("id", "not-an-id");
-    request.setParams(params);
+    var routeParams = new HashMap<String, String>();
+    routeParams.put("id", "not-an-id");
+    request.setRouteParams(routeParams);
 
     var fileIOMock = new FileIOMock(new IOException("File does not exist"));
 
@@ -153,9 +153,9 @@ class RemindersTest {
     var patchBody = "hello post!\nsecond line";
     var request = new RequestMock("PATCH", "/reminders", patchBody);
 
-    var params = new HashMap<String, String>();
-    params.put("id", mockUUID.getDefaultUUID());
-    request.setParams(params);
+    var routeParams = new HashMap<String, String>();
+    routeParams.put("id", mockUUID.getDefaultUUID());
+    request.setRouteParams(routeParams);
 
     var textFile = new TextFile(new FileIOMock(), mockUUID);
     var reminders = new Reminders(textFile);
