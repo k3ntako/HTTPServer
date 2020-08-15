@@ -27,7 +27,7 @@ class RouteMatcherTest {
     var route = routeMatcher.matchRoute(routes, request);
 
     assertNotNull(route.getControllerMethod());
-    assertNotNull(route.getParams());
+    assertNotNull(route.getRouteParams());
   }
 
   @Test
@@ -47,9 +47,9 @@ class RouteMatcherTest {
     assertNotNull(route.getControllerMethod());
     assertEquals("/reminders/8d142d80-565f-417d-8334-a8a19caadadb", route.getRoutePath());
 
-    var params = route.getParams();
-    assertNotNull(params);
-    assertEquals("8d142d80-565f-417d-8334-a8a19caadadb", params.get("id"));
+    var routeParams = route.getRouteParams();
+    assertNotNull(routeParams);
+    assertEquals("8d142d80-565f-417d-8334-a8a19caadadb", routeParams.get("id"));
   }
 
   @Test

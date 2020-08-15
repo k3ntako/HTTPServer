@@ -1,11 +1,8 @@
 package com.k3ntako.HTTPServer.controllers;
 
 import com.k3ntako.HTTPServer.*;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
 
 public class Reminders {
   private TextFile textFile;
@@ -33,9 +30,7 @@ public class Reminders {
   }
 
   public Response get(RequestInterface request) throws IOException, HTTPError {
-    var params = request.getParams();
-
-    var id = params.get("id");
+    var id = request.getRouteParam("id");
 
     var response = new Response();
 
@@ -47,5 +42,20 @@ public class Reminders {
     response.setBody(content);
 
     return response;
+  }
+
+  public Response patch(RequestInterface request) throws HTTPError {
+    var body = request.getBody();
+    validateBody(body);
+
+    var id = request.getRouteParam("id");
+
+    try {
+      textFile.patchFile(id, body);
+    } catch (IOException e) {
+      throw new HTTPError(404, "Reminder was not found");
+    }
+
+    return new Response();
   }
 }

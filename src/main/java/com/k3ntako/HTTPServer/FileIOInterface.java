@@ -7,5 +7,6 @@ import java.nio.file.Path;
 public interface FileIOInterface {
     void write(Path path, String str) throws IOException;
     String read(Path path) throws IOException;
+    void patchNewLine(Path path, String str) throws IOException;
     String getResource(String fileName) throws IOException, URISyntaxException;
 }

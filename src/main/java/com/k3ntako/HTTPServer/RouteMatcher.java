@@ -64,7 +64,7 @@ public class RouteMatcher {
         }
 
         route.setControllerMethod(controllerMethod);
-        route.setParams(this.getParams(registeredRoute, requestRoute));
+        route.setRouteParams(this.parseRouteParams(registeredRoute, requestRoute));
         return route;
       }
     }
@@ -108,8 +108,8 @@ public class RouteMatcher {
     return true;
   }
 
-  private HashMap<String, String> getParams(String registeredRoute, String requestRoute) {
-    var params = new HashMap<String, String>();
+  private HashMap<String, String> parseRouteParams(String registeredRoute, String requestRoute) {
+    var routeParams = new HashMap<String, String>();
 
     var registeredParts = convertToArray(registeredRoute);
     var requestParts = convertToArray(requestRoute);
@@ -120,10 +120,10 @@ public class RouteMatcher {
 
       if (registeredPart.charAt(0) == ':') {
         var paramKey = registeredPart.substring(1);
-        params.put(paramKey, requestPart);
+        routeParams.put(paramKey, requestPart);
       }
     }
 
-    return params;
+    return routeParams;
   }
 }

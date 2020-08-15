@@ -6,6 +6,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 public class FileIO implements FileIOInterface {
   @Override
@@ -39,5 +40,16 @@ public class FileIO implements FileIOInterface {
     var fileURI = fileURL.toURI();
     var path = Paths.get(fileURI);
     return read(path);
+  }
+
+  public void patchNewLine(Path path, String str) throws IOException {
+    var file = new File(path.toString());
+
+    if (!file.exists()) {
+      throw new IOException("File does not exist");
+    }
+
+    str = System.lineSeparator() + str;
+    Files.write(path, str.getBytes(), StandardOpenOption.APPEND);
   }
 }

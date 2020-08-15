@@ -15,17 +15,23 @@ public class Response {
       throw new HTTPError(500, "Response body cannot be null");
     }
 
-
     return this.createHeader(body.length()) + this.body;
   }
 
   private String createHeader(int contentLength) {
+    var status = this.status;
+
+    if (body.length() == 0 && status >= 200 && status <= 299) {
+      status = 204;
+    }
+
     var header = "HTTP/1.1 " + status + " " + Status.fromStatusCode(status) + "\r\n";
 
     var additionalHeaders = stringifyAdditionHeaders();
     header += additionalHeaders;
 
     header += "Content-Length: " + contentLength + "\r\n\r\n";
+
 
     return header;
   }

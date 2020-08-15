@@ -18,7 +18,7 @@ public class Router {
 
     if(route != null) {
       controllerMethod = route.getControllerMethod();
-      request.setParams(route.getParams());
+      request.setRouteParams(route.getRouteParams());
     }
 
     return controllerMethod.getResponse(request);
