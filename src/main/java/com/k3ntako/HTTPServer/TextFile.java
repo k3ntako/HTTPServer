@@ -40,6 +40,12 @@ public class TextFile {
     fileIO.overwrite(path, text);
   }
 
+  public void delete(String fileUUID) throws IOException {
+    var path = generatePathForUUID(fileUUID);
+
+    fileIO.delete(path);
+  }
+
   private Path generatePathForUUID(String fileUUID) {
     var strPath = "./data/" + fileUUID + ".txt";
     return FileSystems.getDefault().getPath(strPath);
