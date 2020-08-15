@@ -22,6 +22,7 @@ public class RouteRegistrar {
     routeRegistry.registerRoute("GET", "/reminders/:id", (RequestInterface req) -> new Reminders(textFile).get(req));
     routeRegistry.registerRoute("PATCH", "/reminders/:id", (RequestInterface req) -> new Reminders(textFile).patch(req));
     routeRegistry.registerRoute("PUT", "/reminders/:id", (RequestInterface req) -> new Reminders(textFile).put(req));
+    routeRegistry.registerRoute("DELETE", "/reminders/:id", (RequestInterface req) -> new Reminders(textFile).delete(req));
 
     return routeRegistry;
   }

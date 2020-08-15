@@ -235,4 +235,46 @@ class RemindersTest {
 
     assertEquals(expectedResponse, response.createResponse());
   }
+
+  @Test
+  void delete() throws HTTPError {
+    var mockUUID = new UUIDMock();
+
+    var request = new RequestMock("DELETE", "/reminders/" + mockUUID.getDefaultUUID(), "");
+    var params = new HashMap<String, String>();
+    params.put("id", mockUUID.getDefaultUUID());
+    request.setParams(params);
+
+    var fileIOMock = new FileIOMock();
+    var textFile = new TextFile(fileIOMock, mockUUID);
+    var reminders = new Reminders(textFile);
+    var response = reminders.delete(request);
+
+    assertEquals("./data/" + mockUUID.getDefaultUUID() + ".txt", fileIOMock.getLastDeletePath().toString());
+
+
+    var expectedResponse = "HTTP/1.1 204 No Content\r\n" +
+        "Content-Length: 0\r\n\r\n";
+
+    assertEquals(expectedResponse, response.createResponse());
+  }
+
+  @Test
+  void deleteThrowsHTTPErrorIfFileNotFound() {
+    var request = new RequestMock("DELETE", "/reminders/not-an-id", "");
+    var params = new HashMap<String, String>();
+    params.put("id", "not-an-id");
+    request.setParams(params);
+
+    var fileIOMock = new FileIOMock(new IOException("File does not exist"));
+    var textFile = new TextFile(fileIOMock, new UUID());
+    var reminders = new Reminders(textFile);
+    HTTPError exception = assertThrows(
+        HTTPError.class,
+        () -> reminders.delete(request)
+    );
+
+    assertEquals("Reminder was not found", exception.getMessage());
+    assertEquals(404, exception.getStatus());
+  }
 }

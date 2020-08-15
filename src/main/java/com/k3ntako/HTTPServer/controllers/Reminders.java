@@ -71,4 +71,16 @@ public class Reminders {
 
     return new Response();
   }
+
+  public Response delete(RequestInterface request) throws HTTPError {
+    var id = request.getParam("id");
+
+    try {
+      textFile.delete(id);
+    } catch (IOException e) {
+      throw new HTTPError(404, "Reminder was not found");
+    }
+
+    return new Response();
+  }
 }
