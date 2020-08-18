@@ -54,7 +54,11 @@ public class FileIO implements FileIOInterface {
   }
 
   public void overwrite(Path path, String str) throws IOException {
-    new File(path.toString());
+    var file = new File(path.toString());
+
+    if (!file.exists()) {
+      throw new IOException("File does not exist");
+    }
 
     Files.write(path, str.getBytes());
   }

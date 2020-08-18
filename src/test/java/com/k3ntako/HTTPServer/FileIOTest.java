@@ -115,7 +115,7 @@ class FileIOTest {
     final var overwriteStr = "This is the second line";
     final var fileIO = new FileIO();
 
-    IOException exception = assertThrows(IOException.class, () -> fileIO.patchNewLine(path, overwriteStr));
+    IOException exception = assertThrows(IOException.class, () -> fileIO.overwrite(path, overwriteStr));
     assertEquals("File does not exist", exception.getMessage());
   }
 
