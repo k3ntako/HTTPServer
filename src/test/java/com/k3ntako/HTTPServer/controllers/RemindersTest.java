@@ -175,7 +175,7 @@ class RemindersTest {
 
     var params = new HashMap<String, String>();
     params.put("id", mockUUID.getDefaultUUID());
-    request.setParams(params);
+    request.setRouteParams(params);
 
     var fileIOMock = new FileIOMock(content);
 
@@ -198,7 +198,7 @@ class RemindersTest {
 
     var params = new HashMap<String, String>();
     params.put("id", "not-an-id");
-    request.setParams(params);
+    request.setRouteParams(params);
 
     var fileIOMock = new FileIOMock(new IOException("File does not exist"));
 
@@ -220,7 +220,7 @@ class RemindersTest {
 
     var params = new HashMap<String, String>();
     params.put("id", mockUUID.getDefaultUUID());
-    request.setParams(params);
+    request.setRouteParams(params);
 
     var fileIOMock = new FileIOMock();
 
@@ -243,7 +243,7 @@ class RemindersTest {
     var request = new RequestMock("DELETE", "/reminders/" + mockUUID.getDefaultUUID(), "");
     var params = new HashMap<String, String>();
     params.put("id", mockUUID.getDefaultUUID());
-    request.setParams(params);
+    request.setRouteParams(params);
 
     var fileIOMock = new FileIOMock();
     var textFile = new TextFile(fileIOMock, mockUUID);
@@ -264,7 +264,7 @@ class RemindersTest {
     var request = new RequestMock("DELETE", "/reminders/not-an-id", "");
     var params = new HashMap<String, String>();
     params.put("id", "not-an-id");
-    request.setParams(params);
+    request.setRouteParams(params);
 
     var fileIOMock = new FileIOMock(new IOException("File does not exist"));
     var textFile = new TextFile(fileIOMock, new UUID());

@@ -73,7 +73,7 @@ public class Reminders {
   }
 
   public Response delete(RequestInterface request) throws HTTPError {
-    var id = request.getParam("id");
+    var id = request.getRouteParam("id");
 
     try {
       textFile.delete(id);
