@@ -59,4 +59,16 @@ class TextFileTest {
     assertEquals("./data/8d142d80-565f-417d-8334-a8a19caadadb.txt", pathStr);
     assertEquals("Here is the patch text", fileIO.getLastOverwrite());
   }
+
+  @Test
+  void delete() throws IOException {
+    var fileIO = new FileIOMock();
+    var uuid = new UUIDMock();
+    var textFile = new TextFile(fileIO, uuid);
+
+    textFile.delete(uuid.getDefaultUUID());
+
+    var pathStr = fileIO.getLastDeletePath().toString();
+    assertEquals("./data/8d142d80-565f-417d-8334-a8a19caadadb.txt", pathStr);
+  }
 }

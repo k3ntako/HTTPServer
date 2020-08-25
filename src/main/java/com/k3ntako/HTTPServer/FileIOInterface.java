@@ -9,5 +9,6 @@ public interface FileIOInterface {
     String read(Path path) throws IOException;
     void patchNewLine(Path path, String str) throws IOException;
     void overwrite(Path path, String str) throws IOException;
+    void delete(Path path) throws IOException;
     String getResource(String fileName) throws IOException, URISyntaxException;
 }
