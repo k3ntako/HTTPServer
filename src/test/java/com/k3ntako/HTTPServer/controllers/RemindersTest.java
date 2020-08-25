@@ -165,4 +165,74 @@ class RemindersTest {
     assertEquals("Request body should not be multiline", exception.getMessage());
     assertEquals(400, exception.getStatus());
   }
+
+  @Test
+  void put() throws HTTPError {
+    var mockUUID = new UUIDMock();
+
+    var content = "text file content!";
+    var request = new RequestMock("PUT", "/reminders/" + mockUUID.getDefaultUUID(), content);
+
+    var params = new HashMap<String, String>();
+    params.put("id", mockUUID.getDefaultUUID());
+    request.setRouteParams(params);
+
+    var fileIOMock = new FileIOMock(content);
+
+    var textFile = new TextFile(fileIOMock, mockUUID);
+    var reminders = new Reminders(textFile);
+    var response = reminders.put(request);
+
+    assertEquals("./data/" + mockUUID.getDefaultUUID() + ".txt", fileIOMock.getLastOverwritePath().toString());
+    assertEquals(content, fileIOMock.getLastOverwrite());
+
+    var expectedResponse = "HTTP/1.1 204 No Content\r\n" +
+        "Content-Length: 0\r\n\r\n";
+
+    assertEquals(expectedResponse, response.createResponse());
+  }
+
+  @Test
+  void putReturns404IfFileNotFound() {
+    var request = new RequestMock("PUT", "/reminders/not-an-id");
+
+    var params = new HashMap<String, String>();
+    params.put("id", "not-an-id");
+    request.setRouteParams(params);
+
+    var fileIOMock = new FileIOMock(new IOException("File does not exist"));
+
+    var textFile = new TextFile(fileIOMock, new UUID());
+    var reminders = new Reminders(textFile);
+
+    HTTPError exception = assertThrows(HTTPError.class, () -> reminders.put(request));
+
+    assertEquals("Reminder was not found", exception.getMessage());
+    assertEquals(404, exception.getStatus());
+  }
+
+  @Test
+  void putAllowsMultipleLines() throws HTTPError {
+    var mockUUID = new UUIDMock();
+
+    var content = "text file content!\nsecond line";
+    var request = new RequestMock("PUT", "/reminders/" + mockUUID.getDefaultUUID(), content);
+
+    var params = new HashMap<String, String>();
+    params.put("id", mockUUID.getDefaultUUID());
+    request.setRouteParams(params);
+
+    var fileIOMock = new FileIOMock();
+
+    var textFile = new TextFile(fileIOMock, mockUUID);
+    var reminders = new Reminders(textFile);
+    var response = reminders.put(request);
+
+    assertEquals("./data/" + mockUUID.getDefaultUUID() + ".txt", fileIOMock.getLastOverwritePath().toString());
+
+    var expectedResponse = "HTTP/1.1 204 No Content\r\n" +
+        "Content-Length: 0\r\n\r\n";
+
+    assertEquals(expectedResponse, response.createResponse());
+  }
 }

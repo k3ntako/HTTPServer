@@ -34,6 +34,12 @@ public class TextFile {
     fileIO.patchNewLine(path, text);
   }
 
+  public void overwriteFile(String fileUUID, String text) throws IOException {
+    var path = generatePathForUUID(fileUUID);
+
+    fileIO.overwrite(path, text);
+  }
+
   private Path generatePathForUUID(String fileUUID) {
     var strPath = "./data/" + fileUUID + ".txt";
     return FileSystems.getDefault().getPath(strPath);

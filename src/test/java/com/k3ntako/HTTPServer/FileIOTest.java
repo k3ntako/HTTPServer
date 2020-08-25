@@ -96,6 +96,29 @@ class FileIOTest {
     assertEquals("File does not exist", exception.getMessage());
   }
 
+  @Test
+  void overwrite() throws IOException {
+    final var str = "This is the first line";
+    Files.write(path, str.getBytes());
+
+    final var overwriteStr = "This is the second line";
+    final var fileIO = new FileIO();
+    fileIO.overwrite(path, overwriteStr);
+
+    final var fileContent = Files.readString(path);
+
+    assertEquals(overwriteStr, fileContent);
+  }
+
+  @Test
+  void overwriteThrowsErrorIfDoesNotExist() {
+    final var overwriteStr = "This is the second line";
+    final var fileIO = new FileIO();
+
+    IOException exception = assertThrows(IOException.class, () -> fileIO.overwrite(path, overwriteStr));
+    assertEquals("File does not exist", exception.getMessage());
+  }
+
   @AfterEach
   void tearDown() throws IOException {
     Files.deleteIfExists(path);

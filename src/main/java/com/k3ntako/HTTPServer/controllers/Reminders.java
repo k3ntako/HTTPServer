@@ -58,4 +58,17 @@ public class Reminders {
 
     return new Response();
   }
+
+  public Response put(RequestInterface request) throws HTTPError {
+    var body = request.getBody();
+    var id = request.getRouteParam("id");
+
+    try {
+      textFile.overwriteFile(id, body);
+    } catch (IOException e) {
+      throw new HTTPError(404, "Reminder was not found");
+    }
+
+    return new Response();
+  }
 }
