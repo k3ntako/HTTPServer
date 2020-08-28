@@ -2,11 +2,10 @@ package com.k3ntako.HTTPServer;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.Scanner;
 
 public class FileIO implements FileIOInterface {
   @Override
@@ -30,16 +29,15 @@ public class FileIO implements FileIOInterface {
     return Files.readString(path);
   }
 
-  public String getResource(String fileName) throws IOException, URISyntaxException {
-    var fileURL = this.getClass().getClassLoader().getResource(fileName);
+  public String getResource(String fileName) throws Exception {
+    var inputStream = this.getClass().getClassLoader().getResourceAsStream(fileName);
 
-    if (fileURL == null) {
-      return null;
+    if (inputStream == null) {
+      throw new Exception("Resource was null");
     }
 
-    var fileURI = fileURL.toURI();
-    var path = Paths.get(fileURI);
-    return read(path);
+    var scanner = new Scanner(inputStream).useDelimiter("\\A");
+    return scanner.hasNext() ? scanner.next() : "";
   }
 
   public void patchNewLine(Path path, String str) throws IOException {
