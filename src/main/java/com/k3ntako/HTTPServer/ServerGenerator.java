@@ -1,5 +1,6 @@
 package com.k3ntako.HTTPServer;
 
+import com.google.gson.Gson;
 import com.k3ntako.HTTPServer.wrappers.ServerSocketWrapper;
 
 import java.io.IOException;
@@ -30,8 +31,9 @@ public class ServerGenerator {
   }
 
   private Router registerRoutes() throws Exception {
-    var textFile = new TextFile(new FileIO(), new UUID());
-    var routeRegistrar = new RouteRegistrar(new RouteRegistry(), fileIO, textFile);
+    var jsonIO = new JsonIO(new Gson());
+    var reminderIO = new ReminderIO(fileIO, jsonIO, new UUID());
+    var routeRegistrar = new RouteRegistrar(new RouteRegistry(), fileIO, reminderIO);
     var routeRegistry = routeRegistrar.registerRoutes();
     return new Router(routeRegistry);
   }

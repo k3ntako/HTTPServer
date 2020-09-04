@@ -4,6 +4,7 @@ import com.k3ntako.HTTPServer.controllers.SimpleGet;
 import com.k3ntako.HTTPServer.controllers.SimpleGetWithBody;
 import com.k3ntako.HTTPServer.controllers.Reminders;
 import com.k3ntako.HTTPServer.mocks.FileIOMock;
+import com.k3ntako.HTTPServer.mocks.ReminderIOMock;
 import com.k3ntako.HTTPServer.mocks.RequestMock;
 import com.k3ntako.HTTPServer.mocks.UUIDMock;
 import org.junit.jupiter.api.Test;
@@ -27,8 +28,7 @@ class RouteRegistryTest {
   @Test
   void registerAPostRoute() throws Exception {
     var routeRegistry = new RouteRegistry();
-    var textFile = new TextFile(new FileIOMock(), new UUID());
-    routeRegistry.registerRoute("POST", "/reminders", (RequestInterface req) -> new Reminders(textFile).post(req));
+    routeRegistry.registerRoute("POST", "/reminders", (RequestInterface req) -> new Reminders(new ReminderIOMock()).post(req));
 
     var request = new RequestMock("POST", "/reminders");
     var remindersPost = routeRegistry.getController(request);
@@ -38,8 +38,7 @@ class RouteRegistryTest {
   @Test
   void registerALowercaseMethod() throws Exception {
     var routeRegistry = new RouteRegistry();
-    var textFile = new TextFile(new FileIOMock(), new UUID());
-    routeRegistry.registerRoute("post", "/reminders", (RequestInterface req) -> new Reminders(textFile).post(req));
+    routeRegistry.registerRoute("post", "/reminders", (RequestInterface req) -> new Reminders(new ReminderIOMock()).post(req));
 
     var request = new RequestMock("POST", "/reminders");
     var remindersPost = routeRegistry.getController(request);
@@ -87,8 +86,7 @@ class RouteRegistryTest {
 
     var mockUUID = new UUIDMock();
     var routeRegistry = new RouteRegistry();
-    var textFile = new TextFile(new FileIOMock(mockContent), mockUUID);
-    routeRegistry.registerRoute("GET", "/reminders/:id", (RequestInterface req) -> new Reminders(textFile).get(req));
+    routeRegistry.registerRoute("GET", "/reminders/:id", (RequestInterface req) -> new Reminders(new ReminderIOMock()).get(req));
 
     var request = new RequestMock("GET", "/reminders/" + mockUUID.getDefaultUUID());
     var routeParams = new HashMap<String, String>();
@@ -102,8 +100,8 @@ class RouteRegistryTest {
     var response = controllerMethod.getResponse(request);
 
     var expectedResponse = "HTTP/1.1 200 OK\r\n" +
-        "Content-Length: 6\r\n\r\n" +
-        mockContent;
+        "Content-Length: 85\r\n\r\n" +
+        "{\"id\":\"8d142d80-565f-417d-8334-a8a19caadadb\",\"task\":\"ReminderIOMock: mock task text\"}";
     assertEquals(expectedResponse, response.createResponse());
   }
 }

@@ -1,23 +1,25 @@
 package com.k3ntako.HTTPServer.controllers;
 
+import com.google.gson.Gson;
 import com.k3ntako.HTTPServer.*;
 
 import java.io.IOException;
 
 public class Reminders {
-  private TextFile textFile;
+  private ReminderIOInterface reminderIO;
 
-  public Reminders(TextFile textFile) {
-    this.textFile = textFile;
+  public Reminders(ReminderIOInterface reminderIO) {
+    this.reminderIO = reminderIO;
   }
 
-  public Response post(RequestInterface request) throws IOException, HTTPError {
+  public ResponseInterface post(RequestInterface request) throws IOException, HTTPError {
     var body = request.getBody();
     validateBody(body);
 
-    var fileName = textFile.saveFile(body);
+    var fileName = reminderIO.addNew(body);
 
-    var response = new Response();
+    var jsonIO = new JsonIO(new Gson());
+    var response = new Response(jsonIO);
     response.setBody(fileName);
 
     return response;
@@ -29,58 +31,46 @@ public class Reminders {
     }
   }
 
-  public Response get(RequestInterface request) throws IOException, HTTPError {
+  public ResponseInterface get(RequestInterface request) throws IOException, HTTPError {
     var id = request.getRouteParam("id");
 
-    var response = new Response();
+    var jsonIO = new JsonIO(new Gson());
+    var response = new Response(jsonIO);
 
-    var content = textFile.readFile(id);
+    var content = reminderIO.getById(id);
     if (content == null) {
       throw new HTTPError(404, "Reminder was not found");
     }
 
-    response.setBody(content);
+    response.setJsonBody(content);
 
     return response;
   }
 
-  public Response patch(RequestInterface request) throws HTTPError {
-    var body = request.getBody();
-    validateBody(body);
-
-    var id = request.getRouteParam("id");
-
-    try {
-      textFile.patchFile(id, body);
-    } catch (IOException e) {
-      throw new HTTPError(404, "Reminder was not found");
-    }
-
-    return new Response();
-  }
-
-  public Response put(RequestInterface request) throws HTTPError {
+  public ResponseInterface put(RequestInterface request) throws HTTPError {
     var body = request.getBody();
     var id = request.getRouteParam("id");
 
     try {
-      textFile.overwriteFile(id, body);
+      reminderIO.overwrite(id, body);
     } catch (IOException e) {
       throw new HTTPError(404, "Reminder was not found");
     }
 
-    return new Response();
+    var jsonIO = new JsonIO(new Gson());
+    return new Response(jsonIO);
   }
 
-  public Response delete(RequestInterface request) throws HTTPError {
+  public ResponseInterface delete(RequestInterface request) throws HTTPError {
     var id = request.getRouteParam("id");
 
     try {
-      textFile.delete(id);
+      reminderIO.delete(id);
     } catch (IOException e) {
       throw new HTTPError(404, "Reminder was not found");
     }
 
-    return new Response();
+    var jsonIO = new JsonIO(new Gson());
+    return new Response(jsonIO);
   }
 }

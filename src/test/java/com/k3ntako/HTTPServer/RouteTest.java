@@ -3,6 +3,7 @@ package com.k3ntako.HTTPServer;
 import com.k3ntako.HTTPServer.controllers.Reminders;
 import com.k3ntako.HTTPServer.controllers.SimpleGet;
 import com.k3ntako.HTTPServer.mocks.FileIOMock;
+import com.k3ntako.HTTPServer.mocks.ReminderIOMock;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -29,8 +30,7 @@ class RouteTest {
   @Test
   void getAndSetRouteParams() {
     var route = new Route("/reminders/123");
-    var textFile = new TextFile(new   FileIOMock(), new UUID());
-    route.setControllerMethod((RequestInterface req) -> new Reminders(textFile).get(req));
+    route.setControllerMethod((RequestInterface req) -> new Reminders(new ReminderIOMock()).get(req));
 
     var routeParams = new HashMap<String, String>();
     routeParams.put("id", "123");
