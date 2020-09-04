@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.ws.rs.core.Response.Status;
 
-public class Response {
+public class Response implements ResponseInterface {
   private String body = "";
   private int status = 200;
   private HashMap<String, String> additionalHeaders = new HashMap<>();
@@ -15,6 +15,7 @@ public class Response {
     this.jsonIO = jsonIO;
   }
 
+  @Override
   public String createResponse() throws HTTPError {
     if (body == null) {
       throw new HTTPError(500, "Response body cannot be null");
@@ -40,22 +41,27 @@ public class Response {
     return header;
   }
 
+  @Override
   public void setBody(String body) {
     this.body = body;
   }
 
+  @Override
   public void setJsonBody(Object body) {
     this.body = this.jsonIO.toJson(body);
   }
 
+  @Override
   public void setStatus(int status) {
     this.status = status;
   }
 
+  @Override
   public void addHeader(String key, String value) {
     additionalHeaders.put(key, value);
   }
 
+  @Override
   public void setRedirect(String url, int status) {
     setStatus(status);
     addHeader("Location", url);

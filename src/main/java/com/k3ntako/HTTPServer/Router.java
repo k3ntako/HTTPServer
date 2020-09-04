@@ -11,7 +11,7 @@ public class Router {
     this.routeRegistry = routeRegistry;
   }
 
-  public Response routeRequest(RequestInterface request) throws IOException, HTTPError {
+  public ResponseInterface routeRequest(RequestInterface request) throws IOException, HTTPError {
 
     Route route = routeRegistry.getController(request);
     ControllerMethodInterface controllerMethod = (RequestInterface req) -> new NotFound().handleNotFound(req);
