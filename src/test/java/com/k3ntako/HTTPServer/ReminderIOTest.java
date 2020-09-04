@@ -15,9 +15,9 @@ class ReminderIOTest {
   void getById() throws IOException {
     var mockJson = "{" +
         "\"reminders\": {" +
-          "\"123\": {\"id\": \"123\", \"task\": \"task content!!\"}" +
+        "\"123\": {\"id\": \"123\", \"task\": \"task content!!\"}" +
         "}" +
-      "}";
+        "}";
 
     var fileIO = new FileIOMock(mockJson);
     var jsonIO = new JsonIO(new Gson());
@@ -38,16 +38,16 @@ class ReminderIOTest {
   void write() throws IOException {
     var mockJson = "{" +
         "\"reminders\": {" +
-          "\"123\": {\"id\": \"123\", \"task\": \"task content!!\"}" +
+        "\"123\": {\"id\": \"123\", \"task\": \"task content!!\"}" +
         "}" +
-      "}";
+        "}";
 
 
     var fileIO = new FileIOMock(mockJson);
     var jsonIO = new JsonIO(new Gson());
     var reminderIO = new ReminderIO(fileIO, jsonIO, new UUIDMock("809"));
 
-    var reminderId = reminderIO.write("new task");
+    var reminderId = reminderIO.addNew("new task");
     assertEquals("809", reminderId);
 
     assertEquals(
@@ -56,10 +56,65 @@ class ReminderIOTest {
     );
 
     var expectedJson = "{" +
-          "\"reminders\":{" +
-            "\"809\":{\"id\":\"809\",\"task\":\"new task\"}," +
-            "\"123\":{\"id\":\"123\",\"task\":\"task content!!\"}" +
-          "}" +
+        "\"reminders\":{" +
+        "\"809\":{\"id\":\"809\",\"task\":\"new task\"}," +
+        "\"123\":{\"id\":\"123\",\"task\":\"task content!!\"}" +
+        "}" +
+        "}";
+
+    assertEquals(
+        expectedJson,
+        fileIO.getLastWrite()
+    );
+  }
+
+  @Test
+  void overwrite() throws IOException {
+    var mockJson = "{" +
+        "\"reminders\":{" +
+        "\"809\":{\"id\":\"809\",\"task\":\"new task\"}," +
+        "\"123\":{\"id\":\"123\",\"task\":\"task content!!\"}" +
+        "}" +
+        "}";
+
+    var fileIO = new FileIOMock(mockJson);
+    var jsonIO = new JsonIO(new Gson());
+    var reminderIO = new ReminderIO(fileIO, jsonIO, new UUID());
+
+    reminderIO.overwrite("123", "overwrite content");
+
+    var expectedJson = "{" +
+        "\"reminders\":{" +
+        "\"809\":{\"id\":\"809\",\"task\":\"new task\"}," +
+        "\"123\":{\"id\":\"123\",\"task\":\"overwrite content\"}" +
+        "}" +
+        "}";
+
+    assertEquals(
+        expectedJson,
+        fileIO.getLastWrite()
+    );
+  }
+
+  @Test
+  void delete() throws IOException {
+    var mockJson = "{" +
+        "\"reminders\":{" +
+        "\"809\":{\"id\":\"809\",\"task\":\"new task\"}," +
+        "\"123\":{\"id\":\"123\",\"task\":\"task content!!\"}" +
+        "}" +
+        "}";
+
+    var fileIO = new FileIOMock(mockJson);
+    var jsonIO = new JsonIO(new Gson());
+    var reminderIO = new ReminderIO(fileIO, jsonIO, new UUID());
+
+    reminderIO.delete("123");
+
+    var expectedJson = "{" +
+        "\"reminders\":{" +
+        "\"809\":{\"id\":\"809\",\"task\":\"new task\"}" +
+        "}" +
         "}";
 
     assertEquals(

@@ -5,5 +5,9 @@ import java.io.IOException;
 public interface ReminderIOInterface {
   Reminder getById(String id) throws IOException;
 
-  String write(String task) throws IOException;
+  String addNew(String task) throws IOException;
+
+  void overwrite(String id, String task) throws IOException;
+
+  void delete(String id) throws IOException;
 }
