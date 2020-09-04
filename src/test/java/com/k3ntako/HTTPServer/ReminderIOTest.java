@@ -20,7 +20,8 @@ class ReminderIOTest {
       "}";
 
     var fileIO = new FileIOMock(mockJson);
-    var reminderIO = new ReminderIO(fileIO, new Gson(), new UUID());
+    var jsonIO = new JsonIO(new Gson());
+    var reminderIO = new ReminderIO(fileIO, jsonIO, new UUID());
 
     var reminder = reminderIO.getById("123");
 
@@ -43,7 +44,8 @@ class ReminderIOTest {
 
 
     var fileIO = new FileIOMock(mockJson);
-    var reminderIO = new ReminderIO(fileIO, new Gson(), new UUIDMock("809"));
+    var jsonIO = new JsonIO(new Gson());
+    var reminderIO = new ReminderIO(fileIO, jsonIO, new UUIDMock("809"));
 
     var reminderId = reminderIO.write("new task");
     assertEquals("809", reminderId);

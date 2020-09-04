@@ -1,39 +1,38 @@
 package com.k3ntako.HTTPServer;
 
-import com.google.gson.Gson;
-
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
-import java.util.HashMap;
 
-public class ReminderIO {
-  private Gson gson;
+public class ReminderIO implements ReminderIOInterface {
+  private JsonIOInterface jsonIO;
   private FileIOInterface fileIO;
   private Path filePath;
   private UUIDInterface uuid;
 
-  public ReminderIO(FileIOInterface fileIO, Gson gson, UUIDInterface uuid) {
+  public ReminderIO(FileIOInterface fileIO, JsonIOInterface jsonIO, UUIDInterface uuid) {
     this.fileIO = fileIO;
-    this.gson = gson;
+    this.jsonIO = jsonIO;
     this.uuid = uuid;
 
     var strPath = "./data/reminders.json";
     this.filePath = FileSystems.getDefault().getPath(strPath);
   }
 
-  Reminder getById(String id) throws IOException {
+  @Override
+  public Reminder getById(String id) throws IOException {
     var reminderFile = all();
     return reminderFile.reminders.get(id);
   }
 
-  String write(String task) throws IOException {
-    var reminder = new Reminder(task, uuid.generate());
+  @Override
+  public String write(String task) throws IOException {
+    var reminder = new Reminder(uuid.generate(), task);
     var reminderFile = all();
 
     reminderFile.reminders.put(reminder.id, reminder);
 
-    var fileStr = gson.toJson(reminderFile);
+    var fileStr = jsonIO.toJson(reminderFile);
     fileIO.write(filePath, fileStr);
 
     return reminder.id;
@@ -41,7 +40,7 @@ public class ReminderIO {
 
   private ReminderFile all() throws IOException {
     var jsonStr = fileIO.read(filePath);
-    var reminderFile = gson.fromJson(jsonStr, ReminderFile.class);
+    var reminderFile = jsonIO.fromJson(jsonStr, ReminderFile.class);
 
     if (reminderFile == null) {
       reminderFile = new ReminderFile(uuid.generate());
@@ -51,14 +50,3 @@ public class ReminderIO {
   }
 
 }
-
-
-//
-//  void jsonToFile(String fileName, ReminderFile reminderFile){
-//
-//  }
-//
-//  private Path generatePathForUUID(String fileUUID) {
-//    var strPath = "./data/" + fileUUID + ".json";
-//    return FileSystems.getDefault().getPath(strPath);
-//  }

@@ -1,5 +1,7 @@
 package com.k3ntako.HTTPServer;
 
+import com.google.gson.Gson;
+
 public class ErrorHandler implements ErrorHandlerInterface {
   @Override
   public Response handleError(HTTPError e){
@@ -12,7 +14,8 @@ public class ErrorHandler implements ErrorHandlerInterface {
   }
 
   private Response generateErrorResponse(int status, Exception exception) {
-    var response = new Response();
+    var jsonIO = new JsonIO(new Gson());
+    var response = new Response(jsonIO);
     response.setStatus(status);
 
     var message = exception.getMessage();

@@ -9,6 +9,11 @@ public class Response {
   private String body = "";
   private int status = 200;
   private HashMap<String, String> additionalHeaders = new HashMap<>();
+  private JsonIOInterface jsonIO;
+
+  public Response(JsonIOInterface jsonIO) {
+    this.jsonIO = jsonIO;
+  }
 
   public String createResponse() throws HTTPError {
     if (body == null) {
@@ -32,12 +37,15 @@ public class Response {
 
     header += "Content-Length: " + contentLength + "\r\n\r\n";
 
-
     return header;
   }
 
   public void setBody(String body) {
     this.body = body;
+  }
+
+  public void setJsonBody(Object body) {
+    this.body = this.jsonIO.toJson(body);
   }
 
   public void setStatus(int status) {
