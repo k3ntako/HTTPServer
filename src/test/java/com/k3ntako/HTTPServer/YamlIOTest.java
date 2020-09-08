@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class YamlIOTest {
 
   @Test
-  void read() throws IOException, URISyntaxException {
+  void read() throws Exception {
     var mockYAML = "---" +
         "\nport: 5000";
 

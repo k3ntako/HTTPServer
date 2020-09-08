@@ -25,7 +25,7 @@ public class ServerGenerator {
     return new Server(new ServerServerIO(), requestHandler, serverSocket, router);
   }
 
-  private LinkedHashMap<String, Object> getConfig() throws IOException, URISyntaxException {
+  private LinkedHashMap<String, Object> getConfig() throws Exception {
     return yamlIOInterface.read("config/server.yml");
   }
 
