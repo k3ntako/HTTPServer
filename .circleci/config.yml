@@ -4,7 +4,7 @@ jobs:
     docker:
       - image: circleci/openjdk:14.0.1-buster
 
-    working_directory: ~/repo
+    working_directory: ~/com.k3ntako.HTTPServer
 
     environment:
       # Customize the JVM maximum heap limit
@@ -28,3 +28,43 @@ jobs:
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
       - run: gradle test
+
+  deploy:
+    docker:
+      - image: circleci/openjdk:14.0.1-buster
+
+    working_directory: ~/com.k3ntako.HTTPServer
+    steps:
+      - checkout
+
+      - run:
+          name: Install python
+          command: |
+            sudo apt-get -y -qq update
+            sudo apt-get install python-pip python-dev build-essential
+            sudo pip install --upgrade setuptools
+      - run:
+          name: Install awsebcli
+          command: sudo pip install awsebcli --upgrade
+      - run:
+          name: Create AWS credentials
+          command: |
+            chmod +x src/main/resources/aws_credentials.sh
+            bash src/main/resources/aws_credentials.sh
+      - run:
+          name: Create build jar
+          command: gradle build
+      - run:
+          name: Deploying
+          command: eb deploy --profile user --region us-east-1
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build
+      - deploy:
+          filters:
+            branches:
+              only:
+                - master
