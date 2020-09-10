@@ -3,11 +3,13 @@ package com.k3ntako.HTTPServer;
 import java.io.IOException;
 
 public interface ReminderIOInterface {
-  Reminder getById(String id) throws IOException;
+  ReminderList createNewList() throws IOException;
 
-  String addNew(String task) throws IOException;
+  Reminder getReminderByIds(String listId, String reminderId) throws IOException;
 
-  void overwrite(String id, String task) throws IOException;
+  Reminder addReminder(String listId, String task) throws IOException;
 
-  void delete(String id) throws IOException;
+  Reminder updateReminder(String listId, String reminderId, String updatedTask) throws IOException;
+
+  void deleteReminder(String listId, String reminderId) throws IOException;
 }

@@ -2,20 +2,27 @@ package com.k3ntako.HTTPServer.mocks;
 
 import com.k3ntako.HTTPServer.Reminder;
 import com.k3ntako.HTTPServer.ReminderIOInterface;
+import com.k3ntako.HTTPServer.ReminderList;
 import com.k3ntako.HTTPServer.UUIDInterface;
 
 import java.io.IOException;
 
 public class ReminderIOMock implements ReminderIOInterface {
-  public String idForGet;
+  public Boolean createNewListCalled = false;
+  public String reminderIdForGet;
+  public String listIdForGet;
+  public String listIdForWrite;
   public String taskForWrite;
   private UUIDInterface uuid;
   private Reminder reminderToReturn;
   private boolean isReminderToReturnSet = false;
-  public String overwriteId;
-  public String overwriteTask;
-  public String deleteId;
+  public String listIdForUpdate;
+  public String reminderIdForUpdate;
+  public String taskForUpdate;
+  public String reminderIdForDelete;
+  public String listIdForDelete;
   private IOException mockException;
+
 
   public ReminderIOMock() {
     this.uuid = new UUIDMock();
@@ -31,39 +38,54 @@ public class ReminderIOMock implements ReminderIOInterface {
   }
 
   @Override
-  public Reminder getById(String id) throws IOException {
+  public ReminderList createNewList() throws IOException {
     throwIfExceptionExists();
-    idForGet = id;
+    this.createNewListCalled = true;
+    return new ReminderList("mock-new-list-id");
+  }
+
+  @Override
+  public Reminder getReminderByIds(String listId, String reminderId) throws IOException {
+    throwIfExceptionExists();
+
+    listIdForGet = listId;
+    reminderIdForGet = reminderId;
 
     if (isReminderToReturnSet) {
       return reminderToReturn;
     }
 
-    return new Reminder(id, "ReminderIOMock: mock task text");
+    return new Reminder(reminderId, "ReminderIOMock: mock task text");
   }
 
   @Override
-  public String addNew(String task) throws IOException {
+  public Reminder addReminder(String listId, String task) throws IOException {
     throwIfExceptionExists();
+
+    listIdForWrite = listId;
     taskForWrite = task;
-    return uuid.generate();
+    return new Reminder(uuid.generate(), "ReminderIOMock: mock task text");
   }
 
   @Override
-  public void overwrite(String id, String task) throws IOException {
+  public Reminder updateReminder(String listId, String reminderId, String updatedTask) throws IOException {
     throwIfExceptionExists();
-    overwriteId = id;
-    overwriteTask = task;
+    listIdForUpdate = listId;
+    reminderIdForUpdate = reminderId;
+    taskForUpdate = updatedTask;
+
+    return new Reminder(reminderId, updatedTask);
   }
 
   @Override
-  public void delete(String id) throws IOException {
+  public void deleteReminder(String listId, String reminderId) throws IOException {
     throwIfExceptionExists();
-    deleteId = id;
+    listIdForDelete = listId;
+    reminderIdForDelete = reminderId;
   }
 
   private void throwIfExceptionExists() throws IOException {
-    if(mockException != null){
+    if (mockException != null) {
       throw mockException;
     }
   }

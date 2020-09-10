@@ -38,7 +38,7 @@ class RouterTest {
 
     var expectedResponse = "HTTP/1.1 200 OK\r\n" +
         "Content-Length: 36\r\n\r\n" +
-        new UUIDMock().getDefaultUUID();
+        "{\"id\":\"mock-new-list-id\",\"items\":{}}";
 
     assertEquals(expectedResponse, response.createResponse());
   }

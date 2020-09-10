@@ -8,6 +8,7 @@ public class ReminderIO implements ReminderIOInterface {
   private JsonIOInterface jsonIO;
   private FileIOInterface fileIO;
   private Path filePath;
+  private String remindersDir;
   private UUIDInterface uuid;
 
   public ReminderIO(FileIOInterface fileIO, JsonIOInterface jsonIO, UUIDInterface uuid, String dataDir) {
@@ -16,61 +17,91 @@ public class ReminderIO implements ReminderIOInterface {
     this.uuid = uuid;
 
     this.filePath = FileSystems.getDefault().getPath(dataDir);
+    this.remindersDir = dataDir;
   }
 
-  @Override
-  public Reminder getById(String id) throws IOException {
-    var reminderList = all();
-    return reminderList.items.get(id);
+  public ReminderList createNewList() throws IOException {
+    var uuid = this.uuid.generate();
+
+    var reminderList = new ReminderList(uuid);
+
+    var filePath = this.generatePath(uuid);
+    var fileStr = jsonIO.toJson(reminderList);
+    fileIO.write(filePath, fileStr);
+
+    return reminderList;
   }
 
-  @Override
-  public String addNew(String task) throws IOException {
+  public Reminder getReminderByIds(String listId, String reminderId) throws IOException {
+    var reminderList = this.getListById(listId);
+
+    if(reminderList == null){
+      return null;
+    }
+
+    return reminderList.items.get(reminderId);
+  }
+
+  public Reminder addReminder(String listId, String task) throws IOException {
+    var reminderList = getListById(listId);
+
+    // check if reminderList exists
+
     var reminder = new Reminder(uuid.generate(), task);
-    var reminderList = all();
-
     reminderList.items.put(reminder.id, reminder);
 
-    this.writeToFile(reminderList);
+    var filePath = this.generatePath(listId);
+    var fileStr = jsonIO.toJson(reminderList);
+    fileIO.write(filePath, fileStr);
 
-    return reminder.id;
+    return reminder;
   }
 
-  @Override
-  public void overwrite(String id, String task) throws IOException {
-    var reminderList = all();
-    var reminder = reminderList.items.get(id);
-    reminderList.items.remove(id);
+  public Reminder updateReminder(String listId, String reminderId, String updatedTask) throws IOException {
+    var reminderList = getListById(listId);
+    // check if reminderList exists
 
-    reminder.task = task;
-    reminderList.items.put(id, reminder);
+    var reminder = reminderList.items.get(reminderId);
 
-    this.writeToFile(reminderList);
+    // check if reminder exists
+
+    reminder.task = updatedTask;
+    reminderList.items.put(reminderId, reminder);
+
+    // write private method to write to file
+    var filePath = this.generatePath(listId);
+    var fileStr = jsonIO.toJson(reminderList);
+    fileIO.write(filePath, fileStr);
+
+    return reminder;
   }
 
-  @Override
-  public void delete(String id) throws IOException {
-    var reminderList = all();
-    reminderList.items.remove(id);
+  public void deleteReminder(String listId, String reminderId) throws IOException {
+    var reminderList = getListById(listId);
+    // check if reminderList exists
 
-    this.writeToFile(reminderList);
-  }
+    var removedReminder = reminderList.items.remove(reminderId);
 
-  private void writeToFile(ReminderList reminderList) throws IOException {
+    if(removedReminder == null){
+      // check if reminder exists
+    }
+
+    // write private method to write to file
+    var filePath = this.generatePath(listId);
     var fileStr = jsonIO.toJson(reminderList);
     fileIO.write(filePath, fileStr);
   }
 
+  private Path generatePath(String id){
+    var filePathStr = remindersDir + id + ".json";
+    return FileSystems.getDefault().getPath(filePathStr);
+  }
 
-  private ReminderList all() throws IOException {
+  private ReminderList getListById(String id) throws IOException {
+    var filePath = generatePath(id);
+
     var jsonStr = fileIO.read(filePath);
 
-    var reminderList = jsonIO.fromJson(jsonStr, ReminderList.class);
-    
-    if (reminderList == null) {
-      reminderList = new ReminderList(uuid.generate());
-    }
-
-    return reminderList;
+    return jsonIO.fromJson(jsonStr, ReminderList.class);
   }
 }

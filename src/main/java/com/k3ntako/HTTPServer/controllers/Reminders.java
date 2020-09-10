@@ -16,11 +16,12 @@ public class Reminders {
     var body = request.getBody();
     validateBody(body);
 
-    var fileName = reminderIO.addNew(body);
+    var listId = request.getRouteParam("list_id");
+    var reminder = reminderIO.addReminder(listId, body);
 
     var jsonIO = new JsonIO(new Gson());
     var response = new Response(jsonIO);
-    response.setBody(fileName);
+    response.setJsonBody(reminder);
 
     return response;
   }
@@ -32,12 +33,13 @@ public class Reminders {
   }
 
   public ResponseInterface get(RequestInterface request) throws IOException, HTTPError {
-    var id = request.getRouteParam("id");
+    var listId = request.getRouteParam("list_id");
+    var reminderId = request.getRouteParam("reminder_id");
 
     var jsonIO = new JsonIO(new Gson());
     var response = new Response(jsonIO);
 
-    var content = reminderIO.getById(id);
+    var content = reminderIO.getReminderByIds(listId, reminderId);
     if (content == null) {
       throw new HTTPError(404, "Reminder was not found");
     }
@@ -49,10 +51,11 @@ public class Reminders {
 
   public ResponseInterface put(RequestInterface request) throws HTTPError {
     var body = request.getBody();
-    var id = request.getRouteParam("id");
+    var listId = request.getRouteParam("list_id");
+    var reminderId = request.getRouteParam("reminder_id");
 
     try {
-      reminderIO.overwrite(id, body);
+      reminderIO.updateReminder(listId, reminderId, body);
     } catch (IOException e) {
       throw new HTTPError(404, "Reminder was not found");
     }
@@ -62,10 +65,11 @@ public class Reminders {
   }
 
   public ResponseInterface delete(RequestInterface request) throws HTTPError {
-    var id = request.getRouteParam("id");
+    var listId = request.getRouteParam("list_id");
+    var reminderId = request.getRouteParam("reminder_id");
 
     try {
-      reminderIO.delete(id);
+      reminderIO.deleteReminder(listId, reminderId);
     } catch (IOException e) {
       throw new HTTPError(404, "Reminder was not found");
     }

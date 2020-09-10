@@ -100,8 +100,8 @@ class RouteRegistryTest {
     var response = controllerMethod.getResponse(request);
 
     var expectedResponse = "HTTP/1.1 200 OK\r\n" +
-        "Content-Length: 85\r\n\r\n" +
-        "{\"id\":\"8d142d80-565f-417d-8334-a8a19caadadb\",\"task\":\"ReminderIOMock: mock task text\"}";
+        "Content-Length: 41\r\n\r\n" +
+        "{\"task\":\"ReminderIOMock: mock task text\"}";
     assertEquals(expectedResponse, response.createResponse());
   }
 }

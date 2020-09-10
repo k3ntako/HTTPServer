@@ -18,26 +18,38 @@ class RemindersTest {
   @Test
   void post() throws IOException, HTTPError {
     var postBody = "hello post!";
-    var request = new RequestMock("POST", "/reminders", "HTTP/1.1", new HashMap<>(), postBody);
+    var request = new RequestMock("POST", "/reminders/reminder-list-123", "HTTP/1.1", new HashMap<>(), postBody);
+    var routeParams = new HashMap<String, String>();
+    routeParams.put("list_id", "reminder-list-123");
+    request.setRouteParams(routeParams);
+
     var reminderIOMock = new ReminderIOMock();
 
     var reminders = new Reminders(reminderIOMock);
     reminders.post(request);
 
+    assertEquals("reminder-list-123", reminderIOMock.listIdForWrite);
     assertEquals(postBody, reminderIOMock.taskForWrite);
   }
 
   @Test
-  void postReturnsFileName() throws IOException, HTTPError {
+  void postReturnsReminderJson() throws IOException, HTTPError {
     var postBody = "hello post!";
-    var request = new RequestMock("POST", "/reminders", "HTTP/1.1", new HashMap<>(), postBody);
+    var request = new RequestMock("POST", "/reminders/reminder-list-123", "HTTP/1.1", new HashMap<>(), postBody);
+    var routeParams = new HashMap<String, String>();
+    routeParams.put("list_id", "reminder-list-123");
+    request.setRouteParams(routeParams);
 
     var reminderIOMock = new ReminderIOMock();
     var reminders = new Reminders(reminderIOMock);
     var response = reminders.post(request);
     var responseStr = response.createResponse();
 
-    var expectedResponse = "HTTP/1.1 200 OK\r\n" + "Content-Length: 36\r\n\r\n" + "8d142d80-565f-417d-8334-a8a19caadadb";
+    var expectedResponse = "HTTP/1.1 200 OK\r\n" + "Content-Length: 85\r\n\r\n" +
+        "{\"" +
+        "id\":\"8d142d80-565f-417d-8334-a8a19caadadb\"," +
+        "\"task\":\"ReminderIOMock: mock task text\"" +
+        "}";
 
     assertEquals(expectedResponse, responseStr);
   }
@@ -45,7 +57,10 @@ class RemindersTest {
   @Test
   void postThrowsErrorIfBodyIsMultipleLines() {
     var postBody = "hello post!\nsecond line";
-    var request = new RequestMock("POST", "/reminders", "HTTP/1.1", new HashMap<>(), postBody);
+    var request = new RequestMock("POST", "/reminders/reminder-list-123", "HTTP/1.1", new HashMap<>(), postBody);
+    var routeParams = new HashMap<String, String>();
+    routeParams.put("list_id", "reminder-list-123");
+    request.setRouteParams(routeParams);
 
     var reminderIOMock = new ReminderIOMock();
     var reminders = new Reminders(reminderIOMock);
@@ -60,17 +75,18 @@ class RemindersTest {
   void get() throws IOException, HTTPError {
     var mockUUID = new UUIDMock();
 
-    var request = new RequestMock("GET", "/reminders/" + mockUUID.getDefaultUUID());
+    var request = new RequestMock("GET", "/reminders/reminder-list-123/" + mockUUID.getDefaultUUID());
 
     var routeParams = new HashMap<String, String>();
-    routeParams.put("id", mockUUID.getDefaultUUID());
+    routeParams.put("list_id", "reminder-list-123");
+    routeParams.put("reminder_id", mockUUID.getDefaultUUID());
     request.setRouteParams(routeParams);
 
     var reminderIOMock = new ReminderIOMock();
     var reminders = new Reminders(reminderIOMock);
     var response = reminders.get(request);
 
-    assertEquals(mockUUID.getDefaultUUID(), reminderIOMock.idForGet);
+    assertEquals(mockUUID.getDefaultUUID(), reminderIOMock.reminderIdForGet);
 
     var expectedResponse =
         "HTTP/1.1 200 OK\r\n" +
@@ -85,10 +101,11 @@ class RemindersTest {
 
   @Test
   void getThrows404IfFileIsNotFound() {
-    var request = new RequestMock("GET", "/reminders/not-an-id");
+    var request = new RequestMock("GET", "/reminders/reminder-list-123/not-an-id");
 
     var routeParams = new HashMap<String, String>();
-    routeParams.put("id", "not-an-id");
+    routeParams.put("list_id", "reminder-list-123");
+    routeParams.put("reminder_id", "not-an-id");
     request.setRouteParams(routeParams);
 
     var reminderIOMock = new ReminderIOMock((Reminder) null);
@@ -105,18 +122,19 @@ class RemindersTest {
     var mockUUID = new UUIDMock();
 
     var content = "text file content!";
-    var request = new RequestMock("PUT", "/reminders/" + mockUUID.getDefaultUUID(), content);
+    var request = new RequestMock("PUT", "/reminders/reminder-list-123/" + mockUUID.getDefaultUUID(), content);
 
     var params = new HashMap<String, String>();
-    params.put("id", mockUUID.getDefaultUUID());
+    params.put("list_id", "reminder-list-123");
+    params.put("reminder_id", mockUUID.getDefaultUUID());
     request.setRouteParams(params);
 
     var reminderIOMock = new ReminderIOMock();
     var reminders = new Reminders(reminderIOMock);
     var response = reminders.put(request);
 
-    assertEquals(mockUUID.getDefaultUUID(), reminderIOMock.overwriteId);
-    assertEquals(content, reminderIOMock.overwriteTask);
+    assertEquals(mockUUID.getDefaultUUID(), reminderIOMock.reminderIdForUpdate);
+    assertEquals(content, reminderIOMock.taskForUpdate);
 
     var expectedResponse = "HTTP/1.1 204 No Content\r\n" +
         "Content-Length: 0\r\n\r\n";
@@ -126,10 +144,11 @@ class RemindersTest {
 
   @Test
   void putReturns404IfFileNotFound() {
-    var request = new RequestMock("PUT", "/reminders/not-an-id");
+    var request = new RequestMock("PUT", "/reminders/reminder-list-123/not-an-id");
 
     var params = new HashMap<String, String>();
-    params.put("id", "not-an-id");
+    params.put("list_id", "reminder-list-123");
+    params.put("reminder_id", "not-an-id");
     request.setRouteParams(params);
 
     var reminderIOMock = new ReminderIOMock(new IOException("File does not exist"));
@@ -146,17 +165,20 @@ class RemindersTest {
     var mockUUID = new UUIDMock();
 
     var content = "text file content!\nsecond line";
-    var request = new RequestMock("PUT", "/reminders/" + mockUUID.getDefaultUUID(), content);
+    var request = new RequestMock("PUT", "/reminders/reminder-list-123/" + mockUUID.getDefaultUUID(), content);
 
     var params = new HashMap<String, String>();
-    params.put("id", mockUUID.getDefaultUUID());
+    params.put("list_id", "reminder-list-123");
+    params.put("reminder_id", mockUUID.getDefaultUUID());
     request.setRouteParams(params);
 
     var reminderIOMock = new ReminderIOMock();
     var reminders = new Reminders(reminderIOMock);
     var response = reminders.put(request);
 
-    assertEquals(mockUUID.getDefaultUUID(), reminderIOMock.overwriteId);
+    assertEquals("reminder-list-123", reminderIOMock.listIdForUpdate);
+    assertEquals(mockUUID.getDefaultUUID(), reminderIOMock.reminderIdForUpdate);
+    assertEquals(content, reminderIOMock.taskForUpdate);
 
     var expectedResponse = "HTTP/1.1 204 No Content\r\n" +
         "Content-Length: 0\r\n\r\n";
@@ -168,16 +190,17 @@ class RemindersTest {
   void delete() throws HTTPError {
     var mockUUID = new UUIDMock();
 
-    var request = new RequestMock("DELETE", "/reminders/" + mockUUID.getDefaultUUID(), "");
+    var request = new RequestMock("DELETE", "/reminders/reminder-list-123/" + mockUUID.getDefaultUUID(), "");
     var params = new HashMap<String, String>();
-    params.put("id", mockUUID.getDefaultUUID());
+    params.put("list_id", "reminder-list-123");
+    params.put("reminder_id", mockUUID.getDefaultUUID());
     request.setRouteParams(params);
 
     var reminderIOMock = new ReminderIOMock();
     var reminders = new Reminders(reminderIOMock);
     var response = reminders.delete(request);
 
-    assertEquals(mockUUID.getDefaultUUID(), reminderIOMock.deleteId);
+    assertEquals(mockUUID.getDefaultUUID(), reminderIOMock.reminderIdForDelete);
 
 
     var expectedResponse = "HTTP/1.1 204 No Content\r\n" +
@@ -188,9 +211,10 @@ class RemindersTest {
 
   @Test
   void deleteThrowsHTTPErrorIfFileNotFound() {
-    var request = new RequestMock("DELETE", "/reminders/not-an-id", "");
+    var request = new RequestMock("DELETE", "/reminders/reminder-list-123/not-an-id", "");
     var params = new HashMap<String, String>();
-    params.put("id", "not-an-id");
+    params.put("list_id", "reminder-list-123");
+    params.put("reminder_id", "not-an-id");
     request.setRouteParams(params);
 
     var reminderIOMock = new ReminderIOMock(new IOException("File does not exist"));
