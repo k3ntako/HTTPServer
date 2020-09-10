@@ -7,7 +7,6 @@ import java.nio.file.Path;
 public class ReminderIO implements ReminderIOInterface {
   private JsonIOInterface jsonIO;
   private FileIOInterface fileIO;
-  private Path filePath;
   private String remindersDir;
   private UUIDInterface uuid;
 
@@ -16,7 +15,6 @@ public class ReminderIO implements ReminderIOInterface {
     this.jsonIO = jsonIO;
     this.uuid = uuid;
 
-    this.filePath = FileSystems.getDefault().getPath(dataDir);
     this.remindersDir = dataDir;
   }
 
@@ -32,76 +30,78 @@ public class ReminderIO implements ReminderIOInterface {
     return reminderList;
   }
 
-  public Reminder getReminderByIds(String listId, String reminderId) throws IOException {
+  public Reminder getReminderByIds(String listId, String reminderId) throws IOException, HTTPError {
     var reminderList = this.getListById(listId);
-
-    if(reminderList == null){
-      return null;
-    }
-
-    return reminderList.items.get(reminderId);
+    return  getReminderById(reminderList, reminderId);
   }
 
-  public Reminder addReminder(String listId, String task) throws IOException {
+  public Reminder addReminder(String listId, String task) throws IOException, HTTPError {
     var reminderList = getListById(listId);
-
-    // check if reminderList exists
 
     var reminder = new Reminder(uuid.generate(), task);
     reminderList.items.put(reminder.id, reminder);
 
-    var filePath = this.generatePath(listId);
-    var fileStr = jsonIO.toJson(reminderList);
-    fileIO.write(filePath, fileStr);
+    writeToFile(listId, reminderList);
 
     return reminder;
   }
 
-  public Reminder updateReminder(String listId, String reminderId, String updatedTask) throws IOException {
+  public Reminder updateReminder(String listId, String reminderId, String updatedTask) throws IOException, HTTPError {
     var reminderList = getListById(listId);
-    // check if reminderList exists
-
-    var reminder = reminderList.items.get(reminderId);
-
-    // check if reminder exists
+    var reminder =  getReminderById(reminderList, reminderId);
 
     reminder.task = updatedTask;
     reminderList.items.put(reminderId, reminder);
 
-    // write private method to write to file
-    var filePath = this.generatePath(listId);
-    var fileStr = jsonIO.toJson(reminderList);
-    fileIO.write(filePath, fileStr);
+    writeToFile(listId, reminderList);
 
     return reminder;
   }
 
-  public void deleteReminder(String listId, String reminderId) throws IOException {
+  public void deleteReminder(String listId, String reminderId) throws IOException, HTTPError {
     var reminderList = getListById(listId);
-    // check if reminderList exists
 
     var removedReminder = reminderList.items.remove(reminderId);
 
-    if(removedReminder == null){
-      // check if reminder exists
+    if (removedReminder == null) {
+      throw new HTTPError(404, "Reminder was not found");
     }
 
-    // write private method to write to file
-    var filePath = this.generatePath(listId);
-    var fileStr = jsonIO.toJson(reminderList);
-    fileIO.write(filePath, fileStr);
+    writeToFile(listId, reminderList);
   }
 
-  private Path generatePath(String id){
+  private Path generatePath(String id) {
     var filePathStr = remindersDir + id + ".json";
     return FileSystems.getDefault().getPath(filePathStr);
   }
 
-  private ReminderList getListById(String id) throws IOException {
+  private ReminderList getListById(String id) throws IOException, HTTPError {
     var filePath = generatePath(id);
 
     var jsonStr = fileIO.read(filePath);
 
-    return jsonIO.fromJson(jsonStr, ReminderList.class);
+    var reminderList = jsonIO.fromJson(jsonStr, ReminderList.class);
+
+    if (reminderList == null) {
+      throw new HTTPError(404, "Reminder list was not found");
+    }
+
+    return reminderList;
+  }
+
+  private Reminder getReminderById(ReminderList reminderList, String reminderId) throws HTTPError {
+    var reminder = reminderList.items.get(reminderId);
+
+    if (reminder == null) {
+      throw new HTTPError(404, "Reminder was not found");
+    }
+
+    return reminder;
+  }
+
+  private void writeToFile(String listId, ReminderList reminderList) throws IOException {
+    var filePath = this.generatePath(listId);
+    var fileStr = jsonIO.toJson(reminderList);
+    fileIO.write(filePath, fileStr);
   }
 }

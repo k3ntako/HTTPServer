@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ReminderIOTest {
 
   @Test
-  void getReminderByIds() throws IOException {
+  void getReminderByIds() throws IOException, HTTPError {
     var mockJson = "{" +
         "\"id\":\"reminder-list-1\"," +
         "\"items\": {" +
@@ -30,6 +30,43 @@ class ReminderIOTest {
     assertEquals("reminder-123", reminder.id);
     assertEquals("task content!!", reminder.task);
     assertEquals("./mock/data/reminder-list-1.json", fileIO.getLastReadPath().toString());
+  }
+
+  @Test
+  void getReminderByIdsThrowsErrorIfListIsNotFound() {
+    var fileIO = new FileIOMock((String) null);
+    var jsonIO = new JsonIO(new Gson());
+    var reminderIO = new ReminderIO(fileIO, jsonIO, new UUID(), "./mock/data/");
+
+    HTTPError exception = assertThrows(HTTPError.class, () -> reminderIO.getReminderByIds(
+        "reminder-list-2",
+        "reminder-123"
+    ));
+
+    assertEquals("Reminder list was not found", exception.getMessage());
+    assertEquals(404, exception.getStatus());
+  }
+
+  @Test
+  void getReminderByIdsThrowsErrorIfReminderIsNotFound() {
+    var mockJson = "{" +
+        "\"id\":\"reminder-list-1\"," +
+        "\"items\": {" +
+        "\"reminder-123\":{\"id\": \"reminder-123\", \"task\": \"task content!!\"}" +
+        "}" +
+        "}";
+
+    var fileIO = new FileIOMock(mockJson);
+    var jsonIO = new JsonIO(new Gson());
+    var reminderIO = new ReminderIO(fileIO, jsonIO, new UUID(), "./mock/data/");
+
+    HTTPError exception = assertThrows(HTTPError.class, () -> reminderIO.getReminderByIds(
+        "reminder-list-1",
+        "reminder-404"
+    ));
+
+    assertEquals("Reminder was not found", exception.getMessage());
+    assertEquals(404, exception.getStatus());
   }
 
   @Test
@@ -55,7 +92,7 @@ class ReminderIOTest {
   }
 
   @Test
-  void addReminder() throws IOException {
+  void addReminder() throws IOException, HTTPError {
     var mockJson = "{" +
         "\"id\":\"reminder-list-1\"," +
         "\"items\":{}" +
@@ -88,7 +125,22 @@ class ReminderIOTest {
   }
 
   @Test
-  void updateReminder() throws IOException {
+  void addReminderThrowsErrorIfListIsNotFound() {
+    var fileIO = new FileIOMock((String) null);
+    var jsonIO = new JsonIO(new Gson());
+    var reminderIO = new ReminderIO(fileIO, jsonIO, new UUID(), "./mock/data/");
+
+    HTTPError exception = assertThrows(HTTPError.class, () -> reminderIO.addReminder(
+        "reminder-list-2",
+        "do this"
+    ));
+
+    assertEquals("Reminder list was not found", exception.getMessage());
+    assertEquals(404, exception.getStatus());
+  }
+
+  @Test
+  void updateReminder() throws IOException, HTTPError {
     var mockJson = "{" +
         "\"id\":\"reminder-list-1\"," +
         "\"items\":{" +
@@ -127,7 +179,46 @@ class ReminderIOTest {
   }
 
   @Test
-  void deleteReminder() throws IOException {
+  void updateReminderThrowsErrorIfListIsNotFound() {
+    var fileIO = new FileIOMock((String) null);
+    var jsonIO = new JsonIO(new Gson());
+    var reminderIO = new ReminderIO(fileIO, jsonIO, new UUID(), "./mock/data/");
+
+    HTTPError exception = assertThrows(HTTPError.class, () -> reminderIO.updateReminder(
+        "reminder-list-2",
+        "reminder-404",
+        "updateTask"
+    ));
+
+    assertEquals("Reminder list was not found", exception.getMessage());
+    assertEquals(404, exception.getStatus());
+  }
+
+  @Test
+  void updateReminderThrowsErrorIfReminderIsNotFound() {
+    var mockJson = "{" +
+        "\"id\":\"reminder-list-1\"," +
+        "\"items\": {" +
+        "\"reminder-123\":{\"id\": \"reminder-123\", \"task\": \"task content!!\"}" +
+        "}" +
+        "}";
+
+    var fileIO = new FileIOMock(mockJson);
+    var jsonIO = new JsonIO(new Gson());
+    var reminderIO = new ReminderIO(fileIO, jsonIO, new UUID(), "./mock/data/");
+
+    HTTPError exception = assertThrows(HTTPError.class, () -> reminderIO.updateReminder(
+        "reminder-list-1",
+        "reminder-404",
+        "updated task"
+    ));
+
+    assertEquals("Reminder was not found", exception.getMessage());
+    assertEquals(404, exception.getStatus());
+  }
+
+  @Test
+  void deleteReminder() throws IOException, HTTPError {
     var mockJson = "{" +
         "\"id\":\"reminder-list-1\"," +
         "\"items\":{" +
@@ -156,122 +247,40 @@ class ReminderIOTest {
     assertEquals(expectedWrite, fileIO.getLastWrite());
   }
 
-//  @Test
-//  void getById() throws IOException {
-//    var mockJson = "{" +
-//        "\"id\":\"reminder-list-1\"," +
-//        "\"items\": {" +
-//        "\"reminder-123\": {\"id\": \"reminder-123\", \"task\": \"task content!!\"}" +
-//        "}" +
-//        "}";
-//
-//    var fileIO = new FileIOMock(mockJson);
-//    var jsonIO = new JsonIO(new Gson());
-//    var reminderIO = new ReminderIO(fileIO, jsonIO, new UUID(), "./mock/data.json");
-//
-//    var reminder = reminderIO.getById("reminder-123");
-//
-//    assertEquals(
-//        "./mock/data.json",
-//        fileIO.getLastReadPath().toString()
-//    );
-//
-//    assertEquals("reminder-123", reminder.id);
-//    assertEquals("task content!!", reminder.task);
-//  }
+  @Test
+  void deleteReminderThrowsErrorIfListIsNotFound() {
+    var fileIO = new FileIOMock((String) null);
+    var jsonIO = new JsonIO(new Gson());
+    var reminderIO = new ReminderIO(fileIO, jsonIO, new UUID(), "./mock/data/");
 
-//  @Test
-//  void write() throws IOException {
-//    var mockJson = "{" +
-//        "\"id\":\"reminder-list-1\"," +
-//        "\"items\": {" +
-//        "\"reminder-123\": {\"id\": \"reminder-123\", \"task\": \"task content!!\"}" +
-//        "}" +
-//        "}";
-//
-//
-//    var fileIO = new FileIOMock(mockJson);
-//    var jsonIO = new JsonIO(new Gson());
-//    var reminderIO = new ReminderIO(fileIO, jsonIO, new UUIDMock("reminder-809"), "./mock/data.json");
-//
-//    var reminderId = reminderIO.addNew("new task");
-//    assertEquals("reminder-809", reminderId);
-//
-//    assertEquals(
-//        "./mock/data.json",
-//        fileIO.getLastWritePath().toString()
-//    );
-//
-//    var expectedJson = "{" +
-//        "\"id\":\"reminder-list-1\"," +
-//        "\"items\":{" +
-//        "\"reminder-809\":{\"id\":\"reminder-809\",\"task\":\"new task\"}," +
-//        "\"reminder-123\":{\"id\":\"reminder-123\",\"task\":\"task content!!\"}" +
-//        "}" +
-//        "}";
-//
-//    assertEquals(
-//        expectedJson,
-//        fileIO.getLastWrite()
-//    );
-//  }
+    HTTPError exception = assertThrows(HTTPError.class, () -> reminderIO.deleteReminder(
+        "reminder-list-2",
+        "reminder-404"
+    ));
 
-//  @Test
-//  void overwrite() throws IOException {
-//    var mockJson = "{" +
-//        "\"id\":\"reminder-list-1\"," +
-//        "\"items\":{" +
-//        "\"reminder-809\":{\"id\":\"reminder-809\",\"task\":\"new task\"}," +
-//        "\"reminder-123\":{\"id\":\"reminder-123\",\"task\":\"task content!!\"}" +
-//        "}" +
-//        "}";
-//
-//    var fileIO = new FileIOMock(mockJson);
-//    var jsonIO = new JsonIO(new Gson());
-//    var reminderIO = new ReminderIO(fileIO, jsonIO, new UUID(), "./mock/data.json");
-//
-//    reminderIO.overwrite("reminder-123", "overwrite content");
-//
-//    var expectedJson = "{" +
-//        "\"id\":\"reminder-list-1\"," +
-//        "\"items\":{" +
-//        "\"reminder-809\":{\"id\":\"reminder-809\",\"task\":\"new task\"}," +
-//        "\"reminder-123\":{\"id\":\"reminder-123\",\"task\":\"overwrite content\"}" +
-//        "}" +
-//        "}";
-//
-//    assertEquals(
-//        expectedJson,
-//        fileIO.getLastWrite()
-//    );
-//  }
+    assertEquals("Reminder list was not found", exception.getMessage());
+    assertEquals(404, exception.getStatus());
+  }
 
-//  @Test
-//  void delete() throws IOException {
-//    var mockJson = "{" +
-//        "\"id\":\"reminder-list-1\"," +
-//        "\"items\":{" +
-//        "\"reminder-809\":{\"id\":\"reminder-809\",\"task\":\"new task\"}," +
-//        "\"reminder-123\":{\"id\":\"reminder-123\",\"task\":\"task content!!\"}" +
-//        "}" +
-//        "}";
-//
-//    var fileIO = new FileIOMock(mockJson);
-//    var jsonIO = new JsonIO(new Gson());
-//    var reminderIO = new ReminderIO(fileIO, jsonIO, new UUID(), "./mock/data.json");
-//
-//    reminderIO.delete("reminder-123");
-//
-//    var expectedJson = "{" +
-//        "\"id\":\"reminder-list-1\"," +
-//        "\"items\":{" +
-//        "\"reminder-809\":{\"id\":\"reminder-809\",\"task\":\"new task\"}" +
-//        "}" +
-//        "}";
-//
-//    assertEquals(
-//        expectedJson,
-//        fileIO.getLastWrite()
-//    );
-//  }
+  @Test
+  void deleteReminderThrowsErrorIfReminderIsNotFound() {
+    var mockJson = "{" +
+        "\"id\":\"reminder-list-1\"," +
+        "\"items\": {" +
+        "\"reminder-123\":{\"id\": \"reminder-123\", \"task\": \"task content!!\"}" +
+        "}" +
+        "}";
+
+    var fileIO = new FileIOMock(mockJson);
+    var jsonIO = new JsonIO(new Gson());
+    var reminderIO = new ReminderIO(fileIO, jsonIO, new UUID(), "./mock/data/");
+
+    HTTPError exception = assertThrows(HTTPError.class, () -> reminderIO.deleteReminder(
+        "reminder-list-1",
+        "reminder-404"
+    ));
+
+    assertEquals("Reminder was not found", exception.getMessage());
+    assertEquals(404, exception.getStatus());
+  }
 }
