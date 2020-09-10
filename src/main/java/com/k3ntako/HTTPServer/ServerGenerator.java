@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 public class ServerGenerator {
   private FileIOInterface fileIO;
   private YamlIOInterface yamlIOInterface;
+  private LinkedHashMap<String, Object> config;
 
   public ServerGenerator(FileIOInterface fileIO, YamlIOInterface yamlIOInterface) {
     this.yamlIOInterface = yamlIOInterface;
@@ -17,7 +18,7 @@ public class ServerGenerator {
   }
 
   public Server generate() throws Exception {
-    var config = this.getConfig();
+    config = this.getConfig();
     final var serverSocket = new ServerSocketWrapper((int) config.get("port"));
 
     var router = this.registerRoutes();
@@ -32,7 +33,13 @@ public class ServerGenerator {
 
   private Router registerRoutes() throws Exception {
     var jsonIO = new JsonIO(new Gson());
-    var reminderIO = new ReminderIO(fileIO, jsonIO, new UUID());
+    String dataDir = (String) config.get("data_directory");
+
+    if (dataDir == null) {
+      throw new Exception("Data directory was no specified");
+    }
+
+    var reminderIO = new ReminderIO(fileIO, jsonIO, new UUID(), dataDir + "/reminders.json");
     var routeRegistrar = new RouteRegistrar(new RouteRegistry(), fileIO, reminderIO);
     var routeRegistry = routeRegistrar.registerRoutes();
     return new Router(routeRegistry);

@@ -10,67 +10,67 @@ public class ReminderIO implements ReminderIOInterface {
   private Path filePath;
   private UUIDInterface uuid;
 
-  public ReminderIO(FileIOInterface fileIO, JsonIOInterface jsonIO, UUIDInterface uuid) {
+  public ReminderIO(FileIOInterface fileIO, JsonIOInterface jsonIO, UUIDInterface uuid, String dataDir) {
     this.fileIO = fileIO;
     this.jsonIO = jsonIO;
     this.uuid = uuid;
 
-    var strPath = "./data/reminders.json";
-    this.filePath = FileSystems.getDefault().getPath(strPath);
+    this.filePath = FileSystems.getDefault().getPath(dataDir);
   }
 
   @Override
   public Reminder getById(String id) throws IOException {
-    var reminderFile = all();
-    return reminderFile.reminders.get(id);
+    var reminderList = all();
+    return reminderList.items.get(id);
   }
 
   @Override
   public String addNew(String task) throws IOException {
     var reminder = new Reminder(uuid.generate(), task);
-    var reminderFile = all();
+    var reminderList = all();
 
-    reminderFile.reminders.put(reminder.id, reminder);
+    reminderList.items.put(reminder.id, reminder);
 
-    this.writeToFile(reminderFile);
+    this.writeToFile(reminderList);
 
     return reminder.id;
   }
 
   @Override
   public void overwrite(String id, String task) throws IOException {
-    var reminderFile = all();
-    var reminder = reminderFile.reminders.get(id);
-    reminderFile.reminders.remove(id);
+    var reminderList = all();
+    var reminder = reminderList.items.get(id);
+    reminderList.items.remove(id);
 
     reminder.task = task;
-    reminderFile.reminders.put(id, reminder);
+    reminderList.items.put(id, reminder);
 
-    this.writeToFile(reminderFile);
+    this.writeToFile(reminderList);
   }
 
   @Override
   public void delete(String id) throws IOException {
-    var reminderFile = all();
-    reminderFile.reminders.remove(id);
+    var reminderList = all();
+    reminderList.items.remove(id);
 
-    this.writeToFile(reminderFile);
+    this.writeToFile(reminderList);
   }
 
-  private void writeToFile(ReminderFile reminderFile) throws IOException {
-    var fileStr = jsonIO.toJson(reminderFile);
+  private void writeToFile(ReminderList reminderList) throws IOException {
+    var fileStr = jsonIO.toJson(reminderList);
     fileIO.write(filePath, fileStr);
   }
 
 
-  private ReminderFile all() throws IOException {
+  private ReminderList all() throws IOException {
     var jsonStr = fileIO.read(filePath);
-    var reminderFile = jsonIO.fromJson(jsonStr, ReminderFile.class);
 
-    if (reminderFile == null) {
-      reminderFile = new ReminderFile(uuid.generate());
+    var reminderList = jsonIO.fromJson(jsonStr, ReminderList.class);
+    
+    if (reminderList == null) {
+      reminderList = new ReminderList(uuid.generate());
     }
 
-    return reminderFile;
+    return reminderList;
   }
 }

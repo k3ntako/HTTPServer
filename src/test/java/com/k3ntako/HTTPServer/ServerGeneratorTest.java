@@ -13,10 +13,14 @@ class ServerGeneratorTest {
 
   @Test
   void generate() throws Exception {
-    var fileIO = new FileIOMock("---" + "port");
+    var mockConfigStr = "---\n" +
+        "port: 5000\n" +
+        "data_directory: ./mock/data";
+    var fileIO = new FileIOMock(mockConfigStr);
 
     var mockConfig = new LinkedHashMap<String, Object>();
     mockConfig.put("port", 3000);
+    mockConfig.put("data_directory", "./mock/data");
     var yamlIO = new YamlIOMock(mockConfig);
 
     var serverGenerator = new ServerGenerator(fileIO, yamlIO);
