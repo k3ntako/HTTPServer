@@ -14,8 +14,9 @@ class ReminderIOTest {
   @Test
   void getById() throws IOException {
     var mockJson = "{" +
+        "\"id\":\"reminder-list-1\"," +
         "\"items\": {" +
-        "\"123\": {\"id\": \"123\", \"task\": \"task content!!\"}" +
+        "\"reminder-123\": {\"id\": \"reminder-123\", \"task\": \"task content!!\"}" +
         "}" +
         "}";
 
@@ -23,32 +24,33 @@ class ReminderIOTest {
     var jsonIO = new JsonIO(new Gson());
     var reminderIO = new ReminderIO(fileIO, jsonIO, new UUID(), "./mock/data.json");
 
-    var reminder = reminderIO.getById("123");
+    var reminder = reminderIO.getById("reminder-123");
 
     assertEquals(
         "./mock/data.json",
         fileIO.getLastReadPath().toString()
     );
 
-    assertEquals("123", reminder.id);
+    assertEquals("reminder-123", reminder.id);
     assertEquals("task content!!", reminder.task);
   }
 
   @Test
   void write() throws IOException {
     var mockJson = "{" +
+        "\"id\":\"reminder-list-1\"," +
         "\"items\": {" +
-        "\"123\": {\"id\": \"123\", \"task\": \"task content!!\"}" +
+        "\"reminder-123\": {\"id\": \"reminder-123\", \"task\": \"task content!!\"}" +
         "}" +
         "}";
 
 
     var fileIO = new FileIOMock(mockJson);
     var jsonIO = new JsonIO(new Gson());
-    var reminderIO = new ReminderIO(fileIO, jsonIO, new UUIDMock("809"), "./mock/data.json");
+    var reminderIO = new ReminderIO(fileIO, jsonIO, new UUIDMock("reminder-809"), "./mock/data.json");
 
     var reminderId = reminderIO.addNew("new task");
-    assertEquals("809", reminderId);
+    assertEquals("reminder-809", reminderId);
 
     assertEquals(
         "./mock/data.json",
@@ -56,9 +58,10 @@ class ReminderIOTest {
     );
 
     var expectedJson = "{" +
+        "\"id\":\"reminder-list-1\"," +
         "\"items\":{" +
-        "\"809\":{\"id\":\"809\",\"task\":\"new task\"}," +
-        "\"123\":{\"id\":\"123\",\"task\":\"task content!!\"}" +
+        "\"reminder-809\":{\"id\":\"reminder-809\",\"task\":\"new task\"}," +
+        "\"reminder-123\":{\"id\":\"reminder-123\",\"task\":\"task content!!\"}" +
         "}" +
         "}";
 
@@ -71,9 +74,10 @@ class ReminderIOTest {
   @Test
   void overwrite() throws IOException {
     var mockJson = "{" +
+        "\"id\":\"reminder-list-1\"," +
         "\"items\":{" +
-        "\"809\":{\"id\":\"809\",\"task\":\"new task\"}," +
-        "\"123\":{\"id\":\"123\",\"task\":\"task content!!\"}" +
+        "\"reminder-809\":{\"id\":\"reminder-809\",\"task\":\"new task\"}," +
+        "\"reminder-123\":{\"id\":\"reminder-123\",\"task\":\"task content!!\"}" +
         "}" +
         "}";
 
@@ -81,12 +85,13 @@ class ReminderIOTest {
     var jsonIO = new JsonIO(new Gson());
     var reminderIO = new ReminderIO(fileIO, jsonIO, new UUID(), "./mock/data.json");
 
-    reminderIO.overwrite("123", "overwrite content");
+    reminderIO.overwrite("reminder-123", "overwrite content");
 
     var expectedJson = "{" +
+        "\"id\":\"reminder-list-1\"," +
         "\"items\":{" +
-        "\"809\":{\"id\":\"809\",\"task\":\"new task\"}," +
-        "\"123\":{\"id\":\"123\",\"task\":\"overwrite content\"}" +
+        "\"reminder-809\":{\"id\":\"reminder-809\",\"task\":\"new task\"}," +
+        "\"reminder-123\":{\"id\":\"reminder-123\",\"task\":\"overwrite content\"}" +
         "}" +
         "}";
 
@@ -99,9 +104,10 @@ class ReminderIOTest {
   @Test
   void delete() throws IOException {
     var mockJson = "{" +
+        "\"id\":\"reminder-list-1\"," +
         "\"items\":{" +
-        "\"809\":{\"id\":\"809\",\"task\":\"new task\"}," +
-        "\"123\":{\"id\":\"123\",\"task\":\"task content!!\"}" +
+        "\"reminder-809\":{\"id\":\"reminder-809\",\"task\":\"new task\"}," +
+        "\"reminder-123\":{\"id\":\"reminder-123\",\"task\":\"task content!!\"}" +
         "}" +
         "}";
 
@@ -109,11 +115,12 @@ class ReminderIOTest {
     var jsonIO = new JsonIO(new Gson());
     var reminderIO = new ReminderIO(fileIO, jsonIO, new UUID(), "./mock/data.json");
 
-    reminderIO.delete("123");
+    reminderIO.delete("reminder-123");
 
     var expectedJson = "{" +
+        "\"id\":\"reminder-list-1\"," +
         "\"items\":{" +
-        "\"809\":{\"id\":\"809\",\"task\":\"new task\"}" +
+        "\"reminder-809\":{\"id\":\"reminder-809\",\"task\":\"new task\"}" +
         "}" +
         "}";
 
