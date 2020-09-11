@@ -58,7 +58,7 @@ jobs:
             echo "aws_secret_access_key=$AWS_SECRET_ACCESS_KEY" >> ~/.aws/config
       - run:
           name: Create build jar
-          command: gradle build
+          command: ./gradlew build
       - run:
           name: Deploying
           command: eb deploy --profile eb-user --region us-east-1
