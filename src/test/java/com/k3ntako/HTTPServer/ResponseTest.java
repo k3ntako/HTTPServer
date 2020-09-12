@@ -1,5 +1,7 @@
 package com.k3ntako.HTTPServer;
 
+import com.google.gson.Gson;
+import com.k3ntako.HTTPServer.mocks.JsonIOMock;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -8,7 +10,8 @@ class ResponseTest {
 
   @Test
   void createEmptyResponse() throws HTTPError {
-    var response = new Response();
+    var jsonIO = new JsonIO(new Gson());
+    var response = new Response(jsonIO);
 
     var headerStr = response.createResponse();
 
@@ -19,7 +22,8 @@ class ResponseTest {
 
   @Test
   void createResponseWithBody() throws HTTPError {
-    var response = new Response();
+    var jsonIO = new JsonIO(new Gson());
+    var response = new Response(jsonIO);
     response.setBody("This\nis\nthe\nresponse\nbody!!");
 
     var headerStr = response.createResponse();
@@ -32,7 +36,8 @@ class ResponseTest {
 
   @Test
   void setStatus() throws HTTPError {
-    var response = new Response();
+    var jsonIO = new JsonIO(new Gson());
+    var response = new Response(jsonIO);
     response.setStatus(404);
 
     var headerStr = response.createResponse();
@@ -43,8 +48,19 @@ class ResponseTest {
   }
 
   @Test
+  void setJsonBody() {
+    var jsonIOMock = new JsonIOMock();
+    var response = new Response(jsonIOMock);
+    var reminder = new Reminder("123", "new task");
+    response.setJsonBody(reminder);
+
+    assertEquals(reminder, jsonIOMock.toJsonArg);
+  }
+
+  @Test
   void addHeader() throws HTTPError {
-    var response = new Response();
+    var jsonIO = new JsonIO(new Gson());
+    var response = new Response(jsonIO);
     response.setStatus(301);
     response.addHeader("Location", "/simple_get");
 
@@ -59,7 +75,8 @@ class ResponseTest {
 
   @Test
   void setRedirect() throws HTTPError {
-    var response = new Response();
+    var jsonIO = new JsonIO(new Gson());
+    var response = new Response(jsonIO);
     response.setRedirect("/test", 302);
 
     var headerStr = response.createResponse();
@@ -73,7 +90,8 @@ class ResponseTest {
 
   @Test
   void throwErrorIfBodyIsNull() {
-    var response = new Response();
+    var jsonIO = new JsonIO(new Gson());
+    var response = new Response(jsonIO);
     response.setBody(null);
 
     HTTPError exception = assertThrows(

@@ -2,6 +2,7 @@ package com.k3ntako.HTTPServer;
 
 import com.k3ntako.HTTPServer.controllers.Reminders;
 import com.k3ntako.HTTPServer.mocks.FileIOMock;
+import com.k3ntako.HTTPServer.mocks.ReminderIOMock;
 import com.k3ntako.HTTPServer.mocks.RequestMock;
 import org.junit.jupiter.api.Test;
 
@@ -18,8 +19,7 @@ class RouteMatcherTest {
     var routes = new HashMap<String, HashMap<String, ControllerMethodInterface>>();
     var routesForMethod = new HashMap<String, ControllerMethodInterface>();
 
-    var textFile = new TextFile(new FileIOMock(), new UUID());
-    routesForMethod.put("/reminders", (RequestInterface req) -> new Reminders(textFile).post(req));
+    routesForMethod.put("/reminders", (RequestInterface req) -> new Reminders(new ReminderIOMock()).post(req));
 
    routes.put("POST", routesForMethod);
 
@@ -36,8 +36,7 @@ class RouteMatcherTest {
     var routes = new HashMap<String, HashMap<String, ControllerMethodInterface>>();
     var routesForMethod = new HashMap<String, ControllerMethodInterface>();
 
-    var textFile = new TextFile(new FileIOMock(), new UUID());
-    routesForMethod.put("/reminders/:id", (RequestInterface req) -> new Reminders(textFile).get(req));
+    routesForMethod.put("/reminders/:id", (RequestInterface req) -> new Reminders(new ReminderIOMock()).get(req));
 
     routes.put("GET", routesForMethod);
 
