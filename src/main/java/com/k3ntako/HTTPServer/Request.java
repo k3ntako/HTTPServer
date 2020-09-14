@@ -8,9 +8,9 @@ public class Request implements RequestInterface {
   private String method;
   private String route;
   private String protocol;
-  private HashMap<String, String> headers;
+  final private HashMap<String, String> headers;
   private String body;
-  private ServerIOInterface serverIO;
+  final private ServerIOInterface serverIO;
   private HashMap<String, String> routeParams;
 
   public Request(ServerIOInterface serverIO) {

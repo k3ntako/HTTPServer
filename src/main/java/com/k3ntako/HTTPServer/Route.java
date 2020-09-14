@@ -3,7 +3,7 @@ package com.k3ntako.HTTPServer;
 import java.util.HashMap;
 
 public class Route {
-  private String path;
+  final private String path;
   private ControllerMethodInterface controllerMethod;
   private HashMap<String, String> routeParams = new HashMap<>();
 

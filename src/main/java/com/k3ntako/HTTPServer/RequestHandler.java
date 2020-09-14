@@ -1,9 +1,9 @@
 package com.k3ntako.HTTPServer;
 
 public class RequestHandler {
-  private Router router;
-  private RequestGeneratorInterface requestGenerator;
-  private ErrorHandlerInterface errorHandler;
+  final private Router router;
+  final private RequestGeneratorInterface requestGenerator;
+  final private ErrorHandlerInterface errorHandler;
 
   public RequestHandler(
       Router router,

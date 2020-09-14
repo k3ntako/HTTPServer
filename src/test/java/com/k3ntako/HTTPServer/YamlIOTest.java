@@ -4,9 +4,6 @@ import com.k3ntako.HTTPServer.mocks.FileIOMock;
 import org.junit.jupiter.api.Test;
 import org.yaml.snakeyaml.Yaml;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class YamlIOTest {

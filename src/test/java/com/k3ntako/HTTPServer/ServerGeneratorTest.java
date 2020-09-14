@@ -3,7 +3,6 @@ package com.k3ntako.HTTPServer;
 import com.k3ntako.HTTPServer.mocks.FileIOMock;
 import com.k3ntako.HTTPServer.mocks.YamlIOMock;
 import org.junit.jupiter.api.Test;
-import org.yaml.snakeyaml.Yaml;
 
 import java.util.LinkedHashMap;
 

@@ -7,6 +7,7 @@ import java.net.Socket;
 public class ServerSocketMock implements ServerSocketWrapperInterface {
   public boolean acceptCalled;
   public boolean closeCalled;
+
   public ServerSocketMock() {
     acceptCalled = false;
     closeCalled = false;

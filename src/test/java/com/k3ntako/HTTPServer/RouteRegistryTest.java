@@ -3,7 +3,6 @@ package com.k3ntako.HTTPServer;
 import com.k3ntako.HTTPServer.controllers.SimpleGet;
 import com.k3ntako.HTTPServer.controllers.SimpleGetWithBody;
 import com.k3ntako.HTTPServer.controllers.Reminders;
-import com.k3ntako.HTTPServer.mocks.FileIOMock;
 import com.k3ntako.HTTPServer.mocks.ReminderIOMock;
 import com.k3ntako.HTTPServer.mocks.RequestMock;
 import com.k3ntako.HTTPServer.mocks.UUIDMock;
@@ -82,8 +81,6 @@ class RouteRegistryTest {
 
   @Test
   void getControllerForVariableRoute() throws Exception {
-    var mockContent = "Hello!";
-
     var mockUUID = new UUIDMock();
     var routeRegistry = new RouteRegistry();
     routeRegistry.registerRoute("GET", "/reminders/:id", (RequestInterface req) -> new Reminders(new ReminderIOMock()).get(req));

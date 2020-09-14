@@ -5,8 +5,8 @@ import com.k3ntako.HTTPServer.RequestInterface;
 import java.util.HashMap;
 
 public class RequestMock implements RequestInterface {
-  private String method;
-  private String route;
+  final private String method;
+  final private String route;
   private String protocol = "HTTP/1.1";
   private HashMap<String, String> headers = new HashMap<>();
   private HashMap<String, String> routeParams;

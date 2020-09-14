@@ -29,11 +29,11 @@ public class FileIO implements FileIOInterface {
     return Files.readString(path);
   }
 
-  public String getResource(String fileName) throws Exception {
+  public String getResource(String fileName) throws IOException {
     var inputStream = this.getClass().getClassLoader().getResourceAsStream(fileName);
 
     if (inputStream == null) {
-      throw new Exception("Resource was null");
+      throw new IOException("Resource was null");
     }
 
     var scanner = new Scanner(inputStream).useDelimiter("\\A");

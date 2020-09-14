@@ -8,8 +8,8 @@ import javax.ws.rs.core.Response.Status;
 public class Response implements ResponseInterface {
   private String body = "";
   private int status = 200;
-  private HashMap<String, String> additionalHeaders = new HashMap<>();
-  private JsonIOInterface jsonIO;
+  final private HashMap<String, String> additionalHeaders = new HashMap<>();
+  final private JsonIOInterface jsonIO;
 
   public Response(JsonIOInterface jsonIO) {
     this.jsonIO = jsonIO;

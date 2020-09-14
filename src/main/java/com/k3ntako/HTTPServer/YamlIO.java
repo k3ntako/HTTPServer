@@ -16,7 +16,7 @@ public class YamlIO implements YamlIOInterface {
   }
 
   @Override
-  public LinkedHashMap<String, Object> read(String fileName) throws Exception {
+  public LinkedHashMap<String, Object> read(String fileName) throws IOException {
     var yamlStr = fileIO.getResource(fileName);
 
     if(yamlStr == null) {

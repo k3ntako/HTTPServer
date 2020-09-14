@@ -8,11 +8,11 @@ import com.k3ntako.HTTPServer.ServerIOInterface;
 import java.util.HashMap;
 
 public class RequestGeneratorMockThrowsError implements RequestGeneratorInterface {
-  private String method;
-  private String route;
-  private String protocol;
-  private HashMap<String, String> headers;
-  private String body;
+  final private String method;
+  final private String route;
+  final private String protocol;
+  final private HashMap<String, String> headers;
+  final private String body;
   private boolean handleRequestCalled = false;
 
   public RequestGeneratorMockThrowsError() {

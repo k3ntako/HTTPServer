@@ -5,7 +5,7 @@ import com.k3ntako.HTTPServer.controllers.NotFound;
 import java.io.IOException;
 
 public class Router {
-  private RouteRegistry routeRegistry;
+  final private RouteRegistry routeRegistry;
 
   public Router(RouteRegistry routeRegistry) {
     this.routeRegistry = routeRegistry;
@@ -16,7 +16,7 @@ public class Router {
     Route route = routeRegistry.getController(request);
     ControllerMethodInterface controllerMethod = (RequestInterface req) -> new NotFound().handleNotFound(req);
 
-    if(route != null) {
+    if (route != null) {
       controllerMethod = route.getControllerMethod();
       request.setRouteParams(route.getRouteParams());
     }

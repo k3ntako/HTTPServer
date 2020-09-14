@@ -5,7 +5,7 @@ import java.io.PrintWriter;
 
 
 public class PrintWriterWrapper implements PrintWriterWrapperInterface {
-  private PrintWriter printerWriter;
+  final private PrintWriter printerWriter;
 
   public PrintWriterWrapper(OutputStream outputStream, boolean autoFlush) {
     printerWriter = new PrintWriter(outputStream, autoFlush);

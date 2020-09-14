@@ -3,7 +3,7 @@ package com.k3ntako.HTTPServer;
 import com.google.gson.Gson;
 
 public class JsonIO implements JsonIOInterface {
-  private Gson gson;
+  final private Gson gson;
 
   public JsonIO(Gson gson) {
     this.gson = gson;

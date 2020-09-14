@@ -6,7 +6,7 @@ import com.k3ntako.HTTPServer.*;
 import java.io.IOException;
 
 public class ReminderLists {
-  private ReminderIOInterface reminderIO;
+  final private ReminderIOInterface reminderIO;
 
   public ReminderLists(ReminderIOInterface reminderIO) {
     this.reminderIO = reminderIO;

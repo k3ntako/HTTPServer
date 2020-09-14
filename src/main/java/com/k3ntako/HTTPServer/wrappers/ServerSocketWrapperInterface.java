@@ -5,5 +5,6 @@ import java.net.Socket;
 
 public interface ServerSocketWrapperInterface {
   Socket accept() throws IOException;
+
   void close() throws IOException;
 }

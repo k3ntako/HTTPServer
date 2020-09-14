@@ -6,10 +6,10 @@ import java.io.*;
 import java.net.Socket;
 
 public class ServerIOMock implements ServerIOInterface {
-  private String clientInput;
+  final private String clientInput;
   private BufferedReader bufferedReader;
   private PrintWriterWrapperMock printWriter;
-  
+
   public ServerIOMock(String clientInput) {
     this.clientInput = clientInput;
   }

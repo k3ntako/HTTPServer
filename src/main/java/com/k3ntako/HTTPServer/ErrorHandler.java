@@ -4,12 +4,12 @@ import com.google.gson.Gson;
 
 public class ErrorHandler implements ErrorHandlerInterface {
   @Override
-  public ResponseInterface handleError(HTTPError e){
+  public ResponseInterface handleError(HTTPError e) {
     return generateErrorResponse(e.getStatus(), e);
   }
 
   @Override
-  public ResponseInterface handleError(Exception e){
+  public ResponseInterface handleError(Exception e) {
     return generateErrorResponse(500, e);
   }
 
@@ -19,7 +19,7 @@ public class ErrorHandler implements ErrorHandlerInterface {
     response.setStatus(status);
 
     var message = exception.getMessage();
-    if(message == null){
+    if (message == null) {
       message = exception.getClass().getName();
     }
     response.setBody(message);

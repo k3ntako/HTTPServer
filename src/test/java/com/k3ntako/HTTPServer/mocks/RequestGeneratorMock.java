@@ -7,11 +7,11 @@ import com.k3ntako.HTTPServer.RequestInterface;
 import java.util.HashMap;
 
 public class RequestGeneratorMock implements RequestGeneratorInterface {
-  private String method;
-  private String route;
-  private String protocol;
-  private HashMap<String, String> headers;
-  private String body;
+  final private String method;
+  final private String route;
+  final private String protocol;
+  final private HashMap<String, String> headers;
+  final private String body;
   private boolean handleRequestCalled = false;
 
   public RequestGeneratorMock() {
@@ -22,7 +22,7 @@ public class RequestGeneratorMock implements RequestGeneratorInterface {
     this.body = "";
   }
 
-  public RequestInterface generateRequest(ServerIOInterface serverIO){
+  public RequestInterface generateRequest(ServerIOInterface serverIO) {
     var request = new RequestMock(method, route, protocol, headers, body);
     handleRequestCalled = true;
     return request;

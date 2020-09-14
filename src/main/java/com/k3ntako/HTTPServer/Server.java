@@ -6,10 +6,10 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class Server {
-  private ServerIOInterface serverIO;
-  private RequestHandler requestHandler;
-  private ServerSocketWrapperInterface serverSocket;
-  private Router router;
+  final private ServerIOInterface serverIO;
+  final private RequestHandler requestHandler;
+  final private ServerSocketWrapperInterface serverSocket;
+  final private Router router;
 
   public Server(
       ServerIOInterface serverIO,

@@ -1,7 +1,6 @@
 package com.k3ntako.HTTPServer;
 
 import com.k3ntako.HTTPServer.controllers.Reminders;
-import com.k3ntako.HTTPServer.mocks.FileIOMock;
 import com.k3ntako.HTTPServer.mocks.ReminderIOMock;
 import com.k3ntako.HTTPServer.mocks.RequestMock;
 import org.junit.jupiter.api.Test;
@@ -21,7 +20,7 @@ class RouteMatcherTest {
 
     routesForMethod.put("/reminders", (RequestInterface req) -> new Reminders(new ReminderIOMock()).post(req));
 
-   routes.put("POST", routesForMethod);
+    routes.put("POST", routesForMethod);
 
     var routeMatcher = new RouteMatcher();
     var route = routeMatcher.matchRoute(routes, request);

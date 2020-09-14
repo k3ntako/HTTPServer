@@ -3,9 +3,9 @@ package com.k3ntako.HTTPServer;
 import com.k3ntako.HTTPServer.controllers.*;
 
 public class RouteRegistrar {
-  private RouteRegistry routeRegistry;
-  private FileIOInterface fileIO;
-  private ReminderIOInterface reminderIO;
+  final private RouteRegistry routeRegistry;
+  final private FileIOInterface fileIO;
+  final private ReminderIOInterface reminderIO;
 
   public RouteRegistrar(RouteRegistry routeRegistry, FileIOInterface fileIO, ReminderIOInterface reminderIO) {
     this.routeRegistry = routeRegistry;

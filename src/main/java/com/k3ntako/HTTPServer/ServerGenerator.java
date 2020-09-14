@@ -3,13 +3,11 @@ package com.k3ntako.HTTPServer;
 import com.google.gson.Gson;
 import com.k3ntako.HTTPServer.wrappers.ServerSocketWrapper;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.LinkedHashMap;
 
 public class ServerGenerator {
-  private FileIOInterface fileIO;
-  private YamlIOInterface yamlIOInterface;
+  final private FileIOInterface fileIO;
+  final private YamlIOInterface yamlIOInterface;
   private LinkedHashMap<String, Object> config;
 
   public ServerGenerator(FileIOInterface fileIO, YamlIOInterface yamlIOInterface) {

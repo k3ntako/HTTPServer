@@ -108,7 +108,7 @@ public class FileIOMock implements FileIOInterface {
   }
 
   private void throwIfExceptionExists() throws IOException {
-    if(mockException != null){
+    if (mockException != null) {
       throw mockException;
     }
   }

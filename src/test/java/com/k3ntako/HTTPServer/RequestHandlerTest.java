@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class RequestHandlerTest {
   @Test
   void handleRequest() throws Exception {
-    var routeRegistrar = new RouteRegistrar(new RouteRegistry(), new FileIOMock(),  new ReminderIOMock());
+    var routeRegistrar = new RouteRegistrar(new RouteRegistry(), new FileIOMock(), new ReminderIOMock());
     var routeRegistry = routeRegistrar.registerRoutes();
 
     var router = new Router(routeRegistry);

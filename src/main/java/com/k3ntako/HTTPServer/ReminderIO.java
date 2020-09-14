@@ -5,10 +5,10 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
 public class ReminderIO implements ReminderIOInterface {
-  private JsonIOInterface jsonIO;
-  private FileIOInterface fileIO;
-  private String remindersDir;
-  private UUIDInterface uuid;
+  final private JsonIOInterface jsonIO;
+  final private FileIOInterface fileIO;
+  final private String remindersDir;
+  final private UUIDInterface uuid;
 
   public ReminderIO(FileIOInterface fileIO, JsonIOInterface jsonIO, UUIDInterface uuid, String dataDir) {
     this.fileIO = fileIO;
@@ -32,7 +32,7 @@ public class ReminderIO implements ReminderIOInterface {
 
   public Reminder getReminderByIds(String listId, String reminderId) throws IOException, HTTPError {
     var reminderList = this.getListById(listId);
-    return  getReminderById(reminderList, reminderId);
+    return getReminderById(reminderList, reminderId);
   }
 
   public Reminder addReminder(String listId, String task) throws IOException, HTTPError {
@@ -48,7 +48,7 @@ public class ReminderIO implements ReminderIOInterface {
 
   public Reminder updateReminder(String listId, String reminderId, String updatedTask) throws IOException, HTTPError {
     var reminderList = getListById(listId);
-    var reminder =  getReminderById(reminderList, reminderId);
+    var reminder = getReminderById(reminderList, reminderId);
 
     reminder.task = updatedTask;
     reminderList.items.put(reminderId, reminder);

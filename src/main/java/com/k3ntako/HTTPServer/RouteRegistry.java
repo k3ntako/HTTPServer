@@ -9,7 +9,7 @@ public class RouteRegistry {
       "GET", "HEAD", "POST", "PUT", "DELETE",
       "CONNECT", "OPTIONS", "TRACE", "PATCH"
   ));
-  private HashMap<String, HashMap<String, ControllerMethodInterface>> routes = new HashMap<>();
+  final private HashMap<String, HashMap<String, ControllerMethodInterface>> routes = new HashMap<>();
 
   public void registerRoute(String method, String url, ControllerMethodInterface controller) throws Exception {
     method = method.toUpperCase();

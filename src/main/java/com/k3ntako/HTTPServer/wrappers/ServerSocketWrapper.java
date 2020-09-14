@@ -5,7 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ServerSocketWrapper implements ServerSocketWrapperInterface {
-  private ServerSocket serverSocket;
+  final private ServerSocket serverSocket;
 
   public ServerSocketWrapper(int port) throws IOException {
     serverSocket = new ServerSocket(port);

@@ -1,7 +1,7 @@
 package com.k3ntako.HTTPServer;
 
 public class HTTPError extends Exception {
-  private int status;
+  final private int status;
 
   public HTTPError(int status, String message) {
     super(message);
