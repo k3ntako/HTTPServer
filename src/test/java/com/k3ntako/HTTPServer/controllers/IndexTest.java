@@ -7,6 +7,8 @@ import com.k3ntako.HTTPServer.mocks.FileIOMock;
 import com.k3ntako.HTTPServer.mocks.RequestMock;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class IndexTest {
@@ -26,5 +28,18 @@ class IndexTest {
         "Content-Length: 13\r\n\r\n" +
         "<html></html>";
     assertEquals(expectedResponse, responseStr);
+  }
+
+  @Test
+  void getThrowsHTTPErrorIfFileNotFound() {
+    var request = new RequestMock("GET", "/");
+
+    var fileIO = new FileIOMock(new IOException("Resource was null"));
+    var index = new Index(fileIO);
+
+    HTTPError exception = assertThrows(HTTPError.class, () -> index.get(request));
+
+    assertEquals("File was not found", exception.getMessage());
+    assertEquals(404, exception.getStatus());
   }
 }
