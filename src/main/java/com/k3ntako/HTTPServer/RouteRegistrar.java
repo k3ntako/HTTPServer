@@ -14,6 +14,7 @@ public class RouteRegistrar {
   }
 
   public RouteRegistry registerRoutes() throws Exception {
+    routeRegistry.registerRoute("GET", "/", (RequestInterface req) -> new Index(fileIO).get(req));
     routeRegistry.registerRoute("GET", "/simple_get", (RequestInterface req) -> new SimpleGet().get(req));
     routeRegistry.registerRoute("GET", "/simple_get_with_body", (RequestInterface req) -> new SimpleGetWithBody().get(req));
     routeRegistry.registerRoute("GET", "/admin", (RequestInterface req) -> new Admin().get(req));
