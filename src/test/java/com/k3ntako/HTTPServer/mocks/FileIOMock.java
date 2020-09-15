@@ -24,6 +24,7 @@ public class FileIOMock implements FileIOInterface {
 
   public FileIOMock() {
     this.mockFileContentArr = new String[]{"Mock file content was not set"};
+    this.mockIsDirectoryArr = new Boolean[]{null};
   }
 
   public FileIOMock(IOException exception) {

@@ -36,7 +36,7 @@ class PublicFilesTest {
     final var publicFiles = new PublicFiles(fileIO);
     final var response = publicFiles.get(request);
 
-    assertEquals("public/index.html", fileIO.getLastIsResourceDirectoryFileName());
+    assertEquals("public/", fileIO.getLastIsResourceDirectoryFileName());
     assertEquals("public/index.html", fileIO.getLastGetResourceFileName());
 
     final var responseStr = response.createResponse();
