@@ -40,6 +40,18 @@ public class FileIO implements FileIOInterface {
     return scanner.hasNext() ? scanner.next() : "";
   }
 
+  @Override
+  public Boolean isResourceDirectory(String fileName) {
+    var resourceURL = this.getClass().getClassLoader().getResource(fileName);
+
+    if (resourceURL == null) {
+      return null;
+    }
+
+    var file = new File(resourceURL.getPath());
+    return file.isDirectory();
+  }
+
   public void patchNewLine(Path path, String str) throws IOException {
     var file = new File(path.toString());
 

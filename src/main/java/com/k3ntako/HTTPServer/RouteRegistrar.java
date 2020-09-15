@@ -14,16 +14,18 @@ public class RouteRegistrar {
   }
 
   public RouteRegistry registerRoutes() throws Exception {
-    routeRegistry.registerRoute("GET", "/", (RequestInterface req) -> new Index(fileIO).get(req));
-    routeRegistry.registerRoute("GET", "/simple_get", (RequestInterface req) -> new SimpleGet().get(req));
-    routeRegistry.registerRoute("GET", "/simple_get_with_body", (RequestInterface req) -> new SimpleGetWithBody().get(req));
-    routeRegistry.registerRoute("GET", "/admin", (RequestInterface req) -> new Admin().get(req));
+    routeRegistry.registerRoute("GET", "/api/simple_get", (RequestInterface req) -> new SimpleGet().get(req));
+    routeRegistry.registerRoute("GET", "/api/simple_get_with_body", (RequestInterface req) -> new SimpleGetWithBody().get(req));
+    routeRegistry.registerRoute("GET", "/api/admin", (RequestInterface req) -> new Admin().get(req));
+    routeRegistry.registerRoute("POST", "/api/reminders", (RequestInterface req) -> new ReminderLists(reminderIO).post(req));
+    routeRegistry.registerRoute("POST", "/api/reminders/:list_id", (RequestInterface req) -> new Reminders(reminderIO).post(req));
+    routeRegistry.registerRoute("GET", "/api/reminders/:list_id/:reminder_id", (RequestInterface req) -> new Reminders(reminderIO).get(req));
+    routeRegistry.registerRoute("PUT", "/api/reminders/:list_id/:reminder_id", (RequestInterface req) -> new Reminders(reminderIO).put(req));
+    routeRegistry.registerRoute("DELETE", "/api/reminders/:list_id/:reminder_id", (RequestInterface req) -> new Reminders(reminderIO).delete(req));
+
     routeRegistry.registerRoute("GET", "/account", (RequestInterface req) -> new Account().get(req));
-    routeRegistry.registerRoute("POST", "/reminders", (RequestInterface req) -> new ReminderLists(reminderIO).post(req));
-    routeRegistry.registerRoute("POST", "/reminders/:list_id", (RequestInterface req) -> new Reminders(reminderIO).post(req));
-    routeRegistry.registerRoute("GET", "/reminders/:list_id/:reminder_id", (RequestInterface req) -> new Reminders(reminderIO).get(req));
-    routeRegistry.registerRoute("PUT", "/reminders/:list_id/:reminder_id", (RequestInterface req) -> new Reminders(reminderIO).put(req));
-    routeRegistry.registerRoute("DELETE", "/reminders/:list_id/:reminder_id", (RequestInterface req) -> new Reminders(reminderIO).delete(req));
+    routeRegistry.registerRoute("GET", "/", (RequestInterface req) -> new PublicFiles(fileIO).get(req));
+    routeRegistry.registerRoute("GET", "/:file_name", (RequestInterface req) -> new PublicFiles(fileIO).get(req));
 
     return routeRegistry;
   }

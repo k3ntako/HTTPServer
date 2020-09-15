@@ -15,12 +15,17 @@
     <tr>
         <td>GET</td>
         <td><a href="/">/</a></td>
-        <td>Home page</td>
+        <td>Homepage with list of routes.</td>
+    </tr>
+    <tr>
+        <td>GET</td>
+        <td><a href="/index.css">/index.css</a></td>
+        <td>CSS for this page.</td>
     </tr>
     <tr>
         <td>GET</td>
         <td><a href="/account">/account</a></td>
-        <td>Redirects (302) to home page</td>
+        <td>Redirects (302) to home page.</td>
     </tr>
 </table>
 
@@ -33,7 +38,7 @@
     </tr>
     <tr>
         <td>GET</td>
-        <td><a href="/simple_get">/simple_get</a></td>
+        <td>/api/simple_get</td>
         <td>
             <ul>
                 <li>Returns 204 No Content.</li>
@@ -43,7 +48,7 @@
     <tr>
         <td>GET</td>
 
-        <td><a href="/simple_get_with_body">/simple_get_with_body</a></td>
+        <td>/api/simple_get_with_body</td>
         <td>
             <ul>
                 <li>Returns text.</li>
@@ -52,7 +57,7 @@
     </tr>
     <tr>
         <td>GET</td>
-        <td><a href="/admin">/admin</a></td>
+        <td>/api/admin</td>
         <td>
             <ul>
                 <li>Redirects (301) to /simple_get.</li>
@@ -61,7 +66,7 @@
     </tr>
     <tr>
         <td>POST</td>
-        <td>/reminders</td>
+        <td>/api/reminders</td>
         <td>
             <ul>
                 <li>Creates a reminder list.</li>
@@ -71,7 +76,7 @@
     </tr>
     <tr>
         <td>POST</td>
-        <td>/reminders/:list_id</td>
+        <td>/api/reminders/:list_id</td>
         <td>
             <ul>
                 <li>Creates a reminder for the specified reminder list.</li>
@@ -82,7 +87,7 @@
     </tr>
     <tr>
         <td>GET</td>
-        <td>/reminders/:list_id/:reminder_id</td>
+        <td>/api/reminders/:list_id/:reminder_id</td>
         <td>
             <ul>
                 <li>Returns th specified reminder as an object.</li>
@@ -93,7 +98,7 @@
     </tr>
     <tr>
         <td>PUT</td>
-        <td>/reminders/:list_id/:reminder_id</td>
+        <td>/api/reminders/:list_id/:reminder_id</td>
         <td>
             <ul>
                 <li>Overwrites the specified reminder with the text specified in the request body.</li>
@@ -104,7 +109,7 @@
     </tr>
     <tr>
         <td>DELETE</td>
-        <td>/reminders/:list_id/:reminder_id</td>
+        <td>/api/reminders/:list_id/:reminder_id</td>
         <td>
             <ul>
                 <li>Delete the specified reminder.</li>
