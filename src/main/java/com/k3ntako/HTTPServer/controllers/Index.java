@@ -15,7 +15,7 @@ public class Index {
     var response = new Response(jsonIO);
 
     try {
-      var file = fileIO.getResource("/pages/index.html");
+      var file = fileIO.getResource("pages/index.html");
       response.addHeader("Content-Type", "text/html; charset=UTF-8");
       response.setBody(file);
     } catch (Exception exception) {
