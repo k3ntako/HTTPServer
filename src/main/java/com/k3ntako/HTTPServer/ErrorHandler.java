@@ -14,6 +14,10 @@ public class ErrorHandler implements ErrorHandlerInterface {
   }
 
   private ResponseInterface generateErrorResponse(int status, Exception exception) {
+    if (status < 400 || status > 499) {
+      exception.printStackTrace();
+    }
+
     var jsonIO = new JsonIO(new Gson());
     var response = new Response(jsonIO);
     response.setStatus(status);
