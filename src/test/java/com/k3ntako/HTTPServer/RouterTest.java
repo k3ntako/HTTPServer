@@ -15,7 +15,7 @@ class RouterTest {
     var routeRegistrar = new RouteRegistrar(new RouteRegistry(), new FileIOMock(), new ReminderIOMock());
     var routeRegistry = routeRegistrar.registerRoutes();
 
-    var request = new RequestMock("GET", "/simple_get_with_body", "HTTP/1.1", new HashMap<>(), "");
+    var request = new RequestMock("GET", "/api/simple_get_with_body", "HTTP/1.1", new HashMap<>(), "");
     var router = new Router(routeRegistry);
     var response = router.routeRequest(request);
 
@@ -31,7 +31,7 @@ class RouterTest {
     var routeRegistrar = new RouteRegistrar(new RouteRegistry(), new FileIOMock(), new ReminderIOMock());
     var routeRegistry = routeRegistrar.registerRoutes();
 
-    var request = new RequestMock("POST", "/reminders", "HTTP/1.1", new HashMap<>(), "");
+    var request = new RequestMock("POST", "/api/reminders", "HTTP/1.1", new HashMap<>(), "");
     var router = new Router(routeRegistry);
     var response = router.routeRequest(request);
 
@@ -47,7 +47,7 @@ class RouterTest {
     var routeRegistrar = new RouteRegistrar(new RouteRegistry(), new FileIOMock(), new ReminderIOMock());
     var routeRegistry = routeRegistrar.registerRoutes();
 
-    var request = new RequestMock("GET", "/not_valid", "HTTP/1.1", new HashMap<>(), "");
+    var request = new RequestMock("GET", "/api/not_valid", "HTTP/1.1", new HashMap<>(), "");
     var router = new Router(routeRegistry);
     var response = router.routeRequest(request);
 
