@@ -2,123 +2,122 @@
 <head>
     <meta charset="utf-8">
     <title>HTTP Server</title>
+    <link rel="stylesheet" href="./index.css">
 </head>
 
 <body>
-<h3>Pages</h3>
-<table>
-    <tr>
-        <th>HTTP Verb</th>
-        <th>URL</th>
-        <th>Description</th>
-    </tr>
-    <tr>
-        <td>GET</td>
-        <td><a href="/">/</a></td>
-        <td>Homepage with list of routes.</td>
-    </tr>
-    <tr>
-        <td>GET</td>
-        <td><a href="/index.css">/index.css</a></td>
-        <td>CSS for this page.</td>
-    </tr>
-    <tr>
-        <td>GET</td>
-        <td><a href="/account">/account</a></td>
-        <td>Redirects (302) to home page.</td>
-    </tr>
-</table>
+<div class="page">
+    <h1>HTTP Server</h1>
+    <p>
+        The HTTP Server is hosted on <a href="http://httpserver-env-1.eba-eac65tjd.us-east-1.elasticbeanstalk.com/" target="_blank">AWS Elastic Beanstalk</a>
+        and source code can be found on <a href="https://github.com/k3ntako/HTTPServer" target="_blank">Github</a>.
+    </p>
 
-<h3>API Endpoints</h3>
-<table>
-    <tr>
-        <th>HTTP Verb</th>
-        <th>URL</th>
-        <th>Description</th>
-    </tr>
-    <tr>
-        <td>GET</td>
-        <td>/api/simple_get</td>
-        <td>
-            <ul>
-                <li>Returns 204 No Content.</li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>GET</td>
+    <h3>Pages</h3>
+    <table>
+        <tr>
+            <td>GET</td>
+            <td><a href="/">/</a></td>
+            <td>Homepage with list of routes.</td>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td><a href="/index.css">/index.css</a></td>
+            <td>CSS for this page.</td>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td><a href="/account">/account</a></td>
+            <td>Redirects (302) to home page.</td>
+        </tr>
+    </table>
 
-        <td>/api/simple_get_with_body</td>
-        <td>
-            <ul>
-                <li>Returns text.</li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>GET</td>
-        <td>/api/admin</td>
-        <td>
-            <ul>
-                <li>Redirects (301) to /simple_get.</li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>POST</td>
-        <td>/api/reminders</td>
-        <td>
-            <ul>
-                <li>Creates a reminder list.</li>
-                <li>Returns object with the newly created reminder list ID.</li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>POST</td>
-        <td>/api/reminders/:list_id</td>
-        <td>
-            <ul>
-                <li>Creates a reminder for the specified reminder list.</li>
-                <li>Returns the newly created reminder as an object.</li>
-                <li>Returns 404 if reminder list is not found.</li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>GET</td>
-        <td>/api/reminders/:list_id/:reminder_id</td>
-        <td>
-            <ul>
-                <li>Returns th specified reminder as an object.</li>
-                <li>Uses the text in the request body as the task.</li>
-                <li>Returns 404 if reminder list or reminder is not found.</li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>PUT</td>
-        <td>/api/reminders/:list_id/:reminder_id</td>
-        <td>
-            <ul>
-                <li>Overwrites the specified reminder with the text specified in the request body.</li>
-                <li>Returns 204 No Content, if successful.</li>
-                <li>Returns 404 if reminder list or reminder is not found.</li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>DELETE</td>
-        <td>/api/reminders/:list_id/:reminder_id</td>
-        <td>
-            <ul>
-                <li>Delete the specified reminder.</li>
-                <li>Returns 204 No Content, if successful.</li>
-                <li>Returns 404 if reminder list or reminder is not found.</li>
-            </ul>
-        </td>
-    </tr>
-</table>
+    <h3>API Endpoints</h3>
+    <table>
+        <tr>
+            <td>GET</td>
+            <td>/api/simple_get</td>
+            <td>
+                <ul>
+                    <li>Returns 204 No Content.</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>GET</td>
+
+            <td>/api/simple_get_with_body</td>
+            <td>
+                <ul>
+                    <li>Returns text.</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td>/api/admin</td>
+            <td>
+                <ul>
+                    <li>Redirects (301) to /simple_get.</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>POST</td>
+            <td>/api/reminders</td>
+            <td>
+                <ul>
+                    <li>Creates a reminder list.</li>
+                    <li>Returns object with the newly created reminder list ID.</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>POST</td>
+            <td>/api/reminders/:list_id</td>
+            <td>
+                <ul>
+                    <li>Creates a reminder for the specified reminder list.</li>
+                    <li>Returns the newly created reminder as an object.</li>
+                    <li>Returns 404 if reminder list is not found.</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td>/api/reminders/:list_id/:reminder_id</td>
+            <td>
+                <ul>
+                    <li>Returns the specified reminder as an object.</li>
+                    <li>Uses the text in the request body as the task.</li>
+                    <li>Returns 404 if reminder list or reminder is not found.</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>PUT</td>
+            <td>/api/reminders/:list_id/:reminder_id</td>
+            <td>
+                <ul>
+                    <li>Overwrites the specified reminder with the text specified in the request body.</li>
+                    <li>Returns 204 No Content, if successful.</li>
+                    <li>Returns 404 if reminder list or reminder is not found.</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>DELETE</td>
+            <td>/api/reminders/:list_id/:reminder_id</td>
+            <td>
+                <ul>
+                    <li>Delete the specified reminder.</li>
+                    <li>Returns 204 No Content, if successful.</li>
+                    <li>Returns 404 if reminder list or reminder is not found.</li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+</div>
 
 </body>
 </html>

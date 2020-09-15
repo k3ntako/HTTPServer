@@ -1,5 +1,5 @@
 # HTTP Server
-This server is hosted on AWS, <a href="http://httpserver-env-1.eba-eac65tjd.us-east-1.elasticbeanstalk.com/">here<a>.
+This server is hosted on AWS, [here](http://httpserver-env-1.eba-eac65tjd.us-east-1.elasticbeanstalk.com/).
 The list of routes can be found on the homepage.
 
 ## Getting Started
