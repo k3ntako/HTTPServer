@@ -1,5 +1,6 @@
 # HTTP Server
-Currently, it acts as an echo server, but plans are to add further features that will be documented here.
+This server is hosted on AWS, <a href="http://httpserver-env-1.eba-eac65tjd.us-east-1.elasticbeanstalk.com/">here<a>.
+The list of routes can be found on the homepage.
 
 ## Getting Started
 1. Clone repo

@@ -20,7 +20,7 @@ class IndexTest {
     var index = new Index(fileIO);
     var response = index.get(request);
 
-    assertEquals("./pages/index.html", fileIO.getLastGetResourceFileName());
+    assertEquals("pages/index.html", fileIO.getLastGetResourceFileName());
 
     var responseStr = response.createResponse();
     var expectedResponse = "HTTP/1.1 200 OK\r\n" +

@@ -5,6 +5,115 @@
 </head>
 
 <body>
-<a href="/simple_get_with_body">Simple Get With Body</a>
+<h3>Pages</h3>
+<table>
+    <tr>
+        <th>HTTP Verb</th>
+        <th>URL</th>
+        <th>Description</th>
+    </tr>
+    <tr>
+        <td>GET</td>
+        <td><a href="/">/</a></td>
+        <td>Home page</td>
+    </tr>
+    <tr>
+        <td>GET</td>
+        <td><a href="/account">/account</a></td>
+        <td>Redirects (302) to home page</td>
+    </tr>
+</table>
+
+<h3>API Endpoints</h3>
+<table>
+    <tr>
+        <th>HTTP Verb</th>
+        <th>URL</th>
+        <th>Description</th>
+    </tr>
+    <tr>
+        <td>GET</td>
+        <td><a href="/simple_get">/simple_get</a></td>
+        <td>
+            <ul>
+                <li>Returns 204 No Content.</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>GET</td>
+
+        <td><a href="/simple_get_with_body">/simple_get_with_body</a></td>
+        <td>
+            <ul>
+                <li>Returns text.</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>GET</td>
+        <td><a href="/admin">/admin</a></td>
+        <td>
+            <ul>
+                <li>Redirects (301) to /simple_get.</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>POST</td>
+        <td>/reminders</td>
+        <td>
+            <ul>
+                <li>Creates a reminder list.</li>
+                <li>Returns object with the newly created reminder list ID.</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>POST</td>
+        <td>/reminders/:list_id</td>
+        <td>
+            <ul>
+                <li>Creates a reminder for the specified reminder list.</li>
+                <li>Returns the newly created reminder as an object.</li>
+                <li>Returns 404 if reminder list is not found.</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>GET</td>
+        <td>/reminders/:list_id/:reminder_id</td>
+        <td>
+            <ul>
+                <li>Returns th specified reminder as an object.</li>
+                <li>Uses the text in the request body as the task.</li>
+                <li>Returns 404 if reminder list or reminder is not found.</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>PUT</td>
+        <td>/reminders/:list_id/:reminder_id</td>
+        <td>
+            <ul>
+                <li>Overwrites the specified reminder with the text specified in the request body.</li>
+                <li>Returns 204 No Content, if successful.</li>
+                <li>Returns 404 if reminder list or reminder is not found.</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>DELETE</td>
+        <td>/reminders/:list_id/:reminder_id</td>
+        <td>
+            <ul>
+                <li>Delete the specified reminder.</li>
+                <li>Returns 204 No Content, if successful.</li>
+                <li>Returns 404 if reminder list or reminder is not found.</li>
+            </ul>
+        </td>
+    </tr>
+</table>
+
 </body>
 </html>
