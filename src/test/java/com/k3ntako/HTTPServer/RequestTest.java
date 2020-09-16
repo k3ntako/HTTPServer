@@ -51,7 +51,7 @@ class RequestTest {
   }
 
   @Test
-  void getAndSetRouteParams() {
+  void getAndSetRouteParams() throws IOException {
     var headerStr = "GET / HTTP/1.1\r\n" +
         "Host: localhost:5000\r\n" +
         "User-Agent: curl/7.64.1\r\n" +
@@ -74,7 +74,7 @@ class RequestTest {
   }
 
   @Test
-  void getRouteParam() {
+  void getRouteParam() throws IOException {
     var headerStr = "GET / HTTP/1.1\r\n" +
         "Host: localhost:5000\r\n" +
         "User-Agent: curl/7.64.1\r\n" +

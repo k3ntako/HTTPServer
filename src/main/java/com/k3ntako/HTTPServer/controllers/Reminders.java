@@ -13,7 +13,7 @@ public class Reminders {
   }
 
   public ResponseInterface post(RequestInterface request) throws IOException, HTTPError {
-    var body = request.getBody();
+    var body = (String) request.getBody();
     validateBody(body);
 
     var listId = request.getRouteParam("list_id");
@@ -50,7 +50,7 @@ public class Reminders {
   }
 
   public ResponseInterface put(RequestInterface request) throws HTTPError {
-    var body = request.getBody();
+    var body = (String) request.getBody();
     var listId = request.getRouteParam("list_id");
     var reminderId = request.getRouteParam("reminder_id");
 

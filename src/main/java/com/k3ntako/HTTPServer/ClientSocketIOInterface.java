@@ -10,7 +10,11 @@ public interface ClientSocketIOInterface {
 
   char read() throws IOException;
 
-  void sendData(String data);
+  String readTextBody(int contentLength) throws IOException;
+
+  byte[] readBinaryBody(int contentLength) throws IOException;
+
+  void sendData(String data) throws IOException;
 
   void close() throws IOException;
 }

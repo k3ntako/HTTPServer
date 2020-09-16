@@ -22,7 +22,7 @@ public class ServerGenerator {
     var router = this.registerRoutes();
     var requestHandler = new RequestHandler(router, new RequestGenerator(), new ErrorHandler());
 
-    return new Server(new ClientSocketSocketIO(), requestHandler, serverSocket);
+    return new Server(new ClientSocketIO(), requestHandler, serverSocket);
   }
 
   private LinkedHashMap<String, Object> getConfig() throws Exception {

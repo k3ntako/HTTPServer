@@ -6,16 +6,21 @@ import java.io.*;
 import java.net.Socket;
 
 public class ClientSocketIOMock implements ClientSocketIOInterface {
-  final private String clientInput;
+  private Socket clientSocket;
   private BufferedReader bufferedReader;
   private PrintWriterWrapperMock printWriter;
 
-  public ClientSocketIOMock(String clientInput) {
-    this.clientInput = clientInput;
+  public ClientSocketIOMock(String mockClientInput) {
+    clientSocket = new SocketMock(mockClientInput.getBytes());
   }
 
-  public void init(Socket clientSocket) {
-    bufferedReader = new BufferedReader(new StringReader(this.clientInput));
+  public void init(Socket socket) throws IOException {
+    if (clientSocket == null) {
+      clientSocket = socket;
+    }
+
+    var inputStreamReader = new InputStreamReader(clientSocket.getInputStream());
+    bufferedReader = new BufferedReader(inputStreamReader);
     printWriter = new PrintWriterWrapperMock();
   }
 
@@ -27,13 +32,30 @@ public class ClientSocketIOMock implements ClientSocketIOInterface {
     return (char) bufferedReader.read();
   }
 
+  @Override
+  public String readTextBody(int contentLength) throws IOException {
+    var bodyStr = "";
+    char character;
+
+    while (bodyStr.length() < contentLength) {
+      character = (char) bufferedReader.read();
+      bodyStr = bodyStr.concat(String.valueOf(character));
+    }
+    return bodyStr;
+  }
+
+  @Override
+  public byte[] readBinaryBody(int contentLength) {
+    return new byte[0];
+  }
+
   public void sendData(String data) {
-    this.printWriter.sendData(data);
+    printWriter.sendData(data);
+    printWriter.close();
   }
 
   public void close() throws IOException {
     this.bufferedReader.close();
-    this.printWriter.close();
   }
 
   public String getSentData() {

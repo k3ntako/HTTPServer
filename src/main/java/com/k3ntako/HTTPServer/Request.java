@@ -9,7 +9,7 @@ public class Request implements RequestInterface {
   private String route;
   private String protocol;
   final private HashMap<String, String> headers;
-  private String body;
+  private Object body;
   final private ClientSocketIOInterface clientSocketIO;
   private HashMap<String, String> routeParams;
 
@@ -71,15 +71,7 @@ public class Request implements RequestInterface {
   }
 
   private void parseBody(int contentLength) throws IOException {
-    var bodyStr = "";
-    char character;
-
-    while (bodyStr.length() < contentLength) {
-      character = (clientSocketIO.read());
-      bodyStr = bodyStr.concat(String.valueOf(character));
-    }
-
-    this.body = bodyStr;
+    this.body = clientSocketIO.readTextBody(contentLength);
   }
 
   public void setRouteParams(HashMap<String, String> routeParams) {
@@ -110,7 +102,7 @@ public class Request implements RequestInterface {
     return this.headers;
   }
 
-  public String getBody() {
+  public Object getBody() {
     if (Objects.isNull(this.body)) {
       return "";
     } else {
