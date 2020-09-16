@@ -4,8 +4,8 @@ import java.io.IOException;
 
 public class RequestGenerator implements RequestGeneratorInterface {
   @Override
-  public Request generateRequest(ServerIOInterface serverIO) throws IOException {
-    var request = new Request(serverIO);
+  public Request generateRequest(ClientSocketIOInterface clientSocketIO) throws IOException {
+    var request = new Request(clientSocketIO);
     request.parseRequest();
     return request;
   }

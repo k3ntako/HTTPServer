@@ -6,7 +6,7 @@ import com.k3ntako.HTTPServer.wrappers.PrintWriterWrapperInterface;
 import java.io.*;
 import java.net.Socket;
 
-public class ServerServerIO implements ServerIOInterface {
+public class ClientSocketSocketIO implements ClientSocketIOInterface {
   private BufferedReader bufferedReader;
   private PrintWriterWrapperInterface printWriter;
 

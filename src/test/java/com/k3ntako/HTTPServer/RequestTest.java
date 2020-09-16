@@ -1,6 +1,6 @@
 package com.k3ntako.HTTPServer;
 
-import com.k3ntako.HTTPServer.mocks.ServerIOMock;
+import com.k3ntako.HTTPServer.mocks.ClientSocketIOMock;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -17,10 +17,10 @@ class RequestTest {
         "Host: localhost:5000\r\n" +
         "User-Agent: curl/7.64.1\r\n" +
         "Accept: */*\r\n\r\n";
-    var serverIO = new ServerIOMock(headerStr);
-    serverIO.init(new Socket());
+    var clientSocketIO = new ClientSocketIOMock(headerStr);
+    clientSocketIO.init(new Socket());
 
-    var request = new Request(serverIO);
+    var request = new Request(clientSocketIO);
 
     request.parseRequest();
     assertEquals("GET", request.getMethod());
@@ -41,9 +41,9 @@ class RequestTest {
         "Body line 3: abc\n" +
         "Body line 4: abc\n";
 
-    var serverIO = new ServerIOMock(header + bodyStr);
-    serverIO.init(new Socket());
-    var request = new Request(serverIO);
+    var clientSocketIO = new ClientSocketIOMock(header + bodyStr);
+    clientSocketIO.init(new Socket());
+    var request = new Request(clientSocketIO);
 
     request.parseRequest();
 
@@ -56,10 +56,10 @@ class RequestTest {
         "Host: localhost:5000\r\n" +
         "User-Agent: curl/7.64.1\r\n" +
         "Accept: */*\r\n\r\n";
-    var serverIO = new ServerIOMock(headerStr);
-    serverIO.init(new Socket());
+    var clientSocketIO = new ClientSocketIOMock(headerStr);
+    clientSocketIO.init(new Socket());
 
-    var request = new Request(serverIO);
+    var request = new Request(clientSocketIO);
 
     var routeParams = new HashMap<String, String>();
     routeParams.put("id", "123");
@@ -79,10 +79,10 @@ class RequestTest {
         "Host: localhost:5000\r\n" +
         "User-Agent: curl/7.64.1\r\n" +
         "Accept: */*\r\n\r\n";
-    var serverIO = new ServerIOMock(headerStr);
-    serverIO.init(new Socket());
+    var clientSocketIO = new ClientSocketIOMock(headerStr);
+    clientSocketIO.init(new Socket());
 
-    var request = new Request(serverIO);
+    var request = new Request(clientSocketIO);
 
     var routeParams = new HashMap<String, String>();
     routeParams.put("id", "123");

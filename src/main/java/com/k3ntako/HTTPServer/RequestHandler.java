@@ -15,10 +15,10 @@ public class RequestHandler {
     this.errorHandler = errorHandler;
   }
 
-  public String handleRequest(ServerIOInterface serverIO) throws Exception {
+  public String handleRequest(ClientSocketIOInterface clientSocketIO) throws Exception {
     String responseStr;
     try {
-      var request = this.requestGenerator.generateRequest(serverIO);
+      var request = this.requestGenerator.generateRequest(clientSocketIO);
       var response = this.router.routeRequest(request);
       responseStr = response.createResponse();
     } catch (HTTPError httpError) {

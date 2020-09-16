@@ -19,7 +19,7 @@ class RequestHandlerTest {
         "Content-Length: 11\r\n\r\n" +
         "Hello world";
 
-    var responseStr = requestHandler.handleRequest(new ServerIOMock(""));
+    var responseStr = requestHandler.handleRequest(new ClientSocketIOMock(""));
     assertEquals(expectedResponse, responseStr);
   }
 
@@ -36,7 +36,7 @@ class RequestHandlerTest {
         "Content-Length: 20\r\n\r\n" +
         "This is a test error";
 
-    var responseStr = requestHandler.handleRequest(new ServerIOMock(""));
+    var responseStr = requestHandler.handleRequest(new ClientSocketIOMock(""));
     assertEquals(expectedResponse, responseStr);
   }
 }

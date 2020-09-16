@@ -1,16 +1,16 @@
 package com.k3ntako.HTTPServer.mocks;
 
-import com.k3ntako.HTTPServer.ServerIOInterface;
+import com.k3ntako.HTTPServer.ClientSocketIOInterface;
 
 import java.io.*;
 import java.net.Socket;
 
-public class ServerIOMock implements ServerIOInterface {
+public class ClientSocketIOMock implements ClientSocketIOInterface {
   final private String clientInput;
   private BufferedReader bufferedReader;
   private PrintWriterWrapperMock printWriter;
 
-  public ServerIOMock(String clientInput) {
+  public ClientSocketIOMock(String clientInput) {
     this.clientInput = clientInput;
   }
 

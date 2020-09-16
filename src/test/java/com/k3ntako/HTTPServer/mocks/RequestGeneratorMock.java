@@ -1,6 +1,6 @@
 package com.k3ntako.HTTPServer.mocks;
 
-import com.k3ntako.HTTPServer.ServerIOInterface;
+import com.k3ntako.HTTPServer.ClientSocketIOInterface;
 import com.k3ntako.HTTPServer.RequestGeneratorInterface;
 import com.k3ntako.HTTPServer.RequestInterface;
 
@@ -22,7 +22,7 @@ public class RequestGeneratorMock implements RequestGeneratorInterface {
     this.body = "";
   }
 
-  public RequestInterface generateRequest(ServerIOInterface serverIO) {
+  public RequestInterface generateRequest(ClientSocketIOInterface clientSocketIO) {
     var request = new RequestMock(method, route, protocol, headers, body);
     handleRequestCalled = true;
     return request;

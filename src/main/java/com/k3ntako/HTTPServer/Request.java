@@ -10,11 +10,11 @@ public class Request implements RequestInterface {
   private String protocol;
   final private HashMap<String, String> headers;
   private String body;
-  final private ServerIOInterface serverIO;
+  final private ClientSocketIOInterface clientSocketIO;
   private HashMap<String, String> routeParams;
 
-  public Request(ServerIOInterface serverIO) {
-    this.serverIO = serverIO;
+  public Request(ClientSocketIOInterface clientSocketIO) {
+    this.clientSocketIO = clientSocketIO;
     this.headers = new HashMap<>();
   }
 
@@ -43,7 +43,7 @@ public class Request implements RequestInterface {
   }
 
   private String readLine() throws IOException {
-    var line = serverIO.readLine();
+    var line = clientSocketIO.readLine();
 
     if (line == null || line.length() == 0) {
       return null;
@@ -75,7 +75,7 @@ public class Request implements RequestInterface {
     char character;
 
     while (bodyStr.length() < contentLength) {
-      character = (serverIO.read());
+      character = (clientSocketIO.read());
       bodyStr = bodyStr.concat(String.valueOf(character));
     }
 

@@ -3,7 +3,7 @@ package com.k3ntako.HTTPServer;
 import java.io.IOException;
 import java.net.Socket;
 
-public interface ServerIOInterface {
+public interface ClientSocketIOInterface {
   void init(Socket clientSocket) throws IOException;
 
   String readLine() throws IOException;

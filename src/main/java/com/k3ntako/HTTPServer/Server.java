@@ -6,36 +6,33 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class Server {
-  final private ServerIOInterface serverIO;
+  final private ClientSocketIOInterface clientSocketIO;
   final private RequestHandler requestHandler;
   final private ServerSocketWrapperInterface serverSocket;
-  final private Router router;
 
   public Server(
-      ServerIOInterface serverIO,
+      ClientSocketIOInterface clientSocketIO,
       RequestHandler requestHandler,
-      ServerSocketWrapperInterface serverSocket,
-      Router router
+      ServerSocketWrapperInterface serverSocket
   ) {
-    this.serverIO = serverIO;
+    this.clientSocketIO = clientSocketIO;
     this.requestHandler = requestHandler;
     this.serverSocket = serverSocket;
-    this.router = router;
   }
 
   public void run() throws Exception {
     var clientSocket = serverSocket.accept();
 
-    serverIO.init(clientSocket);
+    clientSocketIO.init(clientSocket);
 
-    var responseStr = requestHandler.handleRequest(serverIO);
+    var responseStr = requestHandler.handleRequest(clientSocketIO);
 
-    serverIO.sendData(responseStr);
+    clientSocketIO.sendData(responseStr);
     this.close(clientSocket);
   }
 
   private void close(Socket clientSocket) throws IOException {
-    serverIO.close();
+    clientSocketIO.close();
     clientSocket.close();
   }
 }

@@ -3,7 +3,7 @@ package com.k3ntako.HTTPServer.mocks;
 import com.k3ntako.HTTPServer.HTTPError;
 import com.k3ntako.HTTPServer.RequestGeneratorInterface;
 import com.k3ntako.HTTPServer.RequestInterface;
-import com.k3ntako.HTTPServer.ServerIOInterface;
+import com.k3ntako.HTTPServer.ClientSocketIOInterface;
 
 import java.util.HashMap;
 
@@ -23,7 +23,7 @@ public class RequestGeneratorMockThrowsError implements RequestGeneratorInterfac
     this.body = "";
   }
 
-  public RequestInterface generateRequest(ServerIOInterface serverIO) throws HTTPError {
+  public RequestInterface generateRequest(ClientSocketIOInterface clientSocketIO) throws HTTPError {
     throw new HTTPError(500, "This is a test error");
   }
 
