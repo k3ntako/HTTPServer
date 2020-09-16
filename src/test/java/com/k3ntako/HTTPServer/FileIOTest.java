@@ -29,6 +29,18 @@ class FileIOTest {
   }
 
   @Test
+  void writeBinary() throws IOException {
+    final var bytes = "This is text\nthis is a new line!".getBytes();
+
+    final var fileIO = new FileIO();
+    fileIO.write(path, bytes);
+
+    final var fileContent = Files.readAllBytes(path);
+
+    assertArrayEquals(bytes, fileContent);
+  }
+
+  @Test
   void read() throws IOException {
     final var str = "This is a different text\nthis is a new line!\r\n And more!";
     Files.write(path, str.getBytes());
