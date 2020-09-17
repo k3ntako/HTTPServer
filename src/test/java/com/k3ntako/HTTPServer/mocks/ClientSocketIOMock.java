@@ -6,47 +6,47 @@ import java.io.*;
 import java.net.Socket;
 
 public class ClientSocketIOMock implements ClientSocketIOInterface {
-  private Socket clientSocket;
-  private BufferedReader bufferedReader;
+  final private Object mockBody;
+  final private BufferedReader headerBufferedReader;
   private PrintWriterWrapperMock printWriter;
 
-  public ClientSocketIOMock(String mockClientInput) {
-    clientSocket = new SocketMock(mockClientInput.getBytes());
+  public ClientSocketIOMock(String mockHeader) {
+    this.headerBufferedReader = new BufferedReader(new StringReader(mockHeader));
+    this.mockBody = "";
   }
 
-  public void init(Socket socket) throws IOException {
-    if (clientSocket == null) {
-      clientSocket = socket;
-    }
+  public ClientSocketIOMock(String mockHeader, String mockBody) {
+    this.headerBufferedReader = new BufferedReader(new StringReader(mockHeader));
+    this.mockBody = mockBody;
+  }
 
-    var inputStreamReader = new InputStreamReader(clientSocket.getInputStream());
-    bufferedReader = new BufferedReader(inputStreamReader);
+  public ClientSocketIOMock(String mockHeader, byte[] mockBody) {
+    this.headerBufferedReader = new BufferedReader(new StringReader(mockHeader));
+    this.mockBody = mockBody;
+  }
+
+  public void init(Socket socket) {
+    // Socket is ignored
+
     printWriter = new PrintWriterWrapperMock();
   }
 
   public String readLine() throws IOException {
-    return bufferedReader.readLine();
+    return headerBufferedReader.readLine();
   }
 
   public char read() throws IOException {
-    return (char) bufferedReader.read();
+    return (char) headerBufferedReader.read();
   }
 
   @Override
-  public String readTextBody(int contentLength) throws IOException {
-    var bodyStr = "";
-    char character;
-
-    while (bodyStr.length() < contentLength) {
-      character = (char) bufferedReader.read();
-      bodyStr = bodyStr.concat(String.valueOf(character));
-    }
-    return bodyStr;
+  public String readTextBody(int contentLength) {
+    return (String) mockBody;
   }
 
   @Override
   public byte[] readBinaryBody(int contentLength) {
-    return new byte[0];
+    return (byte[]) mockBody;
   }
 
   public void sendData(String data) {
@@ -55,7 +55,7 @@ public class ClientSocketIOMock implements ClientSocketIOInterface {
   }
 
   public void close() throws IOException {
-    this.bufferedReader.close();
+    this.headerBufferedReader.close();
   }
 
   public String getSentData() {

@@ -27,7 +27,8 @@ public class Request implements RequestInterface {
     }
 
     if (contentLength > 0) {
-      this.parseBody(contentLength);
+      var contentType = this.headers.get("Content-Type");
+      this.parseBody(contentType, contentLength);
     }
   }
 
@@ -70,8 +71,12 @@ public class Request implements RequestInterface {
     }
   }
 
-  private void parseBody(int contentLength) throws IOException {
-    this.body = clientSocketIO.readTextBody(contentLength);
+  private void parseBody(String contentType, int contentLength) throws IOException {
+    if (contentType != null && contentType.toLowerCase().contains("image")) {
+      this.body = clientSocketIO.readBinaryBody(contentLength);
+    } else {
+      this.body = clientSocketIO.readTextBody(contentLength);
+    }
   }
 
   public void setRouteParams(HashMap<String, String> routeParams) {

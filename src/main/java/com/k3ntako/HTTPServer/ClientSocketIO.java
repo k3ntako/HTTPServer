@@ -8,12 +8,16 @@ import java.net.Socket;
 public class ClientSocketIO implements ClientSocketIOInterface {
   private Socket clientSocket;
   private BufferedReader bufferedReader;
+  private PrintWriterWrapper printWriter;
 
   public void init(Socket clientSocket) throws IOException {
     this.clientSocket = clientSocket;
 
     var inputStreamReader = new InputStreamReader(clientSocket.getInputStream());
     bufferedReader = new BufferedReader(inputStreamReader);
+
+    var outputStream = clientSocket.getOutputStream();
+    printWriter = new PrintWriterWrapper(outputStream, true);
   }
 
   public String readLine() throws IOException {
@@ -36,8 +40,8 @@ public class ClientSocketIO implements ClientSocketIOInterface {
   }
 
   public byte[] readBinaryBody(int contentLength) throws IOException {
-    var bufferedInputStream = new BufferedInputStream(clientSocket.getInputStream());
-    var outputStream = new ByteArrayOutputStream();
+    final var bufferedInputStream = new BufferedInputStream(clientSocket.getInputStream());
+    final var outputStream = new ByteArrayOutputStream();
 
     final var defaultSize = 4096;
     final var size = Math.min(contentLength, defaultSize);
@@ -45,31 +49,28 @@ public class ClientSocketIO implements ClientSocketIOInterface {
     byte[] data = new byte[size];
 
     while (totalLengthRead < contentLength) {
-      var bytesRead = bufferedInputStream.read(data, 0, data.length);
+      final var bytesRead = bufferedInputStream.read(data, 0, data.length);
       outputStream.write(data, 0, bytesRead);
 
       totalLengthRead += bytesRead;
 
-      var remaining = contentLength - totalLengthRead;
+      final var remaining = contentLength - totalLengthRead;
       if (remaining < size) {
         data = new byte[remaining];
       }
     }
 
-    bufferedInputStream.close();
     return outputStream.toByteArray();
   }
 
 
-  public void sendData(String data) throws IOException {
-    var outputStream = clientSocket.getOutputStream();
-    var printWriter = new PrintWriterWrapper(outputStream, true);
+  public void sendData(String data) {
     printWriter.sendData(data);
-    printWriter.close();
   }
 
   public void close() throws IOException {
     bufferedReader.close();
+    printWriter.close();
   }
 
 }

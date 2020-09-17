@@ -22,6 +22,7 @@ public class RouteRegistrar {
     routeRegistry.registerRoute("GET", "/api/reminders/:list_id/:reminder_id", (RequestInterface req) -> new Reminders(reminderIO).get(req));
     routeRegistry.registerRoute("PUT", "/api/reminders/:list_id/:reminder_id", (RequestInterface req) -> new Reminders(reminderIO).put(req));
     routeRegistry.registerRoute("DELETE", "/api/reminders/:list_id/:reminder_id", (RequestInterface req) -> new Reminders(reminderIO).delete(req));
+    routeRegistry.registerRoute("POST", "/api/images", (RequestInterface req) -> new Images(fileIO, new UUID()).post(req));
 
     routeRegistry.registerRoute("GET", "/account", (RequestInterface req) -> new Account().get(req));
     routeRegistry.registerRoute("GET", "/", (RequestInterface req) -> new PublicFiles(fileIO).get(req));

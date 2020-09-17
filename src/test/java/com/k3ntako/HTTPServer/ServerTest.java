@@ -43,7 +43,7 @@ class ServerTest {
         "Body line 3: def\n" +
         "Body line 4: def";
 
-    var clientSocketIO = new ClientSocketIOMock(clientInput + bodyStr);
+    var clientSocketIO = new ClientSocketIOMock(clientInput, bodyStr);
     var requestGeneratorMock = new RequestGeneratorMock();
     var socket = new ServerSocketMock();
 
@@ -76,7 +76,7 @@ class ServerTest {
         "Body line 3: def\n" +
         "Body line 4: def";
 
-    var clientSocketIO = new ClientSocketIOMock(clientInput + bodyStr);
+    var clientSocketIO = new ClientSocketIOMock(clientInput, bodyStr);
     var requestGeneratorMock = new RequestGeneratorMockThrowsError();
     var socket = new ServerSocketMock();
 
