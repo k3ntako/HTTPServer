@@ -1,5 +1,6 @@
 package com.k3ntako.HTTPServer.controllers;
 
+import com.k3ntako.HTTPServer.DataDirectoryIO;
 import com.k3ntako.HTTPServer.HTTPError;
 import com.k3ntako.HTTPServer.mocks.FileIOMock;
 import com.k3ntako.HTTPServer.mocks.RequestMock;
@@ -18,9 +19,10 @@ class ImagesTest {
     var request = new RequestMock("POST", "/images", bytes);
 
     final var fileIO = new FileIOMock();
+    final var dataDirectoryIO = new DataDirectoryIO(fileIO, "./data");
     final var uuidMock = new UUIDMock();
 
-    var images = new Images(fileIO, uuidMock);
+    var images = new Images(dataDirectoryIO, uuidMock);
     var response = images.post(request);
 
     var expected = "./data/images/" + uuidMock.getDefaultUUID() + ".png";

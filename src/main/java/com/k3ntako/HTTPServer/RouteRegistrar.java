@@ -5,11 +5,18 @@ import com.k3ntako.HTTPServer.controllers.*;
 public class RouteRegistrar {
   final private RouteRegistry routeRegistry;
   final private FileIOInterface fileIO;
+  final private DataDirectoryIO dataDirectoryIO;
   final private ReminderIOInterface reminderIO;
 
-  public RouteRegistrar(RouteRegistry routeRegistry, FileIOInterface fileIO, ReminderIOInterface reminderIO) {
+  public RouteRegistrar(
+      RouteRegistry routeRegistry,
+      FileIOInterface fileIO,
+      DataDirectoryIO dataDirectoryIO,
+      ReminderIOInterface reminderIO
+  ) {
     this.routeRegistry = routeRegistry;
     this.fileIO = fileIO;
+    this.dataDirectoryIO = dataDirectoryIO;
     this.reminderIO = reminderIO;
   }
 
@@ -22,7 +29,7 @@ public class RouteRegistrar {
     routeRegistry.registerRoute("GET", "/api/reminders/:list_id/:reminder_id", (RequestInterface req) -> new Reminders(reminderIO).get(req));
     routeRegistry.registerRoute("PUT", "/api/reminders/:list_id/:reminder_id", (RequestInterface req) -> new Reminders(reminderIO).put(req));
     routeRegistry.registerRoute("DELETE", "/api/reminders/:list_id/:reminder_id", (RequestInterface req) -> new Reminders(reminderIO).delete(req));
-    routeRegistry.registerRoute("POST", "/api/images", (RequestInterface req) -> new Images(fileIO, new UUID()).post(req));
+    routeRegistry.registerRoute("POST", "/api/images", (RequestInterface req) -> new Images(dataDirectoryIO, new UUID()).post(req));
 
     routeRegistry.registerRoute("GET", "/account", (RequestInterface req) -> new Account().get(req));
     routeRegistry.registerRoute("GET", "/", (RequestInterface req) -> new PublicFiles(fileIO).get(req));

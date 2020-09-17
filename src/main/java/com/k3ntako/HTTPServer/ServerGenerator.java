@@ -37,8 +37,9 @@ public class ServerGenerator {
       throw new Exception("Data directory was no specified");
     }
 
-    var reminderIO = new ReminderIO(fileIO, jsonIO, new UUID(), dataDir + "/reminders/");
-    var routeRegistrar = new RouteRegistrar(new RouteRegistry(), fileIO, reminderIO);
+    var dataDirectoryIO = new DataDirectoryIO(fileIO, dataDir);
+    var reminderIO = new ReminderIO(dataDirectoryIO, jsonIO, new UUID());
+    var routeRegistrar = new RouteRegistrar(new RouteRegistry(), fileIO, dataDirectoryIO, reminderIO);
     var routeRegistry = routeRegistrar.registerRoutes();
     return new Router(routeRegistry);
   }

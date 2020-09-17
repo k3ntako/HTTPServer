@@ -4,15 +4,14 @@ import com.google.gson.Gson;
 import com.k3ntako.HTTPServer.*;
 
 import java.io.IOException;
-import java.nio.file.FileSystems;
 import java.util.HashMap;
 
 public class Images {
-  final private FileIOInterface fileIO;
+  final private DataDirectoryIO dataDirectoryIO;
   final private UUIDInterface uuid;
 
-  public Images(FileIOInterface fileIO, UUIDInterface uuid) {
-    this.fileIO = fileIO;
+  public Images(DataDirectoryIO dataDirectoryIO, UUIDInterface uuid) {
+    this.dataDirectoryIO = dataDirectoryIO;
     this.uuid = uuid;
   }
 
@@ -20,8 +19,7 @@ public class Images {
     var fileBytes = (byte[]) request.getBody();
 
     var uuid = this.uuid.generate();
-    var path = FileSystems.getDefault().getPath("./data/images/" + uuid + ".png");
-    fileIO.write(path, fileBytes);
+    dataDirectoryIO.write("images/" + uuid + ".png", fileBytes);
 
     var responseHashMap = new HashMap<String, String>();
     responseHashMap.put("id", uuid);
