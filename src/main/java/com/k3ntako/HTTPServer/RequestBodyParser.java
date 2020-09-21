@@ -1,4 +1,4 @@
-package com.k3ntako.HTTPServer.RequestBodyHandlers;
+package com.k3ntako.HTTPServer;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;

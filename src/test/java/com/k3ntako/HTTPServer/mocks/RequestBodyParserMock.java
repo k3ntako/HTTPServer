@@ -1,10 +1,8 @@
 package com.k3ntako.HTTPServer.mocks;
 
-import com.k3ntako.HTTPServer.RequestBodyHandlers.RequestBodyParser;
-import com.k3ntako.HTTPServer.RequestBodyHandlers.RequestBodyParserInterface;
+import com.k3ntako.HTTPServer.RequestBodyParserInterface;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.net.Socket;
 
 public class RequestBodyParserMock implements RequestBodyParserInterface {
