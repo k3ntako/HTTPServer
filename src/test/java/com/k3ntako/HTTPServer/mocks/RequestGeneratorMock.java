@@ -16,7 +16,7 @@ public class RequestGeneratorMock implements RequestGeneratorInterface {
 
   public RequestGeneratorMock() {
     this.method = "GET";
-    this.route = "/simple_get_with_body";
+    this.route = "/api/simple_get_with_body";
     this.protocol = "HTTP/1.1";
     this.headers = new HashMap<>();
     this.body = "";

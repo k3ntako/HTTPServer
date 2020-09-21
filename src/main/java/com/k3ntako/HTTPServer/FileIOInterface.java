@@ -15,4 +15,6 @@ public interface FileIOInterface {
   void delete(Path path) throws IOException;
 
   String getResource(String fileName) throws IOException;
+
+  Boolean isResourceDirectory(String fileName);
 }
