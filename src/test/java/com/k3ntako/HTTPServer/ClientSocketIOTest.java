@@ -19,7 +19,7 @@ class ClientSocketIOTest {
 
     var clientSocketIO = new ClientSocketIO();
     clientSocketIO.init(socket);
-    var body = clientSocketIO.readTextBody(bodyStr.length());
+    var body = (String) clientSocketIO.readBody("text/plain", bodyStr.length());
 
     assertEquals(bodyStr, body);
   }
@@ -32,7 +32,7 @@ class ClientSocketIOTest {
 
     var clientSocketIO = new ClientSocketIO();
     clientSocketIO.init(socket);
-    var body = clientSocketIO.readBinaryBody(bodyBinary.length);
+    var body = (byte[]) clientSocketIO.readBody("image/png", bodyBinary.length);
 
     assertArrayEquals(bodyBinary, body);
   }
@@ -45,7 +45,7 @@ class ClientSocketIOTest {
 
     var clientSocketIO = new ClientSocketIO();
     clientSocketIO.init(socket);
-    var body = clientSocketIO.readBinaryBody(bodyBinary.length - 1);
+    var body = (byte[]) clientSocketIO.readBody("image/png", bodyBinary.length - 1);
 
     assertEquals(bodyBinary.length - 1, body.length);
   }
@@ -56,7 +56,7 @@ class ClientSocketIOTest {
 
     var clientSocketIO = new ClientSocketIO();
     clientSocketIO.init(socket);
-    var body = clientSocketIO.readBinaryBody(0);
+    var body = (byte[]) clientSocketIO.readBody("image/png",0);
 
     assertArrayEquals(new byte[]{}, body);
   }

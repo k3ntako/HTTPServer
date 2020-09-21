@@ -9,6 +9,8 @@ public class ClientSocketIO implements ClientSocketIOInterface {
   private Socket clientSocket;
   private BufferedReader bufferedReader;
   private PrintWriterWrapper printWriter;
+  private String contentTypeCategory;
+  private String contentSubtype;
 
   public void init(Socket clientSocket) throws IOException {
     this.clientSocket = clientSocket;
@@ -28,7 +30,19 @@ public class ClientSocketIO implements ClientSocketIOInterface {
     return (char) bufferedReader.read();
   }
 
-  public String readTextBody(int contentLength) throws IOException {
+  public Object readBody(String contentType, int contentLength) throws IOException {
+    final var contentTypeArr = contentType.split("/");
+    contentTypeCategory = contentTypeArr[0].toLowerCase();
+    contentSubtype = contentTypeArr[1].toLowerCase();
+
+    if("image".equals(contentTypeCategory)){
+      return this.readBinaryBody(contentLength);
+    }
+
+    return this.readTextBody(contentLength);
+  }
+
+  private String readTextBody(int contentLength) throws IOException {
     var bodyStr = "";
     char character;
 
@@ -39,7 +53,7 @@ public class ClientSocketIO implements ClientSocketIOInterface {
     return bodyStr;
   }
 
-  public byte[] readBinaryBody(int contentLength) throws IOException {
+  private byte[] readBinaryBody(int contentLength) throws IOException {
     final var bufferedInputStream = new BufferedInputStream(clientSocket.getInputStream());
     final var outputStream = new ByteArrayOutputStream();
 

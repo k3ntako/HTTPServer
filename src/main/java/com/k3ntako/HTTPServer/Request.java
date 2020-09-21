@@ -72,11 +72,7 @@ public class Request implements RequestInterface {
   }
 
   private void parseBody(String contentType, int contentLength) throws IOException {
-    if (contentType != null && contentType.toLowerCase().contains("image")) {
-      this.body = clientSocketIO.readBinaryBody(contentLength);
-    } else {
-      this.body = clientSocketIO.readTextBody(contentLength);
-    }
+    this.body = clientSocketIO.readBody(contentType, contentLength);
   }
 
   public void setRouteParams(HashMap<String, String> routeParams) {

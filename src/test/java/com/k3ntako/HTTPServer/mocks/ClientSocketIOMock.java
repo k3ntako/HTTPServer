@@ -40,13 +40,8 @@ public class ClientSocketIOMock implements ClientSocketIOInterface {
   }
 
   @Override
-  public String readTextBody(int contentLength) {
-    return (String) mockBody;
-  }
-
-  @Override
-  public byte[] readBinaryBody(int contentLength) {
-    return (byte[]) mockBody;
+  public Object readBody(String contentType, int contentLength) {
+    return mockBody;
   }
 
   public void sendData(String data) {
