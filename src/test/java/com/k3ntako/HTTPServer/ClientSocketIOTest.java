@@ -1,5 +1,6 @@
 package com.k3ntako.HTTPServer;
 
+import com.k3ntako.HTTPServer.mocks.RequestBodyParserMock;
 import com.k3ntako.HTTPServer.mocks.SocketMock;
 import org.junit.jupiter.api.Test;
 
@@ -17,11 +18,14 @@ class ClientSocketIOTest {
         "Body line 4: abc\n";
     var socket = new SocketMock(bodyStr);
 
-    var clientSocketIO = new ClientSocketIO();
+    var requestBodyParser = new RequestBodyParserMock(bodyStr);
+    var clientSocketIO = new ClientSocketIO(requestBodyParser);
     clientSocketIO.init(socket);
-    var body = (String) clientSocketIO.readBody("text/plain", bodyStr.length());
+    var body = (String) clientSocketIO.parseBody("text/plain", bodyStr.length());
 
     assertEquals(bodyStr, body);
+    assertEquals(bodyStr.length(), requestBodyParser.contentLength);
+    assertEquals("text", requestBodyParser.contentTypeCategory);
   }
 
   @Test
@@ -30,34 +34,13 @@ class ClientSocketIOTest {
     var bodyBinary = str.getBytes();
     var socket = new SocketMock(bodyBinary);
 
-    var clientSocketIO = new ClientSocketIO();
+    var requestBodyParser = new RequestBodyParserMock(bodyBinary);
+    var clientSocketIO = new ClientSocketIO(requestBodyParser);
     clientSocketIO.init(socket);
-    var body = (byte[]) clientSocketIO.readBody("image/png", bodyBinary.length);
+    var body = (byte[]) clientSocketIO.parseBody("image/png", bodyBinary.length);
 
     assertArrayEquals(bodyBinary, body);
-  }
-
-  @Test
-  void readBinaryBodyShouldOnlyReadUntilContentLength() throws IOException {
-    var str = "This is text!";
-    var bodyBinary = str.getBytes();
-    var socket = new SocketMock(bodyBinary);
-
-    var clientSocketIO = new ClientSocketIO();
-    clientSocketIO.init(socket);
-    var body = (byte[]) clientSocketIO.readBody("image/png", bodyBinary.length - 1);
-
-    assertEquals(bodyBinary.length - 1, body.length);
-  }
-
-  @Test
-  void readBinaryBodyReturnsEmptyArrIfLengthZero() throws IOException {
-    var socket = new SocketMock("");
-
-    var clientSocketIO = new ClientSocketIO();
-    clientSocketIO.init(socket);
-    var body = (byte[]) clientSocketIO.readBody("image/png",0);
-
-    assertArrayEquals(new byte[]{}, body);
+    assertEquals(bodyBinary.length, requestBodyParser.contentLength);
+    assertEquals("image", requestBodyParser.contentTypeCategory);
   }
 }

@@ -1,6 +1,7 @@
 package com.k3ntako.HTTPServer;
 
 import com.google.gson.Gson;
+import com.k3ntako.HTTPServer.RequestBodyHandlers.RequestBodyParser;
 import com.k3ntako.HTTPServer.wrappers.ServerSocketWrapper;
 
 import java.util.LinkedHashMap;
@@ -21,8 +22,9 @@ public class ServerGenerator {
 
     var router = this.registerRoutes();
     var requestHandler = new RequestHandler(router, new RequestGenerator(), new ErrorHandler());
+    var clientSocketIO = new ClientSocketIO(new RequestBodyParser());
 
-    return new Server(new ClientSocketIO(), requestHandler, serverSocket);
+    return new Server(clientSocketIO, requestHandler, serverSocket);
   }
 
   private LinkedHashMap<String, Object> getConfig() throws Exception {

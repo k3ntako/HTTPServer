@@ -72,7 +72,7 @@ public class Request implements RequestInterface {
   }
 
   private void parseBody(String contentType, int contentLength) throws IOException {
-    this.body = clientSocketIO.readBody(contentType, contentLength);
+    this.body = clientSocketIO.parseBody(contentType, contentLength);
   }
 
   public void setRouteParams(HashMap<String, String> routeParams) {
