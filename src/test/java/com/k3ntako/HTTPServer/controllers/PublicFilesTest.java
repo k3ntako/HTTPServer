@@ -21,8 +21,8 @@ class PublicFilesTest {
     assertEquals("public/index.html", fileIO.getLastIsResourceDirectoryFileName());
     assertEquals("public/index.html", fileIO.getLastGetResourceFileName());
 
-    assertNull(response.setJsonBodyArg);
-    assertEquals("<html></html>", response.setBodyArg);
+    assertNull(response.getSetJsonBodyArg);
+    assertEquals("<html></html>", response.getSetBodyArg);
     final var headers = response.headers;
     assertEquals("text/html; charset=UTF-8", headers.get("Content-Type"));
   }
@@ -38,8 +38,8 @@ class PublicFilesTest {
     assertEquals("public/", fileIO.getLastIsResourceDirectoryFileName());
     assertEquals("public/index.html", fileIO.getLastGetResourceFileName());
 
-    assertNull(response.setJsonBodyArg);
-    assertEquals("<html></html>", response.setBodyArg);
+    assertNull(response.getSetJsonBodyArg);
+    assertEquals("<html></html>", response.getSetBodyArg);
     final var headers = response.headers;
     assertEquals("text/html; charset=UTF-8", headers.get("Content-Type"));
   }
@@ -58,9 +58,9 @@ class PublicFilesTest {
     assertEquals("public/", fileIO.getLastIsResourceDirectoryFileName());
     assertEquals("public/", fileIO.getLastGetResourceFileName());
 
-    assertNull(response.setJsonBodyArg);
+    assertNull(response.getSetJsonBodyArg);
 
-    assertEquals("index.html\nindex.css", response.setBodyArg);
+    assertEquals("index.html\nindex.css", response.getSetBodyArg);
     final var headers = response.headers;
     assertEquals("text/html; charset=UTF-8", headers.get("Content-Type"));
   }

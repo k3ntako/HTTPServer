@@ -2,7 +2,6 @@ package com.k3ntako.HTTPServer.controllers;
 
 import com.google.gson.JsonObject;
 import com.k3ntako.HTTPServer.DataDirectoryIO;
-import com.k3ntako.HTTPServer.HTTPError;
 import com.k3ntako.HTTPServer.mocks.FileIOMock;
 import com.k3ntako.HTTPServer.mocks.RequestMock;
 import com.k3ntako.HTTPServer.mocks.ResponseMock;
@@ -32,7 +31,7 @@ class ImagesTest {
     assertEquals(expected, fileIO.getLastWritePath().toString());
     assertArrayEquals(bytes, (byte[]) fileIO.getLastWrite());
 
-    var responseJson = (JsonObject) response.setJsonBodyArg;
+    var responseJson = (JsonObject) response.getSetJsonBodyArg;
     var id = responseJson.get("id").getAsString();
 
     assertEquals(uuidMock.getDefaultUUID(), id);

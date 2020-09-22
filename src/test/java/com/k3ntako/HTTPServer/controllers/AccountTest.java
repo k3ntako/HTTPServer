@@ -1,6 +1,5 @@
 package com.k3ntako.HTTPServer.controllers;
 
-import com.k3ntako.HTTPServer.HTTPError;
 import com.k3ntako.HTTPServer.mocks.RequestMock;
 import com.k3ntako.HTTPServer.mocks.ResponseMock;
 import org.junit.jupiter.api.Test;
@@ -18,10 +17,10 @@ class AccountTest {
     var account = new Account();
     var response = (ResponseMock) account.get(request, new ResponseMock());
 
-    assertNull(response.setBodyArg);
-    assertNull(response.setJsonBodyArg);
+    assertNull(response.getSetBodyArg);
+    assertNull(response.getSetJsonBodyArg);
 
-    assertEquals("http://127.0.0.1:5000/", response.setRedirectUrl);
-    assertEquals(302, response.setRedirectStatus);
+    assertEquals("http://127.0.0.1:5000/", response.getSetRedirectUrl);
+    assertEquals(302, response.getSetRedirectStatus);
   }
 }

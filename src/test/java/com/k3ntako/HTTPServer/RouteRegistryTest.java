@@ -1,6 +1,5 @@
 package com.k3ntako.HTTPServer;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.k3ntako.HTTPServer.controllers.SimpleGet;
 import com.k3ntako.HTTPServer.controllers.SimpleGetWithBody;
@@ -99,7 +98,7 @@ class RouteRegistryTest {
     ControllerMethodInterface controllerMethod = remindersGet.getControllerMethod();
     var response = (ResponseMock) controllerMethod.getResponse(request, new ResponseMock());
 
-    var responseJson = (JsonObject) response.setJsonBodyArg;
+    var responseJson = (JsonObject) response.getSetJsonBodyArg;
     assertEquals("ReminderIOMock.getReminderByIds: mock task text", responseJson.get("task").getAsString());
   }
 }

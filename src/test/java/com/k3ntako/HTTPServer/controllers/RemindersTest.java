@@ -44,9 +44,9 @@ class RemindersTest {
     var reminders = new Reminders(reminderIOMock);
     var response = (ResponseMock) reminders.post(request, new ResponseMock());
 
-    assertNull(response.setBodyArg);
+    assertNull(response.getSetBodyArg);
 
-    var responseJson = (JsonObject) response.setJsonBodyArg;
+    var responseJson = (JsonObject) response.getSetJsonBodyArg;
     assertEquals(new UUIDMock().getDefaultUUID(), responseJson.get("id").getAsString());
     assertEquals(postBody, responseJson.get("task").getAsString());
   }
@@ -85,8 +85,8 @@ class RemindersTest {
 
     assertEquals(mockUUID.getDefaultUUID(), reminderIOMock.reminderIdForGet);
 
-    assertNull(response.setBodyArg);
-    var responseJson = (JsonObject) response.setJsonBodyArg;
+    assertNull(response.getSetBodyArg);
+    var responseJson = (JsonObject) response.getSetJsonBodyArg;
     assertEquals(mockUUID.getDefaultUUID(), responseJson.get("id").getAsString());
     assertEquals("ReminderIOMock.getReminderByIds: mock task text", responseJson.get("task").getAsString());
   }
@@ -129,8 +129,8 @@ class RemindersTest {
     assertEquals(mockUUID.getDefaultUUID(), reminderIOMock.reminderIdForUpdate);
     assertEquals(content, reminderIOMock.taskForUpdate);
 
-    assertNull(response.setBodyArg);
-    assertNull(response.setJsonBodyArg);
+    assertNull(response.getSetBodyArg);
+    assertNull(response.getSetJsonBodyArg);
   }
 
   @Test
@@ -171,8 +171,8 @@ class RemindersTest {
     assertEquals(mockUUID.getDefaultUUID(), reminderIOMock.reminderIdForUpdate);
     assertEquals(content, reminderIOMock.taskForUpdate);
 
-    assertNull(response.setBodyArg);
-    assertNull(response.setJsonBodyArg);
+    assertNull(response.getSetBodyArg);
+    assertNull(response.getSetJsonBodyArg);
   }
 
   @Test
@@ -190,8 +190,8 @@ class RemindersTest {
     var response = (ResponseMock) reminders.delete(request, new ResponseMock());
 
     assertEquals(mockUUID.getDefaultUUID(), reminderIOMock.reminderIdForDelete);
-    assertNull(response.setBodyArg);
-    assertNull(response.setJsonBodyArg);
+    assertNull(response.getSetBodyArg);
+    assertNull(response.getSetJsonBodyArg);
   }
 
   @Test

@@ -1,7 +1,6 @@
 package com.k3ntako.HTTPServer.controllers;
 
 import com.google.gson.JsonObject;
-import com.k3ntako.HTTPServer.HTTPError;
 import com.k3ntako.HTTPServer.mocks.ReminderIOMock;
 import com.k3ntako.HTTPServer.mocks.RequestMock;
 import com.k3ntako.HTTPServer.mocks.ResponseMock;
@@ -22,9 +21,9 @@ class ReminderListsTest {
     var response = (ResponseMock) reminderLists.post(request, new ResponseMock());
 
     assertTrue(reminderIOMock.createNewListCalled);
-    assertNull(response.setBodyArg);
+    assertNull(response.getSetBodyArg);
 
-    var responseJson = (JsonObject) response.setJsonBodyArg;
+    var responseJson = (JsonObject) response.getSetJsonBodyArg;
     assertEquals(responseJson.get("id").getAsString(), "mock-new-list-id");
     assertNotNull(responseJson.getAsJsonObject("items"));
     assertEquals(responseJson.getAsJsonObject("items").size(), 0);

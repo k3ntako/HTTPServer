@@ -7,11 +7,11 @@ import java.util.HashMap;
 
 public class ResponseMock implements ResponseInterface {
   public boolean createResponseCalled = false;
-  public String setBodyArg;
-  public JsonElement setJsonBodyArg;
-  public int setStatusArg;
-  public String setRedirectUrl;
-  public int setRedirectStatus;
+  public String getSetBodyArg;
+  public JsonElement getSetJsonBodyArg;
+  public int getSetStatusArg;
+  public String getSetRedirectUrl;
+  public int getSetRedirectStatus;
   public HashMap<String, String> headers = new HashMap<>();
 
   @Override
@@ -22,17 +22,17 @@ public class ResponseMock implements ResponseInterface {
 
   @Override
   public void setBody(String body) {
-    setBodyArg = body;
+    getSetBodyArg = body;
   }
 
   @Override
   public void setJsonBody(JsonElement body) {
-    setJsonBodyArg = body;
+    getSetJsonBodyArg = body;
   }
 
   @Override
   public void setStatus(int status) {
-    setStatusArg = status;
+    getSetStatusArg = status;
   }
 
   @Override
@@ -42,7 +42,7 @@ public class ResponseMock implements ResponseInterface {
 
   @Override
   public void setRedirect(String url, int status) {
-    setRedirectUrl = url;
-    setRedirectStatus = status;
+    getSetRedirectUrl = url;
+    getSetRedirectStatus = status;
   }
 }

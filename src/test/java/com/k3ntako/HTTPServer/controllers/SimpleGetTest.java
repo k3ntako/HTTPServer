@@ -1,6 +1,5 @@
 package com.k3ntako.HTTPServer.controllers;
 
-import com.k3ntako.HTTPServer.HTTPError;
 import com.k3ntako.HTTPServer.mocks.RequestMock;
 import com.k3ntako.HTTPServer.mocks.ResponseMock;
 import org.junit.jupiter.api.Test;
@@ -18,7 +17,7 @@ class SimpleGetTest {
     var simpleGet = new SimpleGet();
     var response = (ResponseMock) simpleGet.get(request, new ResponseMock());
 
-    assertNull(response.setBodyArg);
-    assertNull(response.setJsonBodyArg);
+    assertNull(response.getSetBodyArg);
+    assertNull(response.getSetJsonBodyArg);
   }
 }
