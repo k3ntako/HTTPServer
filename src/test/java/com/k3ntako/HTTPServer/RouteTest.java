@@ -20,7 +20,7 @@ class RouteTest {
   @Test
   void getAndSetControllerMethod() {
     var route = new Route("/simple_get");
-    route.setControllerMethod((RequestInterface req) -> new SimpleGet().get(req));
+    route.setControllerMethod((RequestInterface req, ResponseInterface res) -> new SimpleGet().get(req, res));
 
     var controllerMethod = route.getControllerMethod();
     assertNotNull(controllerMethod);
@@ -29,7 +29,7 @@ class RouteTest {
   @Test
   void getAndSetRouteParams() {
     var route = new Route("/reminders/123");
-    route.setControllerMethod((RequestInterface req) -> new Reminders(new ReminderIOMock()).get(req));
+    route.setControllerMethod((RequestInterface req, ResponseInterface res) -> new Reminders(new ReminderIOMock()).get(req, res));
 
     var routeParams = new HashMap<String, String>();
     routeParams.put("id", "123");

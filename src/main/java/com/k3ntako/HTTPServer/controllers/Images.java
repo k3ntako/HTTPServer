@@ -1,10 +1,9 @@
 package com.k3ntako.HTTPServer.controllers;
 
-import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.k3ntako.HTTPServer.*;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 public class Images {
   final private DataDirectoryIO dataDirectoryIO;
@@ -15,18 +14,16 @@ public class Images {
     this.uuid = uuid;
   }
 
-  public ResponseInterface post(RequestInterface request) throws IOException {
+  public ResponseInterface post(RequestInterface request, ResponseInterface response) throws IOException {
     var fileBytes = (byte[]) request.getBody();
 
     var uuid = this.uuid.generate();
     dataDirectoryIO.write("images/" + uuid + ".png", fileBytes);
 
-    var responseHashMap = new HashMap<String, String>();
-    responseHashMap.put("id", uuid);
+    var responseJson = new JsonObject();
+    responseJson.addProperty("id", uuid);
 
-    var jsonIO = new JsonIO(new Gson());
-    var response = new Response(jsonIO);
-    response.setJsonBody(responseHashMap);
+    response.setJsonBody(responseJson);
 
     return response;
   }

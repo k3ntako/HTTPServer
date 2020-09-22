@@ -18,7 +18,7 @@ class RouteMatcherTest {
     var routes = new HashMap<String, HashMap<String, ControllerMethodInterface>>();
     var routesForMethod = new HashMap<String, ControllerMethodInterface>();
 
-    routesForMethod.put("/reminders", (RequestInterface req) -> new Reminders(new ReminderIOMock()).post(req));
+    routesForMethod.put("/reminders", (RequestInterface req, ResponseInterface res) -> new Reminders(new ReminderIOMock()).post(req, res));
 
     routes.put("POST", routesForMethod);
 
@@ -35,7 +35,7 @@ class RouteMatcherTest {
     var routes = new HashMap<String, HashMap<String, ControllerMethodInterface>>();
     var routesForMethod = new HashMap<String, ControllerMethodInterface>();
 
-    routesForMethod.put("/reminders/:id", (RequestInterface req) -> new Reminders(new ReminderIOMock()).get(req));
+    routesForMethod.put("/reminders/:id", (RequestInterface req, ResponseInterface res) -> new Reminders(new ReminderIOMock()).get(req, res));
 
     routes.put("GET", routesForMethod);
 

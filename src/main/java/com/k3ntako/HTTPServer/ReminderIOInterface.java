@@ -1,15 +1,18 @@
 package com.k3ntako.HTTPServer;
 
+import com.google.gson.JsonObject;
+
 import java.io.IOException;
+import java.util.HashMap;
 
 public interface ReminderIOInterface {
-  ReminderList createNewList() throws IOException;
+  JsonObject createNewList() throws IOException;
 
-  Reminder getReminderByIds(String listId, String reminderId) throws IOException, HTTPError;
+  JsonObject getReminderByIds(String listId, String reminderId) throws IOException, HTTPError;
 
-  Reminder addReminder(String listId, String task) throws IOException, HTTPError;
+  JsonObject addReminder(String listId, String task) throws IOException, HTTPError;
 
-  Reminder updateReminder(String listId, String reminderId, String updatedTask) throws IOException, HTTPError;
+  JsonObject updateReminder(String listId, String reminderId, String updatedTask) throws IOException, HTTPError;
 
   void deleteReminder(String listId, String reminderId) throws IOException, HTTPError;
 }

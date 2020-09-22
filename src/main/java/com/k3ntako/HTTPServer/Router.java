@@ -1,5 +1,6 @@
 package com.k3ntako.HTTPServer;
 
+import com.google.gson.Gson;
 import com.k3ntako.HTTPServer.controllers.NotFound;
 
 import java.io.IOException;
@@ -12,15 +13,16 @@ public class Router {
   }
 
   public ResponseInterface routeRequest(RequestInterface request) throws IOException, HTTPError {
-
-    Route route = routeRegistry.getController(request);
-    ControllerMethodInterface controllerMethod = (RequestInterface req) -> new NotFound().handleNotFound(req);
+    var route = routeRegistry.getController(request);
+    ControllerMethodInterface controllerMethod = (RequestInterface req, ResponseInterface res) -> new NotFound().handleNotFound(req, res);
 
     if (route != null) {
       controllerMethod = route.getControllerMethod();
       request.setRouteParams(route.getRouteParams());
     }
 
-    return controllerMethod.getResponse(request);
+    var jsonIO = new JsonIO(new Gson());
+    var response = new Response(jsonIO);
+    return controllerMethod.getResponse(request, response);
   }
 }

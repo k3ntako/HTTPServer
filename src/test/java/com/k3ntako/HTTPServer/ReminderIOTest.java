@@ -6,6 +6,7 @@ import com.k3ntako.HTTPServer.mocks.UUIDMock;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,8 +29,8 @@ class ReminderIOTest {
     var reminder = reminderIO.getReminderByIds("reminder-list-1", "reminder-123");
 
     assertNotNull(reminder);
-    assertEquals("reminder-123", reminder.id);
-    assertEquals("task content!!", reminder.task);
+    assertEquals("reminder-123", reminder.get("id").getAsString());
+    assertEquals("task content!!", reminder.get("task").getAsString());
     assertEquals("./mock/data/reminders/reminder-list-1.json", fileIO.getLastReadPath().toString());
   }
 
@@ -91,8 +92,10 @@ class ReminderIOTest {
         "}";
     assertEquals(expectedWrite, fileIO.getLastWrite());
 
-    assertEquals(uuid.getDefaultUUID(), returnedReminderList.id);
-    assertEquals(0, returnedReminderList.items.size());
+    assertEquals(uuid.getDefaultUUID(), returnedReminderList.get("id").getAsString());
+
+    var items = returnedReminderList.getAsJsonObject("items");
+    assertEquals(0, items.size());
   }
 
   @Test
@@ -125,8 +128,8 @@ class ReminderIOTest {
         "}";
     assertEquals(expectedWrite, fileIO.getLastWrite());
 
-    assertEquals(uuid.getDefaultUUID(), reminder.id);
-    assertEquals("Do this task!", reminder.task);
+    assertEquals(uuid.getDefaultUUID(), reminder.get("id").getAsString());
+    assertEquals("Do this task!", reminder.get("task").getAsString());
   }
 
   @Test
@@ -181,8 +184,8 @@ class ReminderIOTest {
         "}";
     assertEquals(expectedWrite, fileIO.getLastWrite());
 
-    assertEquals("reminder-1", reminder.id);
-    assertEquals("Updated task!", reminder.task);
+    assertEquals("reminder-1", reminder.get("id").getAsString());
+    assertEquals("Updated task!", reminder.get("task").getAsString());
   }
 
   @Test

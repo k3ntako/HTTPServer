@@ -3,6 +3,7 @@ package com.k3ntako.HTTPServer.controllers;
 import com.k3ntako.HTTPServer.HTTPError;
 import com.k3ntako.HTTPServer.mocks.FileIOMock;
 import com.k3ntako.HTTPServer.mocks.RequestMock;
+import com.k3ntako.HTTPServer.mocks.ResponseMock;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,17 +16,15 @@ class PublicFilesTest {
 
     final var fileIO = new FileIOMock("<html></html>", false);
     final var publicFiles = new PublicFiles(fileIO);
-    final var response = publicFiles.get(request);
+    final var response = (ResponseMock) publicFiles.get(request, new ResponseMock());
 
     assertEquals("public/index.html", fileIO.getLastIsResourceDirectoryFileName());
     assertEquals("public/index.html", fileIO.getLastGetResourceFileName());
 
-    final var responseStr = response.createResponse();
-    final var expectedResponse = "HTTP/1.1 200 OK\r\n" +
-        "Content-Type: text/html; charset=UTF-8\r\n" +
-        "Content-Length: 13\r\n\r\n" +
-        "<html></html>";
-    assertEquals(expectedResponse, responseStr);
+    assertNull(response.setJsonBodyArg);
+    assertEquals("<html></html>", response.setBodyArg);
+    final var headers = response.headers;
+    assertEquals("text/html; charset=UTF-8", headers.get("Content-Type"));
   }
 
   @Test
@@ -34,17 +33,15 @@ class PublicFilesTest {
 
     final var fileIO = new FileIOMock("<html></html>", true);
     final var publicFiles = new PublicFiles(fileIO);
-    final var response = publicFiles.get(request);
+    final var response = (ResponseMock) publicFiles.get(request, new ResponseMock());
 
     assertEquals("public/", fileIO.getLastIsResourceDirectoryFileName());
     assertEquals("public/index.html", fileIO.getLastGetResourceFileName());
 
-    final var responseStr = response.createResponse();
-    final var expectedResponse = "HTTP/1.1 200 OK\r\n" +
-        "Content-Type: text/html; charset=UTF-8\r\n" +
-        "Content-Length: 13\r\n\r\n" +
-        "<html></html>";
-    assertEquals(expectedResponse, responseStr);
+    assertNull(response.setJsonBodyArg);
+    assertEquals("<html></html>", response.setBodyArg);
+    final var headers = response.headers;
+    assertEquals("text/html; charset=UTF-8", headers.get("Content-Type"));
   }
 
   @Test
@@ -56,17 +53,16 @@ class PublicFilesTest {
         new Boolean[]{true}
     );
     final var publicFiles = new PublicFiles(fileIO);
-    final var response = publicFiles.get(request);
+    final var response = (ResponseMock) publicFiles.get(request, new ResponseMock());
 
     assertEquals("public/", fileIO.getLastIsResourceDirectoryFileName());
     assertEquals("public/", fileIO.getLastGetResourceFileName());
 
-    final var responseStr = response.createResponse();
-    final var expectedResponse = "HTTP/1.1 200 OK\r\n" +
-        "Content-Type: text/html; charset=UTF-8\r\n" +
-        "Content-Length: 20\r\n\r\n" +
-        "index.html\nindex.css";
-    assertEquals(expectedResponse, responseStr);
+    assertNull(response.setJsonBodyArg);
+
+    assertEquals("index.html\nindex.css", response.setBodyArg);
+    final var headers = response.headers;
+    assertEquals("text/html; charset=UTF-8", headers.get("Content-Type"));
   }
 
   @Test
@@ -76,7 +72,7 @@ class PublicFilesTest {
     final var fileIO = new FileIOMock(null, false);
     final var publicFiles = new PublicFiles(fileIO);
 
-    HTTPError exception = assertThrows(HTTPError.class, () -> publicFiles.get(request));
+    HTTPError exception = assertThrows(HTTPError.class, () -> publicFiles.get(request, new ResponseMock()));
 
     assertEquals("File was not found", exception.getMessage());
     assertEquals(404, exception.getStatus());
@@ -89,7 +85,7 @@ class PublicFilesTest {
     final var fileIO = new FileIOMock(null, (Boolean) null);
     final var publicFiles = new PublicFiles(fileIO);
 
-    HTTPError exception = assertThrows(HTTPError.class, () -> publicFiles.get(request));
+    HTTPError exception = assertThrows(HTTPError.class, () -> publicFiles.get(request, new ResponseMock()));
 
     assertEquals("File was not found", exception.getMessage());
     assertEquals(404, exception.getStatus());

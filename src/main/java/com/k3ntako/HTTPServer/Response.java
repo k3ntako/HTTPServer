@@ -1,6 +1,9 @@
 package com.k3ntako.HTTPServer;
 
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 import java.util.HashMap;
 import java.util.Map;
 import javax.ws.rs.core.Response.Status;
@@ -47,7 +50,7 @@ public class Response implements ResponseInterface {
   }
 
   @Override
-  public void setJsonBody(Object body) {
+  public void setJsonBody(JsonElement body) {
     this.body = this.jsonIO.toJson(body);
   }
 

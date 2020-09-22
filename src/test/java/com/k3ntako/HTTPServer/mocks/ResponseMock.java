@@ -1,16 +1,18 @@
 package com.k3ntako.HTTPServer.mocks;
 
+import com.google.gson.JsonElement;
 import com.k3ntako.HTTPServer.ResponseInterface;
+
+import java.util.HashMap;
 
 public class ResponseMock implements ResponseInterface {
   public boolean createResponseCalled = false;
   public String setBodyArg;
-  public Object setJsonBodyArg;
+  public JsonElement setJsonBodyArg;
   public int setStatusArg;
-  public String addHeaderKey;
-  public String addHeaderValue;
   public String setRedirectUrl;
   public int setRedirectStatus;
+  public HashMap<String, String> headers = new HashMap<>();
 
   @Override
   public String createResponse() {
@@ -24,7 +26,7 @@ public class ResponseMock implements ResponseInterface {
   }
 
   @Override
-  public void setJsonBody(Object body) {
+  public void setJsonBody(JsonElement body) {
     setJsonBodyArg = body;
   }
 
@@ -35,8 +37,7 @@ public class ResponseMock implements ResponseInterface {
 
   @Override
   public void addHeader(String key, String value) {
-    addHeaderKey = key;
-    addHeaderValue = value;
+    headers.put(key, value);
   }
 
   @Override

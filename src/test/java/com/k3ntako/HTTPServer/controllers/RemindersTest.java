@@ -1,8 +1,10 @@
 package com.k3ntako.HTTPServer.controllers;
 
+import com.google.gson.JsonObject;
 import com.k3ntako.HTTPServer.*;
 import com.k3ntako.HTTPServer.mocks.ReminderIOMock;
 import com.k3ntako.HTTPServer.mocks.RequestMock;
+import com.k3ntako.HTTPServer.mocks.ResponseMock;
 import com.k3ntako.HTTPServer.mocks.UUIDMock;
 import org.junit.jupiter.api.Test;
 
@@ -24,7 +26,7 @@ class RemindersTest {
     var reminderIOMock = new ReminderIOMock();
 
     var reminders = new Reminders(reminderIOMock);
-    reminders.post(request);
+    reminders.post(request, new ResponseMock());
 
     assertEquals("reminder-list-123", reminderIOMock.listIdForWrite);
     assertEquals(postBody, reminderIOMock.taskForWrite);
@@ -40,16 +42,13 @@ class RemindersTest {
 
     var reminderIOMock = new ReminderIOMock();
     var reminders = new Reminders(reminderIOMock);
-    var response = reminders.post(request);
-    var responseStr = response.createResponse();
+    var response = (ResponseMock) reminders.post(request, new ResponseMock());
 
-    var expectedResponse = "HTTP/1.1 200 OK\r\n" + "Content-Length: 85\r\n\r\n" +
-        "{\"" +
-        "id\":\"8d142d80-565f-417d-8334-a8a19caadadb\"," +
-        "\"task\":\"ReminderIOMock: mock task text\"" +
-        "}";
+    assertNull(response.setBodyArg);
 
-    assertEquals(expectedResponse, responseStr);
+    var responseJson = (JsonObject) response.setJsonBodyArg;
+    assertEquals(new UUIDMock().getDefaultUUID(), responseJson.get("id").getAsString());
+    assertEquals(postBody, responseJson.get("task").getAsString());
   }
 
   @Test
@@ -63,7 +62,7 @@ class RemindersTest {
     var reminderIOMock = new ReminderIOMock();
     var reminders = new Reminders(reminderIOMock);
 
-    HTTPError exception = assertThrows(HTTPError.class, () -> reminders.post(request));
+    HTTPError exception = assertThrows(HTTPError.class, () -> reminders.post(request, new ResponseMock()));
 
     assertEquals("Request body should not be multiline", exception.getMessage());
     assertEquals(400, exception.getStatus());
@@ -82,18 +81,14 @@ class RemindersTest {
 
     var reminderIOMock = new ReminderIOMock();
     var reminders = new Reminders(reminderIOMock);
-    var response = reminders.get(request);
+    var response = (ResponseMock) reminders.get(request, new ResponseMock());
 
     assertEquals(mockUUID.getDefaultUUID(), reminderIOMock.reminderIdForGet);
 
-    var expectedResponse =
-        "HTTP/1.1 200 OK\r\n" +
-            "Content-Length: 85\r\n\r\n" +
-            "{\"id\":\"" +
-            mockUUID.getDefaultUUID() +
-            "\",\"task\":\"ReminderIOMock: mock task text\"}";
-
-    assertEquals(expectedResponse, response.createResponse());
+    assertNull(response.setBodyArg);
+    var responseJson = (JsonObject) response.setJsonBodyArg;
+    assertEquals(mockUUID.getDefaultUUID(), responseJson.get("id").getAsString());
+    assertEquals("ReminderIOMock.getReminderByIds: mock task text", responseJson.get("task").getAsString());
   }
 
 
@@ -106,10 +101,10 @@ class RemindersTest {
     routeParams.put("reminder_id", "not-an-id");
     request.setRouteParams(routeParams);
 
-    var reminderIOMock = new ReminderIOMock((Reminder) null);
+    var reminderIOMock = new ReminderIOMock((JsonObject) null);
     var reminders = new Reminders(reminderIOMock);
 
-    HTTPError exception = assertThrows(HTTPError.class, () -> reminders.get(request));
+    HTTPError exception = assertThrows(HTTPError.class, () -> reminders.get(request, new ResponseMock()));
 
     assertEquals("Reminder was not found", exception.getMessage());
     assertEquals(404, exception.getStatus());
@@ -129,15 +124,13 @@ class RemindersTest {
 
     var reminderIOMock = new ReminderIOMock();
     var reminders = new Reminders(reminderIOMock);
-    var response = reminders.put(request);
+    var response = (ResponseMock) reminders.put(request, new ResponseMock());
 
     assertEquals(mockUUID.getDefaultUUID(), reminderIOMock.reminderIdForUpdate);
     assertEquals(content, reminderIOMock.taskForUpdate);
 
-    var expectedResponse = "HTTP/1.1 204 No Content\r\n" +
-        "Content-Length: 0\r\n\r\n";
-
-    assertEquals(expectedResponse, response.createResponse());
+    assertNull(response.setBodyArg);
+    assertNull(response.setJsonBodyArg);
   }
 
   @Test
@@ -152,7 +145,7 @@ class RemindersTest {
     var reminderIOMock = new ReminderIOMock(new IOException("File does not exist"));
     var reminders = new Reminders(reminderIOMock);
 
-    HTTPError exception = assertThrows(HTTPError.class, () -> reminders.put(request));
+    HTTPError exception = assertThrows(HTTPError.class, () -> reminders.put(request, new ResponseMock()));
 
     assertEquals("Reminder was not found", exception.getMessage());
     assertEquals(404, exception.getStatus());
@@ -172,16 +165,14 @@ class RemindersTest {
 
     var reminderIOMock = new ReminderIOMock();
     var reminders = new Reminders(reminderIOMock);
-    var response = reminders.put(request);
+    var response = (ResponseMock) reminders.put(request, new ResponseMock());
 
     assertEquals("reminder-list-123", reminderIOMock.listIdForUpdate);
     assertEquals(mockUUID.getDefaultUUID(), reminderIOMock.reminderIdForUpdate);
     assertEquals(content, reminderIOMock.taskForUpdate);
 
-    var expectedResponse = "HTTP/1.1 204 No Content\r\n" +
-        "Content-Length: 0\r\n\r\n";
-
-    assertEquals(expectedResponse, response.createResponse());
+    assertNull(response.setBodyArg);
+    assertNull(response.setJsonBodyArg);
   }
 
   @Test
@@ -196,15 +187,11 @@ class RemindersTest {
 
     var reminderIOMock = new ReminderIOMock();
     var reminders = new Reminders(reminderIOMock);
-    var response = reminders.delete(request);
+    var response = (ResponseMock) reminders.delete(request, new ResponseMock());
 
     assertEquals(mockUUID.getDefaultUUID(), reminderIOMock.reminderIdForDelete);
-
-
-    var expectedResponse = "HTTP/1.1 204 No Content\r\n" +
-        "Content-Length: 0\r\n\r\n";
-
-    assertEquals(expectedResponse, response.createResponse());
+    assertNull(response.setBodyArg);
+    assertNull(response.setJsonBodyArg);
   }
 
   @Test
@@ -219,7 +206,7 @@ class RemindersTest {
     var reminders = new Reminders(reminderIOMock);
     HTTPError exception = assertThrows(
         HTTPError.class,
-        () -> reminders.delete(request)
+        () -> reminders.delete(request, new ResponseMock())
     );
 
     assertEquals("Reminder was not found", exception.getMessage());
