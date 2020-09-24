@@ -16,7 +16,7 @@ public class FileIOMock implements FileIOInterface {
   private Path lastReadPath;
   private String lastGetResourceFileName;
   private String lastIsResourceDirectoryFileName;
-  private String[] mockFileContentArr;
+  private Object[] mockFileContentArr;
   private int mockFileContentArrIdx = 0;
   private Boolean[] mockIsDirectoryArr;
   private int mockIsDirectoryArrIdx = 0;
@@ -33,6 +33,10 @@ public class FileIOMock implements FileIOInterface {
 
   public FileIOMock(String mockFileContent) {
     this.mockFileContentArr = new String[]{mockFileContent};
+  }
+
+  public FileIOMock(byte[] mockFileContent) {
+    this.mockFileContentArr = new byte[][]{mockFileContent};
   }
 
   public FileIOMock(String mockFileContent, Boolean mockIsDirectory) {
@@ -60,11 +64,28 @@ public class FileIOMock implements FileIOInterface {
   }
 
   @Override
-  public String read(Path path) throws IOException {
+  public String readString(Path path) throws IOException {
     throwIfExceptionExists();
     lastReadPath = path;
 
-    var mockReturn = mockFileContentArr[mockFileContentArrIdx];
+    var mockReturn = (String) mockFileContentArr[mockFileContentArrIdx];
+    incrementMockContent();
+    return mockReturn;
+  }
+
+  @Override
+  public byte[] readAllBytes(Path path) throws IOException {
+    throwIfExceptionExists();
+    lastReadPath = path;
+
+    byte[] mockReturn;
+
+    if (mockFileContentArr[mockFileContentArrIdx] instanceof String) {
+      mockReturn = ((String) mockFileContentArr[mockFileContentArrIdx]).getBytes();
+    } else {
+      mockReturn = (byte[]) mockFileContentArr[mockFileContentArrIdx];
+    }
+
     incrementMockContent();
     return mockReturn;
   }
@@ -94,7 +115,7 @@ public class FileIOMock implements FileIOInterface {
     throwIfExceptionExists();
     lastGetResourceFileName = fileName;
 
-    var mockReturn = mockFileContentArr[mockFileContentArrIdx];
+    var mockReturn = (String) mockFileContentArr[mockFileContentArrIdx];
     incrementMockContent();
     return mockReturn;
   }
