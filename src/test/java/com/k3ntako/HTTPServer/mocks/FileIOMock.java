@@ -15,6 +15,7 @@ public class FileIOMock implements FileIOInterface {
   private Path lastDeletePath;
   private Path lastReadPath;
   private String lastGetResourceFileName;
+  private String lastGetResourceIfExistsFileName;
   private String lastIsResourceDirectoryFileName;
   private String[] mockFileContentArr;
   private int mockFileContentArrIdx = 0;
@@ -84,8 +85,17 @@ public class FileIOMock implements FileIOInterface {
 
   @Override
   public String getResource(String fileName) throws IOException {
-    throwIfExceptionExists();
     lastGetResourceFileName = fileName;
+    throwIfExceptionExists();
+
+    var mockReturn = mockFileContentArr[mockFileContentArrIdx];
+    incrementMockContent();
+    return mockReturn;
+  }
+
+  @Override
+  public String getResourceIfExists(String fileName) {
+    lastGetResourceIfExistsFileName = fileName;
 
     var mockReturn = mockFileContentArr[mockFileContentArrIdx];
     incrementMockContent();
@@ -147,6 +157,10 @@ public class FileIOMock implements FileIOInterface {
 
   public String getLastGetResourceFileName() {
     return lastGetResourceFileName;
+  }
+
+  public String getLastGetResourceIfExistsFileName() {
+    return lastGetResourceIfExistsFileName;
   }
 
   public String getLastIsResourceDirectoryFileName() {

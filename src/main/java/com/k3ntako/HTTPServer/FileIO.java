@@ -29,6 +29,17 @@ public class FileIO implements FileIOInterface {
     return Files.readString(path);
   }
 
+  public String getResourceIfExists(String fileName) {
+    var inputStream = this.getClass().getClassLoader().getResourceAsStream(fileName);
+
+    if (inputStream == null) {
+      return null;
+    }
+
+    var scanner = new Scanner(inputStream).useDelimiter("\\A");
+    return scanner.hasNext() ? scanner.next() : "";
+  }
+
   public String getResource(String fileName) throws IOException {
     var inputStream = this.getClass().getClassLoader().getResourceAsStream(fileName);
 
