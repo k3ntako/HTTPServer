@@ -59,8 +59,10 @@ public class FileIO implements FileIOInterface {
       return null;
     }
 
-    var file = new File(resourceURL.getPath());
-    return file.isDirectory();
+    // file.isDirectory() does not work for resource directories/files in a Jar file
+    var resourceUrlStr = resourceURL.toString();
+    var lastChar = resourceUrlStr.substring(resourceUrlStr.length() - 1);
+    return lastChar.equals("/");
   }
 
   public void patchNewLine(Path path, String str) throws IOException {
