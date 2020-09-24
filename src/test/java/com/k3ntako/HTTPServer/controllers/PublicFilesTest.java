@@ -18,7 +18,7 @@ class PublicFilesTest {
     final var response = publicFiles.get(request);
 
     assertEquals("public/index.html", fileIO.getLastIsResourceDirectoryFileName());
-    assertEquals("public/index.html", fileIO.getLastGetResourceFileName());
+    assertEquals("public/index.html", fileIO.getLastGetResourceIfExistsFileName());
 
     final var responseStr = response.createResponse();
     final var expectedResponse = "HTTP/1.1 200 OK\r\n" +
@@ -59,7 +59,7 @@ class PublicFilesTest {
     final var response = publicFiles.get(request);
 
     assertEquals("public/", fileIO.getLastIsResourceDirectoryFileName());
-    assertEquals("public/", fileIO.getLastGetResourceFileName());
+    assertEquals("public/", fileIO.getLastGetResourceIfExistsFileName());
 
     final var responseStr = response.createResponse();
     final var expectedResponse = "HTTP/1.1 200 OK\r\n" +
