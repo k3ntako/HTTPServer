@@ -19,7 +19,7 @@ class ImagesTest {
   @Test
   void post() throws IOException, HTTPError {
     final var bytes = "This is the body".getBytes();
-    var request = new RequestMock("POST", "/images", bytes);
+    var request = new RequestMock("POST", "/api/images", bytes);
 
     final var fileIO = new FileIOMock();
     final var dataDirectoryIO = new DataDirectoryIO(fileIO, "./mock/data");
@@ -41,19 +41,17 @@ class ImagesTest {
 
   @Test
   void get() throws IOException, HTTPError {
-    var request = new RequestMock("GET", "/images/mock-name.png");
+    var request = new RequestMock("GET", "/api/images/mock-name.png");
+
     var routeParams = new HashMap<String, String>();
     routeParams.put("image_name", "mock-name.png");
-
     request.setRouteParams(routeParams);
-
 
     final var imageBytes = "This is the body".getBytes();
     final var fileIO = new FileIOMock(imageBytes);
     final var dataDirectoryIO = new DataDirectoryIO(fileIO, "./mock/data");
-    final var uuidMock = new UUIDMock();
 
-    var images = new Images(dataDirectoryIO, uuidMock);
+    var images = new Images(dataDirectoryIO, new UUIDMock());
     var response = (ResponseMock) images.get(request, new ResponseMock());
 
     var expected = "./mock/data/images/mock-name.png";
@@ -79,6 +77,43 @@ class ImagesTest {
     var images = new Images(dataDirectoryIO, new UUIDMock());
 
     HTTPError exception = assertThrows(HTTPError.class, () -> images.get(request, new ResponseMock()));
+    assertEquals("Image was not found.", exception.getMessage());
+    assertEquals(404, exception.getStatus());
+  }
+
+  @Test
+  void delete() throws HTTPError {
+    final var request = new RequestMock("DELETE", "/api/images/mock-name.png");
+
+    final var routeParams = new HashMap<String, String>();
+    routeParams.put("image_name", "mock-name.png");
+    request.setRouteParams(routeParams);
+
+    final var fileIO = new FileIOMock();
+    final var dataDirectoryIO = new DataDirectoryIO(fileIO, "./mock/data");
+
+    var images = new Images(dataDirectoryIO, new UUIDMock());
+    var response = (ResponseMock) images.delete(request, new ResponseMock());
+
+    var expected = "./mock/data/images/mock-name.png";
+    assertEquals(expected, fileIO.getLastDeletePath().toString());
+    assertTrue(response.isBodyNull());
+  }
+
+  @Test
+  void deleteReturns404IfNotFound() {
+    final var request = new RequestMock("DELETE", "/api/images/mock-name.png");
+
+    final var routeParams = new HashMap<String, String>();
+    routeParams.put("image_name", "mock-name.png");
+    request.setRouteParams(routeParams);
+
+    final var fileIO = new FileIOMock(new IOException("File does not exist"));
+    final var dataDirectoryIO = new DataDirectoryIO(fileIO, "./mock/data");
+
+    var images = new Images(dataDirectoryIO, new UUIDMock());
+
+    HTTPError exception = assertThrows(HTTPError.class, () -> images.delete(request, new ResponseMock()));
     assertEquals("Image was not found.", exception.getMessage());
     assertEquals(404, exception.getStatus());
   }

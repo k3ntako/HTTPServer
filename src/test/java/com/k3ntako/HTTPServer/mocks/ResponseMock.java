@@ -51,4 +51,10 @@ public class ResponseMock implements ResponseInterface {
     getSetRedirectUrl = url;
     getSetRedirectStatus = status;
   }
+
+  public Boolean isBodyNull() {
+    return getSetBodyArg == null &&
+        getSetJsonBodyArg == null &&
+        getSetBinaryBodyArg == null;
+  }
 }
