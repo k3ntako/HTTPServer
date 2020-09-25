@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 public class FileIOMock implements FileIOInterface {
-  private String lastWrite;
+  private Object lastWrite;
   private Path lastWritePath;
   private String lastPatch;
   private Path lastPatchPath;
@@ -51,6 +51,13 @@ public class FileIOMock implements FileIOInterface {
     throwIfExceptionExists();
     lastWritePath = path;
     lastWrite = str;
+  }
+
+  @Override
+  public void write(Path path, byte[] bytes) throws IOException {
+    throwIfExceptionExists();
+    lastWritePath = path;
+    lastWrite = bytes;
   }
 
   @Override
@@ -123,7 +130,7 @@ public class FileIOMock implements FileIOInterface {
     }
   }
 
-  public String getLastWrite() {
+  public Object getLastWrite() {
     return lastWrite;
   }
 

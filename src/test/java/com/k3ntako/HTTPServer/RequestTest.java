@@ -41,7 +41,7 @@ class RequestTest {
         "Body line 3: abc\n" +
         "Body line 4: abc\n";
 
-    var clientSocketIO = new ClientSocketIOMock(header + bodyStr);
+    var clientSocketIO = new ClientSocketIOMock(header, bodyStr);
     clientSocketIO.init(new Socket());
     var request = new Request(clientSocketIO);
 
@@ -93,4 +93,25 @@ class RequestTest {
     assertEquals("123", request.getRouteParam("id"));
     assertEquals("345", request.getRouteParam("event_id"));
   }
+
+  @Test
+  void parseBinaryBody() throws IOException {
+    var header = "GET / HTTP/1.1\r\n" +
+        "Content-Type: image/png\r\n" +
+        "Content-Length: 5\r\n\r\n";
+
+    var bodyBytes = new byte[]{1, 13, 127, 12, 1};
+
+
+    var clientSocketIO = new ClientSocketIOMock(header, bodyBytes);
+    clientSocketIO.init(new Socket());
+    var request = new Request(clientSocketIO);
+
+    request.parseRequest();
+
+    assertArrayEquals(bodyBytes, (byte[]) request.getBody());
+    assertEquals(5, ((byte[]) request.getBody()).length);
+    assertEquals("5", request.getHeaders().get("Content-Length"));
+  }
+
 }

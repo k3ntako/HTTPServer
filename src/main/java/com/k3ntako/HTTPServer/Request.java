@@ -9,7 +9,7 @@ public class Request implements RequestInterface {
   private String route;
   private String protocol;
   final private HashMap<String, String> headers;
-  private String body;
+  private Object body;
   final private ClientSocketIOInterface clientSocketIO;
   private HashMap<String, String> routeParams;
 
@@ -27,7 +27,8 @@ public class Request implements RequestInterface {
     }
 
     if (contentLength > 0) {
-      this.parseBody(contentLength);
+      var contentType = this.headers.get("Content-Type");
+      this.parseBody(contentType, contentLength);
     }
   }
 
@@ -70,16 +71,8 @@ public class Request implements RequestInterface {
     }
   }
 
-  private void parseBody(int contentLength) throws IOException {
-    var bodyStr = "";
-    char character;
-
-    while (bodyStr.length() < contentLength) {
-      character = (clientSocketIO.read());
-      bodyStr = bodyStr.concat(String.valueOf(character));
-    }
-
-    this.body = bodyStr;
+  private void parseBody(String contentType, int contentLength) throws IOException {
+    this.body = clientSocketIO.parseBody(contentType, contentLength);
   }
 
   public void setRouteParams(HashMap<String, String> routeParams) {
@@ -110,7 +103,7 @@ public class Request implements RequestInterface {
     return this.headers;
   }
 
-  public String getBody() {
+  public Object getBody() {
     if (Objects.isNull(this.body)) {
       return "";
     } else {

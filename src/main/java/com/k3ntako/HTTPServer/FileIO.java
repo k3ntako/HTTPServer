@@ -10,13 +10,18 @@ import java.util.Scanner;
 public class FileIO implements FileIOInterface {
   @Override
   public void write(Path path, String str) throws IOException {
+    write(path, str.getBytes());
+  }
+
+  @Override
+  public void write(Path path, byte[] bytes) throws IOException {
     var file = new File(path.toString());
     if (!file.exists()) {
       file.getParentFile().mkdirs();
       file.createNewFile();
     }
 
-    Files.write(path, str.getBytes());
+    Files.write(path, bytes);
   }
 
   @Override

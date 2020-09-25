@@ -18,7 +18,15 @@ class ServerTest {
     var requestGeneratorMock = new RequestGeneratorMock();
     var socket = new ServerSocketMock();
 
-    var routeRegistrar = new RouteRegistrar(new RouteRegistry(), new FileIOMock(), new ReminderIOMock());
+    var fileIO = new FileIOMock();
+    var dataDirectoryIO = new DataDirectoryIO(fileIO, "./data");
+
+    var routeRegistrar = new RouteRegistrar(
+        new RouteRegistry(),
+        fileIO,
+        dataDirectoryIO,
+        new ReminderIOMock()
+    );
     var routeRegistry = routeRegistrar.registerRoutes();
     var router = new Router(routeRegistry);
     var requestHandler = new RequestHandler(router, requestGeneratorMock, new ErrorHandler());
@@ -43,11 +51,19 @@ class ServerTest {
         "Body line 3: def\n" +
         "Body line 4: def";
 
-    var clientSocketIO = new ClientSocketIOMock(clientInput + bodyStr);
+    var clientSocketIO = new ClientSocketIOMock(clientInput, bodyStr);
     var requestGeneratorMock = new RequestGeneratorMock();
     var socket = new ServerSocketMock();
 
-    var routeRegistrar = new RouteRegistrar(new RouteRegistry(), new FileIOMock(), new ReminderIOMock());
+    var fileIO = new FileIOMock();
+    var dataDirectoryIO = new DataDirectoryIO(fileIO, "./data");
+
+    var routeRegistrar = new RouteRegistrar(
+        new RouteRegistry(),
+        fileIO,
+        dataDirectoryIO,
+        new ReminderIOMock()
+    );
     var routeRegistry = routeRegistrar.registerRoutes();
     var router = new Router(routeRegistry);
     var requestHandler = new RequestHandler(router, requestGeneratorMock, new ErrorHandler());
@@ -76,11 +92,19 @@ class ServerTest {
         "Body line 3: def\n" +
         "Body line 4: def";
 
-    var clientSocketIO = new ClientSocketIOMock(clientInput + bodyStr);
+    var clientSocketIO = new ClientSocketIOMock(clientInput, bodyStr);
     var requestGeneratorMock = new RequestGeneratorMockThrowsError();
     var socket = new ServerSocketMock();
 
-    var routeRegistrar = new RouteRegistrar(new RouteRegistry(), new FileIOMock(), new ReminderIOMock());
+    var fileIO = new FileIOMock();
+    var dataDirectoryIO = new DataDirectoryIO(fileIO, "./data");
+
+    var routeRegistrar = new RouteRegistrar(
+        new RouteRegistry(),
+        fileIO,
+        dataDirectoryIO,
+        new ReminderIOMock()
+    );
     var routeRegistry = routeRegistrar.registerRoutes();
     var router = new Router(routeRegistry);
     var requestHandler = new RequestHandler(router, requestGeneratorMock, new ErrorHandler());

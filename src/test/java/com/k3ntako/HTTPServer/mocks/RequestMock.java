@@ -10,7 +10,7 @@ public class RequestMock implements RequestInterface {
   private String protocol = "HTTP/1.1";
   private HashMap<String, String> headers = new HashMap<>();
   private HashMap<String, String> routeParams;
-  private String body = "";
+  private Object body = "";
 
   public RequestMock(
       String method,
@@ -24,6 +24,16 @@ public class RequestMock implements RequestInterface {
       String method,
       String route,
       String body
+  ) {
+    this.method = method;
+    this.route = route;
+    this.body = body;
+  }
+
+  public RequestMock(
+      String method,
+      String route,
+      byte[] body
   ) {
     this.method = method;
     this.route = route;
@@ -77,7 +87,7 @@ public class RequestMock implements RequestInterface {
     return this.headers;
   }
 
-  public String getBody() {
+  public Object getBody() {
     return this.body;
   }
 }

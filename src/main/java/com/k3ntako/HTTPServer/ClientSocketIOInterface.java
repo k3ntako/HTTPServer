@@ -10,7 +10,9 @@ public interface ClientSocketIOInterface {
 
   char read() throws IOException;
 
-  void sendData(String data);
+  Object parseBody(String contentType, int contentLength) throws IOException;
+
+  void sendData(String data) throws IOException;
 
   void close() throws IOException;
 }

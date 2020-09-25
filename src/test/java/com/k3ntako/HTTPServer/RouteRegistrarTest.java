@@ -11,7 +11,15 @@ class RouteRegistrarTest {
 
   @Test
   void getSimpleGet() throws Exception {
-    var routeRegistrar = new RouteRegistrar(new RouteRegistry(), new FileIOMock(), new ReminderIOMock());
+    var fileIO = new FileIOMock();
+    var dataDirectoryIO = new DataDirectoryIO(fileIO, "./data");
+
+    var routeRegistrar = new RouteRegistrar(
+        new RouteRegistry(),
+        fileIO,
+        dataDirectoryIO,
+        new ReminderIOMock()
+    );
     var routeRegistry = routeRegistrar.registerRoutes();
     var request = new RequestMock("GET", "/simple_get");
     var simpleGet = routeRegistry.getController(request);
@@ -21,7 +29,15 @@ class RouteRegistrarTest {
 
   @Test
   void getSimpleGetWithBody() throws Exception {
-    var routeRegistrar = new RouteRegistrar(new RouteRegistry(), new FileIOMock(), new ReminderIOMock());
+    var fileIO = new FileIOMock();
+    var dataDirectoryIO = new DataDirectoryIO(fileIO, "./data");
+
+    var routeRegistrar = new RouteRegistrar(
+        new RouteRegistry(),
+        fileIO,
+        dataDirectoryIO,
+        new ReminderIOMock()
+    );
     var routeRegistry = routeRegistrar.registerRoutes();
     var request = new RequestMock("GET", "/simple_get_with_body");
     var simpleGetWithBody = routeRegistry.getController(request);

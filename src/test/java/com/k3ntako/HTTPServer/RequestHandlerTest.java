@@ -8,7 +8,15 @@ import static org.junit.jupiter.api.Assertions.*;
 class RequestHandlerTest {
   @Test
   void handleRequest() throws Exception {
-    var routeRegistrar = new RouteRegistrar(new RouteRegistry(), new FileIOMock(), new ReminderIOMock());
+    var fileIO = new FileIOMock();
+    var dataDirectoryIO = new DataDirectoryIO(fileIO, "./data");
+
+    var routeRegistrar = new RouteRegistrar(
+        new RouteRegistry(),
+        fileIO,
+        dataDirectoryIO,
+        new ReminderIOMock()
+    );
     var routeRegistry = routeRegistrar.registerRoutes();
 
     var router = new Router(routeRegistry);
@@ -25,7 +33,15 @@ class RequestHandlerTest {
 
   @Test
   void handlesError() throws Exception {
-    var routeRegistrar = new RouteRegistrar(new RouteRegistry(), new FileIOMock(), new ReminderIOMock());
+    var fileIO = new FileIOMock();
+    var dataDirectoryIO = new DataDirectoryIO(fileIO, "./data");
+
+    var routeRegistrar = new RouteRegistrar(
+        new RouteRegistry(),
+        fileIO,
+        dataDirectoryIO,
+        new ReminderIOMock()
+    );
     var routeRegistry = routeRegistrar.registerRoutes();
 
     var router = new Router(routeRegistry);

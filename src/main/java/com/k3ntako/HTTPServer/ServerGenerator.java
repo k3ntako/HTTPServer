@@ -21,8 +21,9 @@ public class ServerGenerator {
 
     var router = this.registerRoutes();
     var requestHandler = new RequestHandler(router, new RequestGenerator(), new ErrorHandler());
+    var clientSocketIO = new ClientSocketIO(new RequestBodyParser());
 
-    return new Server(new ClientSocketSocketIO(), requestHandler, serverSocket);
+    return new Server(clientSocketIO, requestHandler, serverSocket);
   }
 
   private LinkedHashMap<String, Object> getConfig() throws Exception {
@@ -37,8 +38,9 @@ public class ServerGenerator {
       throw new Exception("Data directory was no specified");
     }
 
-    var reminderIO = new ReminderIO(fileIO, jsonIO, new UUID(), dataDir + "/reminders/");
-    var routeRegistrar = new RouteRegistrar(new RouteRegistry(), fileIO, reminderIO);
+    var dataDirectoryIO = new DataDirectoryIO(fileIO, dataDir);
+    var reminderIO = new ReminderIO(dataDirectoryIO, jsonIO, new UUID());
+    var routeRegistrar = new RouteRegistrar(new RouteRegistry(), fileIO, dataDirectoryIO, reminderIO);
     var routeRegistry = routeRegistrar.registerRoutes();
     return new Router(routeRegistry);
   }

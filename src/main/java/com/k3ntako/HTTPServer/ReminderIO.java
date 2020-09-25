@@ -5,17 +5,15 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
 public class ReminderIO implements ReminderIOInterface {
+  final private DataDirectoryIO dataDirectoryIO;
   final private JsonIOInterface jsonIO;
-  final private FileIOInterface fileIO;
-  final private String remindersDir;
   final private UUIDInterface uuid;
+  final private String remindersDir = "/reminders/";
 
-  public ReminderIO(FileIOInterface fileIO, JsonIOInterface jsonIO, UUIDInterface uuid, String dataDir) {
-    this.fileIO = fileIO;
+  public ReminderIO(DataDirectoryIO dataDirectoryIO, JsonIOInterface jsonIO, UUIDInterface uuid) {
+    this.dataDirectoryIO = dataDirectoryIO;
     this.jsonIO = jsonIO;
     this.uuid = uuid;
-
-    this.remindersDir = dataDir;
   }
 
   public ReminderList createNewList() throws IOException {
@@ -25,7 +23,7 @@ public class ReminderIO implements ReminderIOInterface {
 
     var filePath = this.generatePath(uuid);
     var fileStr = jsonIO.toJson(reminderList);
-    fileIO.write(filePath, fileStr);
+    dataDirectoryIO.write(filePath, fileStr);
 
     return reminderList;
   }
@@ -70,15 +68,14 @@ public class ReminderIO implements ReminderIOInterface {
     writeToFile(listId, reminderList);
   }
 
-  private Path generatePath(String id) {
-    var filePathStr = remindersDir + id + ".json";
-    return FileSystems.getDefault().getPath(filePathStr);
+  private String generatePath(String id) {
+    return remindersDir + id + ".json";
   }
 
   private ReminderList getListById(String id) throws IOException, HTTPError {
     var filePath = generatePath(id);
 
-    var jsonStr = fileIO.read(filePath);
+    var jsonStr = dataDirectoryIO.read(filePath);
 
     var reminderList = jsonIO.fromJson(jsonStr, ReminderList.class);
 
@@ -102,6 +99,6 @@ public class ReminderIO implements ReminderIOInterface {
   private void writeToFile(String listId, ReminderList reminderList) throws IOException {
     var filePath = this.generatePath(listId);
     var fileStr = jsonIO.toJson(reminderList);
-    fileIO.write(filePath, fileStr);
+    dataDirectoryIO.write(filePath, fileStr);
   }
 }

@@ -20,5 +20,5 @@ public interface RequestInterface {
 
   HashMap<String, String> getHeaders();
 
-  String getBody();
+  Object getBody();
 }
