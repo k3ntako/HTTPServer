@@ -15,24 +15,24 @@ public class RequestHandler {
     this.errorHandler = errorHandler;
   }
 
-  public String handleRequest(ClientSocketIOInterface clientSocketIO) throws Exception {
-    String responseStr;
+  public byte[] handleRequest(ClientSocketIOInterface clientSocketIO) throws Exception {
+    byte[] responseByte;
     try {
       var request = this.requestGenerator.generateRequest(clientSocketIO);
       var response = this.router.routeRequest(request);
-      responseStr = response.createResponse();
+      responseByte = response.createResponse();
     } catch (HTTPError httpError) {
       var response = this.errorHandler.handleError(httpError);
-      responseStr = response.createResponse();
+      responseByte = response.createResponse();
     } catch (Exception exception) {
       var response = this.errorHandler.handleError(exception);
-      responseStr = response.createResponse();
+      responseByte = response.createResponse();
     }
 
-    if (responseStr == null) {
+    if (responseByte == null) {
       throw new Exception("Response is null");
     }
 
-    return responseStr;
+    return responseByte;
   }
 }

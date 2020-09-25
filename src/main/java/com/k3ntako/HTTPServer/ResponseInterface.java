@@ -3,11 +3,13 @@ package com.k3ntako.HTTPServer;
 import com.google.gson.JsonElement;
 
 public interface ResponseInterface {
-  String createResponse() throws HTTPError;
+  byte[] createResponse() throws HTTPError;
 
-  void setBody(String body);
+  void setBody(String body) throws HTTPError;
 
-  void setJsonBody(JsonElement body);
+  void setBody(JsonElement body) throws HTTPError;
+
+  void setBody(byte[] body) throws HTTPError;
 
   void setStatus(int status);
 

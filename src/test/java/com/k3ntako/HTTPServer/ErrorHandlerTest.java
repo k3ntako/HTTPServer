@@ -18,7 +18,7 @@ class ErrorHandlerTest {
         "Content-Length: 18\r\n\r\n" +
         "File was not found";
 
-    assertEquals(expectedResponse, responseStr);
+    assertArrayEquals(expectedResponse.getBytes(), responseStr);
   }
 
   @Test
@@ -33,6 +33,6 @@ class ErrorHandlerTest {
         "Content-Length: 20\r\n\r\n" +
         "Something went wrong";
 
-    assertEquals(expectedResponse, responseStr);
+    assertArrayEquals(expectedResponse.getBytes(), responseStr);
   }
 }

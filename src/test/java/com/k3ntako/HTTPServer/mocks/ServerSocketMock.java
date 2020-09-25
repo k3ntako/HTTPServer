@@ -21,5 +21,10 @@ public class ServerSocketMock implements ServerSocketWrapperInterface {
   public void close() {
     closeCalled = true;
   }
+
+  @Override
+  public int port() {
+    return 3000;
+  }
 }
 

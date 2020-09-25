@@ -1,6 +1,7 @@
 package com.k3ntako.HTTPServer.controllers;
 
 import com.google.gson.JsonObject;
+import com.k3ntako.HTTPServer.HTTPError;
 import com.k3ntako.HTTPServer.mocks.ReminderIOMock;
 import com.k3ntako.HTTPServer.mocks.RequestMock;
 import com.k3ntako.HTTPServer.mocks.ResponseMock;
@@ -13,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ReminderListsTest {
   @Test
-  void post() throws IOException {
+  void post() throws IOException, HTTPError {
     var request = new RequestMock("POST", "/reminders", "HTTP/1.1", new HashMap<>(), "");
     var reminderIOMock = new ReminderIOMock();
 

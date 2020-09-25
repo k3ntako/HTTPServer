@@ -9,13 +9,14 @@ public class ResponseMock implements ResponseInterface {
   public boolean createResponseCalled = false;
   public String getSetBodyArg;
   public JsonElement getSetJsonBodyArg;
+  public byte[] getSetBinaryBodyArg;
   public int getSetStatusArg;
   public String getSetRedirectUrl;
   public int getSetRedirectStatus;
   public HashMap<String, String> headers = new HashMap<>();
 
   @Override
-  public String createResponse() {
+  public byte[] createResponse() {
     createResponseCalled = true;
     return null;
   }
@@ -26,8 +27,13 @@ public class ResponseMock implements ResponseInterface {
   }
 
   @Override
-  public void setJsonBody(JsonElement body) {
+  public void setBody(JsonElement body) {
     getSetJsonBodyArg = body;
+  }
+
+  @Override
+  public void setBody(byte[] body) {
+    getSetBinaryBodyArg = body;
   }
 
   @Override

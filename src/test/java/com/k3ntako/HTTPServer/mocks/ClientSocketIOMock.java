@@ -8,7 +8,7 @@ import java.net.Socket;
 public class ClientSocketIOMock implements ClientSocketIOInterface {
   final private Object mockBody;
   final private BufferedReader headerBufferedReader;
-  private PrintWriterWrapperMock printWriter;
+  private ClientOutputStreamMock clientOutputStreamMock;
 
   public ClientSocketIOMock(String mockHeader) {
     this.headerBufferedReader = new BufferedReader(new StringReader(mockHeader));
@@ -27,16 +27,11 @@ public class ClientSocketIOMock implements ClientSocketIOInterface {
 
   public void init(Socket socket) {
     // Socket is ignored
-
-    printWriter = new PrintWriterWrapperMock();
+    clientOutputStreamMock = new ClientOutputStreamMock();
   }
 
   public String readLine() throws IOException {
     return headerBufferedReader.readLine();
-  }
-
-  public char read() throws IOException {
-    return (char) headerBufferedReader.read();
   }
 
   @Override
@@ -44,17 +39,17 @@ public class ClientSocketIOMock implements ClientSocketIOInterface {
     return mockBody;
   }
 
-  public void sendData(String data) {
-    printWriter.sendData(data);
-    printWriter.close();
+  public void sendData(byte[] data) {
+    clientOutputStreamMock.sendData(data);
+    clientOutputStreamMock.close();
   }
 
   public void close() throws IOException {
     this.headerBufferedReader.close();
   }
 
-  public String getSentData() {
-    return printWriter.getSentData();
+  public byte[] getSentData() {
+    return clientOutputStreamMock.getSentData();
   }
 
 }

@@ -11,10 +11,10 @@ public class ReminderLists {
     this.reminderIO = reminderIO;
   }
 
-  public ResponseInterface post(RequestInterface request, ResponseInterface response) throws IOException {
+  public ResponseInterface post(RequestInterface request, ResponseInterface response) throws IOException, HTTPError {
     var reminderList = reminderIO.createNewList();
 
-    response.setJsonBody(reminderList);
+    response.setBody(reminderList);
 
     return response;
   }
