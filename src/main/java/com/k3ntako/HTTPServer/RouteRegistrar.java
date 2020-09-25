@@ -29,7 +29,7 @@ public class RouteRegistrar {
     route("GET", "/api/reminders/:list_id/:reminder_id", (RequestInterface req, ResponseInterface res) -> new Reminders(reminderIO).get(req, res));
     route("PUT", "/api/reminders/:list_id/:reminder_id", (RequestInterface req, ResponseInterface res) -> new Reminders(reminderIO).put(req, res));
     route("DELETE", "/api/reminders/:list_id/:reminder_id", (RequestInterface req, ResponseInterface res) -> new Reminders(reminderIO).delete(req, res));
-    route("GET", "/api/images/:image_name", (RequestInterface req, ResponseInterface res) -> new Images(dataDirectoryIO, new UUID()).post(req, res));
+    route("GET", "/api/images/:image_name", (RequestInterface req, ResponseInterface res) -> new Images(dataDirectoryIO, new UUID()).get(req, res));
     route("POST", "/api/images", (RequestInterface req, ResponseInterface res) -> new Images(dataDirectoryIO, new UUID()).post(req, res));
 
     route("GET", "/account", (RequestInterface req, ResponseInterface res) -> new Account().get(req, res));

@@ -14,7 +14,17 @@ public class Images {
     this.uuid = uuid;
   }
 
-  public ResponseInterface post(RequestInterface request, ResponseInterface response) throws IOException {
+  public ResponseInterface get (RequestInterface request, ResponseInterface response) throws IOException, HTTPError {
+    var imageName = request.getRouteParam("image_name");
+    var image = dataDirectoryIO.readAllBytes("images/" + imageName);
+
+    response.setBody(image);
+    response.addHeader("Content-Type", "image/png");
+
+    return response;
+  }
+
+  public ResponseInterface post(RequestInterface request, ResponseInterface response) throws IOException, HTTPError {
     var fileBytes = (byte[]) request.getBody();
 
     var uuid = this.uuid.generate();
@@ -23,7 +33,7 @@ public class Images {
     var responseJson = new JsonObject();
     responseJson.addProperty("id", uuid);
 
-    response.setJsonBody(responseJson);
+    response.setBody(responseJson);
 
     return response;
   }
