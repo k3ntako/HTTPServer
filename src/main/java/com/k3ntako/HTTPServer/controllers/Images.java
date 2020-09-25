@@ -14,9 +14,14 @@ public class Images {
     this.uuid = uuid;
   }
 
-  public ResponseInterface get (RequestInterface request, ResponseInterface response) throws IOException, HTTPError {
+  public ResponseInterface get (RequestInterface request, ResponseInterface response) throws HTTPError, IOException {
     var imageName = request.getRouteParam("image_name");
+
     var image = dataDirectoryIO.readAllBytes("images/" + imageName);
+
+    if(image == null) {
+      throw new HTTPError(404, "Image was not found.");
+    }
 
     response.setBody(image);
     response.addHeader("Content-Type", "image/png");

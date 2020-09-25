@@ -64,4 +64,22 @@ class ImagesTest {
 
     assertEquals("image/png", response.headers.get("Content-Type"));
   }
+
+  @Test
+  void getReturns404IfNotFound() {
+    final var request = new RequestMock("GET", "/api/images/mock-name.png");
+
+    final var routeParams = new HashMap<String, String>();
+    routeParams.put("image_name", "mock-name.png");
+    request.setRouteParams(routeParams);
+
+    final var fileIO = new FileIOMock((byte[]) null);
+    final var dataDirectoryIO = new DataDirectoryIO(fileIO, "./mock/data");
+
+    var images = new Images(dataDirectoryIO, new UUIDMock());
+
+    HTTPError exception = assertThrows(HTTPError.class, () -> images.get(request, new ResponseMock()));
+    assertEquals("Image was not found.", exception.getMessage());
+    assertEquals(404, exception.getStatus());
+  }
 }
