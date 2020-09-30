@@ -3,6 +3,7 @@ package com.k3ntako.HTTPServer;
 import com.k3ntako.HTTPServer.mocks.FileIOMock;
 import com.k3ntako.HTTPServer.mocks.ReminderIOMock;
 import com.k3ntako.HTTPServer.mocks.RequestMock;
+import com.k3ntako.HTTPServer.mocks.RouteRegistrarMock;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -26,12 +27,13 @@ class RouterTest {
     var request = new RequestMock("GET", "/api/simple_get_with_body", "HTTP/1.1", new HashMap<>(), "");
     var router = new Router(routeRegistry);
     var response = router.routeRequest(request);
+    var responseBytes = response.createResponse();
 
     var expectedResponse = "HTTP/1.1 200 OK\r\n" +
         "Content-Length: 11\r\n\r\n" +
         "Hello world";
 
-    assertArrayEquals(expectedResponse.getBytes(), response.createResponse());
+    assertEquals(expectedResponse, new String(responseBytes));
   }
 
   @Test
@@ -50,12 +52,13 @@ class RouterTest {
     var request = new RequestMock("POST", "/api/reminders", "HTTP/1.1", new HashMap<>(), "");
     var router = new Router(routeRegistry);
     var response = router.routeRequest(request);
+    var responseBytes = response.createResponse();
 
     var expectedResponse = "HTTP/1.1 200 OK\r\n" +
         "Content-Length: 36\r\n\r\n" +
         "{\"id\":\"mock-new-list-id\",\"items\":{}}";
 
-    assertArrayEquals(expectedResponse.getBytes(), response.createResponse());
+    assertEquals(expectedResponse, new String(responseBytes));
   }
 
   @Test
@@ -63,21 +66,17 @@ class RouterTest {
     var fileIO = new FileIOMock();
     var dataDirectoryIO = new DataDirectoryIO(fileIO, "./data");
 
-    var routeRegistrar = new RouteRegistrar(
-        new RouteRegistry(),
-        fileIO,
-        dataDirectoryIO,
-        new ReminderIOMock()
-    );
+    var routeRegistrar = new RouteRegistrarMock();
     var routeRegistry = routeRegistrar.registerRoutes();
 
     var request = new RequestMock("GET", "/api/not_valid", "HTTP/1.1", new HashMap<>(), "");
     var router = new Router(routeRegistry);
     var response = router.routeRequest(request);
+    var responseBytes = response.createResponse();
 
     var expectedResponse = "HTTP/1.1 404 Not Found\r\n" +
         "Content-Length: 0\r\n\r\n";
 
-    assertArrayEquals(expectedResponse.getBytes(), response.createResponse());
+    assertEquals(expectedResponse, new String(responseBytes));
   }
 }

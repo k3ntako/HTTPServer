@@ -2,7 +2,7 @@ package com.k3ntako.HTTPServer;
 
 import com.k3ntako.HTTPServer.controllers.*;
 
-public class RouteRegistrar {
+public class RouteRegistrar implements RouteRegistrarInterface {
   final private RouteRegistry routeRegistry;
   final private FileIOInterface fileIO;
   final private DataDirectoryIO dataDirectoryIO;
@@ -20,6 +20,7 @@ public class RouteRegistrar {
     this.reminderIO = reminderIO;
   }
 
+  @Override
   public RouteRegistry registerRoutes() throws Exception {
     route("GET", "/api/simple_get", (RequestInterface req, ResponseInterface res) -> new SimpleGet().get(req, res));
     route("GET", "/api/simple_get_with_body", (RequestInterface req, ResponseInterface res) -> new SimpleGetWithBody().get(req, res));
@@ -35,7 +36,7 @@ public class RouteRegistrar {
 
     route("GET", "/account", (RequestInterface req, ResponseInterface res) -> new Account().get(req, res));
     route("GET", "/", (RequestInterface req, ResponseInterface res) -> new PublicFiles(fileIO).get(req, res));
-    route("GET", "/:file_name", (RequestInterface req, ResponseInterface res) -> new PublicFiles(fileIO).get(req, res));
+    route("GET", "/*", (RequestInterface req, ResponseInterface res) -> new PublicFiles(fileIO).get(req, res));
 
     return routeRegistry;
   }
