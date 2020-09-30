@@ -118,7 +118,7 @@ public class FileIOMock implements FileIOInterface {
 
     var mockReturn = mockFileContentArr[mockFileContentArrIdx];
     incrementMockContent();
-    return mockReturn;
+    return (String) mockReturn;
   }
 
   @Override
