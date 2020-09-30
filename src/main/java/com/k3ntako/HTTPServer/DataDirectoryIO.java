@@ -32,6 +32,11 @@ public class DataDirectoryIO {
     return fileIO.readAllBytes(path);
   }
 
+  public void delete(String strPath) throws IOException {
+    var path = generatePath(strPath);
+    fileIO.delete(path);
+  }
+
   private Path generatePath(String strPath) {
     var dataStrPath = dataDirectory + "/" + strPath;
     return FileSystems.getDefault().getPath(dataStrPath);

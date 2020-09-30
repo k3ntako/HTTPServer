@@ -16,7 +16,6 @@ public class Images {
 
   public ResponseInterface get (RequestInterface request, ResponseInterface response) throws HTTPError, IOException {
     var imageName = request.getRouteParam("image_name");
-
     var image = dataDirectoryIO.readAllBytes("images/" + imageName);
 
     if(image == null) {
@@ -39,6 +38,17 @@ public class Images {
     responseJson.addProperty("id", uuid);
 
     response.setBody(responseJson);
+
+    return response;
+  }
+
+  public ResponseInterface delete(RequestInterface request, ResponseInterface response) throws HTTPError {
+    var imageName = request.getRouteParam("image_name");
+    try {
+      dataDirectoryIO.delete("images/" + imageName);
+    } catch (IOException e) {
+      throw new HTTPError(404, "Image was not found.");
+    }
 
     return response;
   }

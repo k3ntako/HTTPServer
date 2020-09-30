@@ -31,6 +31,7 @@ public class RouteRegistrar {
     route("DELETE", "/api/reminders/:list_id/:reminder_id", (RequestInterface req, ResponseInterface res) -> new Reminders(reminderIO).delete(req, res));
     route("GET", "/api/images/:image_name", (RequestInterface req, ResponseInterface res) -> new Images(dataDirectoryIO, new UUID()).get(req, res));
     route("POST", "/api/images", (RequestInterface req, ResponseInterface res) -> new Images(dataDirectoryIO, new UUID()).post(req, res));
+    route("DELETE", "/api/images/:image_name", (RequestInterface req, ResponseInterface res) -> new Images(dataDirectoryIO, new UUID()).delete(req, res));
 
     route("GET", "/account", (RequestInterface req, ResponseInterface res) -> new Account().get(req, res));
     route("GET", "/", (RequestInterface req, ResponseInterface res) -> new PublicFiles(fileIO).get(req, res));
