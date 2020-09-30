@@ -20,5 +20,7 @@ public interface FileIOInterface {
 
   String getResource(String fileName) throws IOException;
 
+  String getResourceIfExists(String fileName);
+
   Boolean isResourceDirectory(String fileName);
 }

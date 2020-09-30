@@ -19,7 +19,7 @@ class PublicFilesTest {
     final var response = (ResponseMock) publicFiles.get(request, new ResponseMock());
 
     assertEquals("public/index.html", fileIO.getLastIsResourceDirectoryFileName());
-    assertEquals("public/index.html", fileIO.getLastGetResourceFileName());
+    assertEquals("public/index.html", fileIO.getLastGetResourceIfExistsFileName());
 
     assertNull(response.getSetJsonBodyArg);
     assertEquals("<html></html>", response.getSetBodyArg);
@@ -36,7 +36,7 @@ class PublicFilesTest {
     final var response = (ResponseMock) publicFiles.get(request, new ResponseMock());
 
     assertEquals("public/", fileIO.getLastIsResourceDirectoryFileName());
-    assertEquals("public/index.html", fileIO.getLastGetResourceFileName());
+    assertEquals("public/index.html", fileIO.getLastGetResourceIfExistsFileName());
 
     assertNull(response.getSetJsonBodyArg);
     assertEquals("<html></html>", response.getSetBodyArg);
@@ -56,7 +56,7 @@ class PublicFilesTest {
     final var response = (ResponseMock) publicFiles.get(request, new ResponseMock());
 
     assertEquals("public/", fileIO.getLastIsResourceDirectoryFileName());
-    assertEquals("public/", fileIO.getLastGetResourceFileName());
+    assertEquals("public/", fileIO.getLastGetResourceIfExistsFileName());
 
     assertNull(response.getSetJsonBodyArg);
 

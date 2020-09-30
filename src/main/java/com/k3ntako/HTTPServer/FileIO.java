@@ -33,6 +33,7 @@ public class FileIO implements FileIOInterface {
     return Files.readString(path);
   }
 
+
   @Override
   public byte[] readAllBytes(Path path) throws IOException {
     if (!doesFileExist(path)) {
@@ -40,6 +41,18 @@ public class FileIO implements FileIOInterface {
     }
 
     return Files.readAllBytes(path);
+  }
+    
+  public String getResourceIfExists(String fileName) {
+    var inputStream = this.getClass().getClassLoader().getResourceAsStream(fileName);
+
+    if (inputStream == null) {
+      return null;
+    }
+
+    var scanner = new Scanner(inputStream).useDelimiter("\\A");
+    return scanner.hasNext() ? scanner.next() : "";
+
   }
 
   public String getResource(String fileName) throws IOException {
@@ -61,8 +74,10 @@ public class FileIO implements FileIOInterface {
       return null;
     }
 
-    var file = new File(resourceURL.getPath());
-    return file.isDirectory();
+    // file.isDirectory() does not work for resource directories/files in a Jar file
+    var resourceUrlStr = resourceURL.toString();
+    var lastChar = resourceUrlStr.substring(resourceUrlStr.length() - 1);
+    return lastChar.equals("/");
   }
 
   public void patchNewLine(Path path, String str) throws IOException {

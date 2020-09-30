@@ -1,8 +1,5 @@
 package com.k3ntako.HTTPServer.controllers;
-
 import com.k3ntako.HTTPServer.*;
-
-import java.io.IOException;
 
 public class PublicFiles {
   final private FileIOInterface fileIO;
@@ -12,28 +9,32 @@ public class PublicFiles {
   }
 
   public ResponseInterface get(RequestInterface request, ResponseInterface response) throws HTTPError {
-    try {
-      final var route = request.getRoute();
-      var isDirectory = fileIO.isResourceDirectory("public" + route);
+    final var route = request.getRoute();
+    var isDirectory = fileIO.isResourceDirectory("public" + route);
 
-      String file = null;
-      if (isDirectory == null || isDirectory) {
-        file = fileIO.getResource("public" + route + "index.html");
-      }
+    String fileStr = null;
+    if (isDirectory != null && isDirectory) {
+      fileStr = fileIO.getResourceIfExists("public" + route + "index.html");
+    }
 
-      if (file == null) {
-        file = fileIO.getResource("public" + route);
-      }
+    if (fileStr == null) {
+      // if directory, returns file names inside
+      fileStr = fileIO.getResourceIfExists("public" + route);
+    }
 
-      if (file == null) {
-        throw new HTTPError(404, "File was not found");
-      }
+    var existsButEmpty = isDirectory != null && fileStr != null && fileStr.length() == 0;
+    if (existsButEmpty && isDirectory) {
+      fileStr = "Directory is empty";
+    } else if (existsButEmpty) {
+      fileStr = "File is empty";
+    }
 
-      response.addHeader("Content-Type", "text/html; charset=UTF-8");
-      response.setBody(file);
-    } catch (IOException exception) {
+    if (fileStr == null) {
       throw new HTTPError(404, "File was not found");
     }
+
+    response.addHeader("Content-Type", "text/html; charset=UTF-8");
+    response.setBody(fileStr);
 
     return response;
   }
