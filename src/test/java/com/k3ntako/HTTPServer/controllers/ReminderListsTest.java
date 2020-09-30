@@ -1,8 +1,9 @@
 package com.k3ntako.HTTPServer.controllers;
 
-import com.k3ntako.HTTPServer.HTTPError;
+import com.google.gson.JsonObject;
 import com.k3ntako.HTTPServer.mocks.ReminderIOMock;
 import com.k3ntako.HTTPServer.mocks.RequestMock;
+import com.k3ntako.HTTPServer.mocks.ResponseMock;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -12,18 +13,19 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ReminderListsTest {
   @Test
-  void post() throws IOException, HTTPError {
+  void post() throws IOException {
     var request = new RequestMock("POST", "/reminders", "HTTP/1.1", new HashMap<>(), "");
     var reminderIOMock = new ReminderIOMock();
 
     var reminderLists = new ReminderLists(reminderIOMock);
-    var response = reminderLists.post(request);
+    var response = (ResponseMock) reminderLists.post(request, new ResponseMock());
 
     assertTrue(reminderIOMock.createNewListCalled);
+    assertNull(response.getSetBodyArg);
 
-    var expectedResponse = "HTTP/1.1 200 OK\r\n" +
-        "Content-Length: 36\r\n\r\n" +
-        "{\"id\":\"mock-new-list-id\",\"items\":{}}";
-    assertEquals(expectedResponse, response.createResponse());
+    var responseJson = (JsonObject) response.getSetJsonBodyArg;
+    assertEquals(responseJson.get("id").getAsString(), "mock-new-list-id");
+    assertNotNull(responseJson.getAsJsonObject("items"));
+    assertEquals(responseJson.getAsJsonObject("items").size(), 0);
   }
 }

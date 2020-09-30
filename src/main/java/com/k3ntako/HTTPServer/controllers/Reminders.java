@@ -12,15 +12,13 @@ public class Reminders {
     this.reminderIO = reminderIO;
   }
 
-  public ResponseInterface post(RequestInterface request) throws IOException, HTTPError {
+  public ResponseInterface post(RequestInterface request, ResponseInterface response) throws IOException, HTTPError {
     var body = (String) request.getBody();
     validateBody(body);
 
     var listId = request.getRouteParam("list_id");
     var reminder = reminderIO.addReminder(listId, body);
 
-    var jsonIO = new JsonIO(new Gson());
-    var response = new Response(jsonIO);
     response.setJsonBody(reminder);
 
     return response;
@@ -32,12 +30,9 @@ public class Reminders {
     }
   }
 
-  public ResponseInterface get(RequestInterface request) throws IOException, HTTPError {
+  public ResponseInterface get(RequestInterface request, ResponseInterface response) throws IOException, HTTPError {
     var listId = request.getRouteParam("list_id");
     var reminderId = request.getRouteParam("reminder_id");
-
-    var jsonIO = new JsonIO(new Gson());
-    var response = new Response(jsonIO);
 
     var content = reminderIO.getReminderByIds(listId, reminderId);
     if (content == null) {
@@ -49,7 +44,7 @@ public class Reminders {
     return response;
   }
 
-  public ResponseInterface put(RequestInterface request) throws HTTPError {
+  public ResponseInterface put(RequestInterface request, ResponseInterface response) throws HTTPError {
     var body = (String) request.getBody();
     var listId = request.getRouteParam("list_id");
     var reminderId = request.getRouteParam("reminder_id");
@@ -60,11 +55,10 @@ public class Reminders {
       throw new HTTPError(404, "Reminder was not found");
     }
 
-    var jsonIO = new JsonIO(new Gson());
-    return new Response(jsonIO);
+    return response;
   }
 
-  public ResponseInterface delete(RequestInterface request) throws HTTPError {
+  public ResponseInterface delete(RequestInterface request, ResponseInterface response) throws HTTPError {
     var listId = request.getRouteParam("list_id");
     var reminderId = request.getRouteParam("reminder_id");
 
@@ -74,7 +68,6 @@ public class Reminders {
       throw new HTTPError(404, "Reminder was not found");
     }
 
-    var jsonIO = new JsonIO(new Gson());
-    return new Response(jsonIO);
+    return response;
   }
 }

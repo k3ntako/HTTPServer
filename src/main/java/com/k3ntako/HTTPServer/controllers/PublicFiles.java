@@ -1,8 +1,5 @@
 package com.k3ntako.HTTPServer.controllers;
-
-import com.google.gson.Gson;
 import com.k3ntako.HTTPServer.*;
-
 
 public class PublicFiles {
   final private FileIOInterface fileIO;
@@ -11,10 +8,7 @@ public class PublicFiles {
     this.fileIO = fileIO;
   }
 
-  public ResponseInterface get(RequestInterface request) throws HTTPError {
-    var jsonIO = new JsonIO(new Gson());
-    var response = new Response(jsonIO);
-
+  public ResponseInterface get(RequestInterface request, ResponseInterface response) throws HTTPError {
     final var route = request.getRoute();
     var isDirectory = fileIO.isResourceDirectory("public" + route);
 

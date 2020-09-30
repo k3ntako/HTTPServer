@@ -1,6 +1,7 @@
 package com.k3ntako.HTTPServer;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.k3ntako.HTTPServer.mocks.JsonIOMock;
 import org.junit.jupiter.api.Test;
 
@@ -51,7 +52,8 @@ class ResponseTest {
   void setJsonBody() {
     var jsonIOMock = new JsonIOMock();
     var response = new Response(jsonIOMock);
-    var reminder = new Reminder("123", "new task");
+    var reminder = ReminderJsonCreator.createReminder("123", "new task");
+
     response.setJsonBody(reminder);
 
     assertEquals(reminder, jsonIOMock.toJsonArg);

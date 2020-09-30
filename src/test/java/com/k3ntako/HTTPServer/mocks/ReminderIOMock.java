@@ -1,8 +1,8 @@
 package com.k3ntako.HTTPServer.mocks;
 
-import com.k3ntako.HTTPServer.Reminder;
+import com.google.gson.JsonObject;
 import com.k3ntako.HTTPServer.ReminderIOInterface;
-import com.k3ntako.HTTPServer.ReminderList;
+import com.k3ntako.HTTPServer.ReminderJsonCreator;
 import com.k3ntako.HTTPServer.UUIDInterface;
 
 import java.io.IOException;
@@ -14,7 +14,7 @@ public class ReminderIOMock implements ReminderIOInterface {
   public String listIdForWrite;
   public String taskForWrite;
   private UUIDInterface uuid;
-  private Reminder reminderToReturn;
+  private JsonObject reminderToReturn;
   private boolean isReminderToReturnSet = false;
   public String listIdForUpdate;
   public String reminderIdForUpdate;
@@ -28,7 +28,7 @@ public class ReminderIOMock implements ReminderIOInterface {
     this.uuid = new UUIDMock();
   }
 
-  public ReminderIOMock(Reminder reminderToReturn) {
+  public ReminderIOMock(JsonObject reminderToReturn) {
     this.reminderToReturn = reminderToReturn;
     this.isReminderToReturnSet = true;
   }
@@ -38,14 +38,15 @@ public class ReminderIOMock implements ReminderIOInterface {
   }
 
   @Override
-  public ReminderList createNewList() throws IOException {
+  public JsonObject createNewList() throws IOException {
     throwIfExceptionExists();
     this.createNewListCalled = true;
-    return new ReminderList("mock-new-list-id");
+
+    return ReminderJsonCreator.createReminderList("mock-new-list-id");
   }
 
   @Override
-  public Reminder getReminderByIds(String listId, String reminderId) throws IOException {
+  public JsonObject getReminderByIds(String listId, String reminderId) throws IOException {
     throwIfExceptionExists();
 
     listIdForGet = listId;
@@ -55,26 +56,27 @@ public class ReminderIOMock implements ReminderIOInterface {
       return reminderToReturn;
     }
 
-    return new Reminder(reminderId, "ReminderIOMock: mock task text");
+    return ReminderJsonCreator.createReminder(reminderId, "ReminderIOMock.getReminderByIds: mock task text");
   }
 
   @Override
-  public Reminder addReminder(String listId, String task) throws IOException {
+  public JsonObject addReminder(String listId, String task) throws IOException {
     throwIfExceptionExists();
 
     listIdForWrite = listId;
     taskForWrite = task;
-    return new Reminder(uuid.generate(), "ReminderIOMock: mock task text");
+    return ReminderJsonCreator.createReminder(uuid.generate(), task);
   }
 
   @Override
-  public Reminder updateReminder(String listId, String reminderId, String updatedTask) throws IOException {
+  public JsonObject updateReminder(String listId, String reminderId, String updatedTask) throws IOException {
     throwIfExceptionExists();
     listIdForUpdate = listId;
     reminderIdForUpdate = reminderId;
     taskForUpdate = updatedTask;
 
-    return new Reminder(reminderId, updatedTask);
+
+    return ReminderJsonCreator.createReminder(reminderId, updatedTask);
   }
 
   @Override
