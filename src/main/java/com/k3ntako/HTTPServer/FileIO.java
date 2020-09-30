@@ -25,15 +25,24 @@ public class FileIO implements FileIOInterface {
   }
 
   @Override
-  public String read(Path path) throws IOException {
-    var file = new File(path.toString());
-    if (!file.exists()) {
+  public String readString(Path path) throws IOException {
+    if (!doesFileExist(path)) {
       return null;
     }
 
     return Files.readString(path);
   }
 
+
+  @Override
+  public byte[] readAllBytes(Path path) throws IOException {
+    if (!doesFileExist(path)) {
+      return null;
+    }
+
+    return Files.readAllBytes(path);
+  }
+    
   public String getResourceIfExists(String fileName) {
     var inputStream = this.getClass().getClassLoader().getResourceAsStream(fileName);
 
@@ -43,6 +52,7 @@ public class FileIO implements FileIOInterface {
 
     var scanner = new Scanner(inputStream).useDelimiter("\\A");
     return scanner.hasNext() ? scanner.next() : "";
+
   }
 
   public String getResource(String fileName) throws IOException {
@@ -71,9 +81,7 @@ public class FileIO implements FileIOInterface {
   }
 
   public void patchNewLine(Path path, String str) throws IOException {
-    var file = new File(path.toString());
-
-    if (!file.exists()) {
+    if (!doesFileExist(path)) {
       throw new IOException("File does not exist");
     }
 
@@ -82,9 +90,7 @@ public class FileIO implements FileIOInterface {
   }
 
   public void overwrite(Path path, String str) throws IOException {
-    var file = new File(path.toString());
-
-    if (!file.exists()) {
+    if (!doesFileExist(path)) {
       throw new IOException("File does not exist");
     }
 
@@ -97,5 +103,10 @@ public class FileIO implements FileIOInterface {
     }
 
     Files.delete(path);
+  }
+
+  private Boolean doesFileExist(Path path) {
+    var file = new File(path.toString());
+    return file.exists();
   }
 }

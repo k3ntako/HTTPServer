@@ -2,14 +2,13 @@ package com.k3ntako.HTTPServer;
 
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 
 import java.util.HashMap;
 import java.util.Map;
 import javax.ws.rs.core.Response.Status;
 
 public class Response implements ResponseInterface {
-  private String body = "";
+  private byte[] body = new byte[]{};
   private int status = 200;
   final private HashMap<String, String> additionalHeaders = new HashMap<>();
   final private JsonIOInterface jsonIO;
@@ -19,18 +18,22 @@ public class Response implements ResponseInterface {
   }
 
   @Override
-  public String createResponse() throws HTTPError {
-    if (body == null) {
-      throw new HTTPError(500, "Response body cannot be null");
-    }
-
-    return this.createHeader(body.length()) + this.body;
+  public byte[] createResponse() {
+    var header = this.createHeader(body.length);
+    return concatByteArrays(header, body);
   }
 
-  private String createHeader(int contentLength) {
+  private byte[] concatByteArrays(byte[] first, byte[] second) {
+    byte[] combined = new byte[first.length + second.length];
+    System.arraycopy(first, 0, combined, 0, first.length);
+    System.arraycopy(second, 0, combined, first.length, second.length);
+    return combined;
+  }
+
+  private byte[] createHeader(int contentLength) {
     var status = this.status;
 
-    if (body.length() == 0 && status >= 200 && status <= 299) {
+    if (body.length == 0 && status >= 200 && status <= 299) {
       status = 204;
     }
 
@@ -41,17 +44,31 @@ public class Response implements ResponseInterface {
 
     header += "Content-Length: " + contentLength + "\r\n\r\n";
 
-    return header;
+    return header.getBytes();
   }
 
   @Override
-  public void setBody(String body) {
+  public void setBody(String body) throws HTTPError {
+    validateBody(body);
+    this.body = body.getBytes();
+  }
+
+  @Override
+  public void setBody(JsonElement body) throws HTTPError {
+    validateBody(body);
+    this.body = this.jsonIO.toJson(body).getBytes();
+  }
+
+  @Override
+  public void setBody(byte[] body) throws HTTPError {
+    validateBody(body);
     this.body = body;
   }
 
-  @Override
-  public void setJsonBody(JsonElement body) {
-    this.body = this.jsonIO.toJson(body);
+  private void validateBody(Object body) throws HTTPError {
+    if (body == null) {
+      throw new HTTPError(500, "Response body cannot be null");
+    }
   }
 
   @Override

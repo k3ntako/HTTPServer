@@ -35,4 +35,8 @@ public class Server {
     clientSocketIO.close();
     clientSocket.close();
   }
+
+  public int port() {
+    return serverSocket.port();
+  }
 }

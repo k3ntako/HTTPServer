@@ -38,13 +38,25 @@ class DataDirectoryIOTest {
   }
 
   @Test
-  void read() throws IOException {
+  void readString() throws IOException {
     var fileIO = new FileIOMock();
     var dataDirectory = "./data";
     var dataDirectoryIO = new DataDirectoryIO(fileIO, dataDirectory);
 
     var strPath = "text/1.txt";
-    dataDirectoryIO.read(strPath);
+    dataDirectoryIO.readString(strPath);
+
+    assertEquals("./data/text/1.txt", fileIO.getLastReadPath().toString());
+  }
+
+  @Test
+  void readAllBytes() throws IOException {
+    var fileIO = new FileIOMock();
+    var dataDirectory = "./data";
+    var dataDirectoryIO = new DataDirectoryIO(fileIO, dataDirectory);
+
+    var strPath = "text/1.txt";
+    dataDirectoryIO.readAllBytes(strPath);
 
     assertEquals("./data/text/1.txt", fileIO.getLastReadPath().toString());
   }

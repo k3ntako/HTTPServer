@@ -11,6 +11,7 @@ public class Main {
 
     var server = serverGenerator.generate();
 
+    System.out.println("Server listening at port " + server.port() + "...");
     while (true) {
       server.run();
     }

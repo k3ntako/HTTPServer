@@ -76,7 +76,7 @@ public class ReminderIO implements ReminderIOInterface {
   private JsonObject getListById(String id) throws IOException, HTTPError {
     var filePath = generatePath(id);
 
-    var jsonStr = dataDirectoryIO.read(filePath);
+    var jsonStr = dataDirectoryIO.readString(filePath);
 
     if (jsonStr == null) {
       throw new HTTPError(404, "Reminder list was not found");

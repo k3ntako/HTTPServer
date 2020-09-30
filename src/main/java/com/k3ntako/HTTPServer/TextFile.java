@@ -25,7 +25,7 @@ public class TextFile {
   public String readFile(String fileUUID) throws IOException {
     var path = generatePathForUUID(fileUUID);
 
-    return fileIO.read(path);
+    return fileIO.readString(path);
   }
 
   public void patchFile(String fileUUID, String text) throws IOException {

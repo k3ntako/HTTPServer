@@ -7,4 +7,6 @@ public interface ServerSocketWrapperInterface {
   Socket accept() throws IOException;
 
   void close() throws IOException;
+
+  int port();
 }

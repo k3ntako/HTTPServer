@@ -1,6 +1,5 @@
 package com.k3ntako.HTTPServer.controllers;
 
-import com.google.gson.Gson;
 import com.k3ntako.HTTPServer.*;
 
 import java.io.IOException;
@@ -19,7 +18,7 @@ public class Reminders {
     var listId = request.getRouteParam("list_id");
     var reminder = reminderIO.addReminder(listId, body);
 
-    response.setJsonBody(reminder);
+    response.setBody(reminder);
 
     return response;
   }
@@ -39,7 +38,7 @@ public class Reminders {
       throw new HTTPError(404, "Reminder was not found");
     }
 
-    response.setJsonBody(content);
+    response.setBody(content);
 
     return response;
   }

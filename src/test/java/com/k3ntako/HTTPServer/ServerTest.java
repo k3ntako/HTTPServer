@@ -73,9 +73,9 @@ class ServerTest {
 
     var expected = "HTTP/1.1 200 OK\r\n" +
         "Content-Length: 11\r\n\r\n" +
-        "Hello world\n";
+        "Hello world";
 
-    assertEquals(expected, clientSocketIO.getSentData());
+    assertArrayEquals(expected.getBytes(), clientSocketIO.getSentData());
   }
 
   @Test
@@ -114,8 +114,8 @@ class ServerTest {
 
     var expected = "HTTP/1.1 500 Internal Server Error\r\n" +
         "Content-Length: 20\r\n\r\n" +
-        "This is a test error\n";
+        "This is a test error";
 
-    assertEquals(expected, clientSocketIO.getSentData());
+    assertArrayEquals(expected.getBytes(), clientSocketIO.getSentData());
   }
 }

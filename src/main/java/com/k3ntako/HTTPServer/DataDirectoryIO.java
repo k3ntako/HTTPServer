@@ -22,9 +22,14 @@ public class DataDirectoryIO {
     fileIO.write(path, bytes);
   }
 
-  public String read(String strPath) throws IOException {
+  public String readString(String strPath) throws IOException {
     var path = generatePath(strPath);
-    return fileIO.read(path);
+    return fileIO.readString(path);
+  }
+
+  public byte[] readAllBytes(String strPath) throws IOException {
+    var path = generatePath(strPath);
+    return fileIO.readAllBytes(path);
   }
 
   private Path generatePath(String strPath) {

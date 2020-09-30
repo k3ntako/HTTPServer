@@ -31,7 +31,7 @@ class RouterTest {
         "Content-Length: 11\r\n\r\n" +
         "Hello world";
 
-    assertEquals(expectedResponse, response.createResponse());
+    assertArrayEquals(expectedResponse.getBytes(), response.createResponse());
   }
 
   @Test
@@ -55,7 +55,7 @@ class RouterTest {
         "Content-Length: 36\r\n\r\n" +
         "{\"id\":\"mock-new-list-id\",\"items\":{}}";
 
-    assertEquals(expectedResponse, response.createResponse());
+    assertArrayEquals(expectedResponse.getBytes(), response.createResponse());
   }
 
   @Test
@@ -78,6 +78,6 @@ class RouterTest {
     var expectedResponse = "HTTP/1.1 404 Not Found\r\n" +
         "Content-Length: 0\r\n\r\n";
 
-    assertEquals(expectedResponse, response.createResponse());
+    assertArrayEquals(expectedResponse.getBytes(), response.createResponse());
   }
 }

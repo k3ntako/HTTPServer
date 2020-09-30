@@ -9,7 +9,8 @@
 <div class="page">
     <h1>HTTP Server</h1>
     <p>
-        The HTTP Server is hosted on <a href="http://httpserver-env-1.eba-eac65tjd.us-east-1.elasticbeanstalk.com/" target="_blank">AWS Elastic Beanstalk</a>
+        The HTTP Server is hosted on <a href="http://httpserver-env-1.eba-eac65tjd.us-east-1.elasticbeanstalk.com/"
+                                        target="_blank">AWS Elastic Beanstalk</a>
         and source code can be found on <a href="https://github.com/k3ntako/HTTPServer" target="_blank">Github</a>.
     </p>
 
@@ -113,6 +114,28 @@
                     <li>Delete the specified reminder.</li>
                     <li>Returns 204 No Content, if successful.</li>
                     <li>Returns 404 if reminder list or reminder is not found.</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td>/api/images/:image_name</td>
+            <td>
+                <ul>
+                    <li>Retrieve image that was previously uploaded via the POST endpoint.</li>
+                    <li>Returns 404 if image is not found.</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>POST</td>
+            <td>/api/images/</td>
+            <td>
+                <ul>
+                    <li>Upload a PNG image.</li>
+                    <li>Returns a JSON with the filename. The image can be accessed using that filename with the GET
+                        endpoint.
+                    </li>
                 </ul>
             </td>
         </tr>

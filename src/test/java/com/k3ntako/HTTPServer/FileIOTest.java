@@ -41,14 +41,25 @@ class FileIOTest {
   }
 
   @Test
-  void read() throws IOException {
+  void readString() throws IOException {
     final var str = "This is a different text\nthis is a new line!\r\n And more!";
     Files.write(path, str.getBytes());
 
     final var fileIO = new FileIO();
-    final var fileContent = fileIO.read(path);
+    final var fileContent = fileIO.readString(path);
 
     assertEquals(str, fileContent);
+  }
+
+  @Test
+  void readAllBytes() throws IOException {
+    final var str = "This text will be turned into bytes.\n";
+    Files.write(path, str.getBytes());
+
+    final var fileIO = new FileIO();
+    final var fileContent = fileIO.readAllBytes(path);
+
+    assertArrayEquals(str.getBytes(), fileContent);
   }
 
   @Test
@@ -57,7 +68,7 @@ class FileIOTest {
     file.createNewFile();
 
     final var fileIO = new FileIO();
-    final var fileContent = fileIO.read(path);
+    final var fileContent = fileIO.readString(path);
 
     assertNotNull(fileContent);
     assertEquals("", fileContent);
@@ -66,7 +77,7 @@ class FileIOTest {
   @Test
   void readReturnsNullIfFileNotFound() throws IOException {
     final var fileIO = new FileIO();
-    final var fileContent = fileIO.read(path);
+    final var fileContent = fileIO.readString(path);
 
     assertNull(fileContent);
   }

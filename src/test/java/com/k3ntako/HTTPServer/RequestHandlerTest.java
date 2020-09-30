@@ -28,7 +28,7 @@ class RequestHandlerTest {
         "Hello world";
 
     var responseStr = requestHandler.handleRequest(new ClientSocketIOMock(""));
-    assertEquals(expectedResponse, responseStr);
+    assertArrayEquals(expectedResponse.getBytes(), responseStr);
   }
 
   @Test
@@ -53,6 +53,6 @@ class RequestHandlerTest {
         "This is a test error";
 
     var responseStr = requestHandler.handleRequest(new ClientSocketIOMock(""));
-    assertEquals(expectedResponse, responseStr);
+    assertArrayEquals(expectedResponse.getBytes(), responseStr);
   }
 }
