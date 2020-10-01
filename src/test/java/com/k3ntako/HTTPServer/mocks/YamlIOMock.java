@@ -1,6 +1,6 @@
 package com.k3ntako.HTTPServer.mocks;
 
-import com.k3ntako.HTTPServer.YamlIOInterface;
+import com.k3ntako.HTTPServer.fileSystemsIO.YamlIOInterface;
 
 import java.util.LinkedHashMap;
 

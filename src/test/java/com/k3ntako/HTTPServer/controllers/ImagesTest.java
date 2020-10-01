@@ -1,7 +1,7 @@
 package com.k3ntako.HTTPServer.controllers;
 
 import com.google.gson.JsonObject;
-import com.k3ntako.HTTPServer.DataDirectoryIO;
+import com.k3ntako.HTTPServer.fileSystemsIO.DataDirectoryIO;
 import com.k3ntako.HTTPServer.HTTPError;
 import com.k3ntako.HTTPServer.mocks.FileIOMock;
 import com.k3ntako.HTTPServer.mocks.RequestMock;

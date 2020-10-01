@@ -1,4 +1,4 @@
-package com.k3ntako.HTTPServer;
+package com.k3ntako.HTTPServer.utilities;
 
 public interface UUIDInterface {
   String generate();

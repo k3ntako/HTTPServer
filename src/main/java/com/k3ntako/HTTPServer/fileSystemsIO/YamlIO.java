@@ -1,9 +1,8 @@
-package com.k3ntako.HTTPServer;
+package com.k3ntako.HTTPServer.fileSystemsIO;
 
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.LinkedHashMap;
 
 public class YamlIO implements YamlIOInterface {

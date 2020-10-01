@@ -1,4 +1,4 @@
-package com.k3ntako.HTTPServer;
+package com.k3ntako.HTTPServer.utilities;
 
 public class UUID implements UUIDInterface {
   @Override

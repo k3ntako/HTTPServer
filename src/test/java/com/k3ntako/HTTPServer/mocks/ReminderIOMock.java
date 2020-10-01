@@ -1,9 +1,9 @@
 package com.k3ntako.HTTPServer.mocks;
 
 import com.google.gson.JsonObject;
-import com.k3ntako.HTTPServer.ReminderIOInterface;
-import com.k3ntako.HTTPServer.ReminderJsonCreator;
-import com.k3ntako.HTTPServer.UUIDInterface;
+import com.k3ntako.HTTPServer.fileSystemsIO.ReminderIOInterface;
+import com.k3ntako.HTTPServer.utilities.ReminderJsonCreator;
+import com.k3ntako.HTTPServer.utilities.UUIDInterface;
 
 import java.io.IOException;
 

@@ -1,6 +1,7 @@
 package com.k3ntako.HTTPServer;
 
 import com.google.gson.Gson;
+import com.k3ntako.HTTPServer.utilities.JsonConverter;
 
 public class ErrorHandler implements ErrorHandlerInterface {
   @Override

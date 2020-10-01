@@ -1,6 +1,6 @@
 package com.k3ntako.HTTPServer.mocks;
 
-import com.k3ntako.HTTPServer.FileIOInterface;
+import com.k3ntako.HTTPServer.fileSystemsIO.FileIOInterface;
 
 import java.io.IOException;
 import java.nio.file.Path;

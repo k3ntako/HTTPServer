@@ -1,9 +1,9 @@
-package com.k3ntako.HTTPServer;
+package com.k3ntako.HTTPServer.fileSystemsIO;
 
 import com.google.gson.JsonObject;
+import com.k3ntako.HTTPServer.HTTPError;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 public interface ReminderIOInterface {
   JsonObject createNewList() throws IOException;

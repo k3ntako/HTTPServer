@@ -1,6 +1,6 @@
 package com.k3ntako.HTTPServer.mocks;
 
-import com.k3ntako.HTTPServer.UUIDInterface;
+import com.k3ntako.HTTPServer.utilities.UUIDInterface;
 
 public class UUIDMock implements UUIDInterface {
   private String mockReturn;

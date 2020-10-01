@@ -2,6 +2,7 @@ package com.k3ntako.HTTPServer;
 
 import com.google.gson.Gson;
 import com.k3ntako.HTTPServer.controllers.NotFound;
+import com.k3ntako.HTTPServer.utilities.JsonConverter;
 
 import java.io.IOException;
 

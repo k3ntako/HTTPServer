@@ -1,6 +1,6 @@
 package com.k3ntako.HTTPServer.mocks;
 
-import com.k3ntako.HTTPServer.JsonConverterInterface;
+import com.k3ntako.HTTPServer.utilities.JsonConverterInterface;
 
 import java.lang.reflect.InvocationTargetException;
 

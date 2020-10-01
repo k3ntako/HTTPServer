@@ -1,4 +1,4 @@
-package com.k3ntako.HTTPServer;
+package com.k3ntako.HTTPServer.utilities;
 
 import com.google.gson.Gson;
 

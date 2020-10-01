@@ -1,5 +1,6 @@
 package com.k3ntako.HTTPServer.controllers;
 import com.k3ntako.HTTPServer.*;
+import com.k3ntako.HTTPServer.fileSystemsIO.FileIOInterface;
 
 public class PublicFiles {
   final private FileIOInterface fileIO;

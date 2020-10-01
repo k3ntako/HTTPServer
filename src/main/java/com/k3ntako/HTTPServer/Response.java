@@ -2,6 +2,7 @@ package com.k3ntako.HTTPServer;
 
 
 import com.google.gson.JsonElement;
+import com.k3ntako.HTTPServer.utilities.JsonConverterInterface;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,5 +1,6 @@
 package com.k3ntako.HTTPServer;
 
+import com.k3ntako.HTTPServer.utilities.UUID;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

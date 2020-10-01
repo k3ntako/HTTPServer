@@ -1,5 +1,6 @@
 package com.k3ntako.HTTPServer;
 
+import com.k3ntako.HTTPServer.fileSystemsIO.DataDirectoryIO;
 import com.k3ntako.HTTPServer.mocks.FileIOMock;
 import com.k3ntako.HTTPServer.mocks.ReminderIOMock;
 import com.k3ntako.HTTPServer.mocks.RequestMock;
@@ -21,7 +22,7 @@ class RouteRegistrarTest {
         new ReminderIOMock()
     );
     var routeRegistry = routeRegistrar.registerRoutes();
-    var request = new RequestMock("GET", "/simple_get");
+    var request = new RequestMock("GET", "/api/simple_get");
     var simpleGet = routeRegistry.getController(request);
 
     assertNotNull(simpleGet);
@@ -39,7 +40,7 @@ class RouteRegistrarTest {
         new ReminderIOMock()
     );
     var routeRegistry = routeRegistrar.registerRoutes();
-    var request = new RequestMock("GET", "/simple_get_with_body");
+    var request = new RequestMock("GET", "/api/simple_get_with_body");
     var simpleGetWithBody = routeRegistry.getController(request);
 
     assertNotNull(simpleGetWithBody);
