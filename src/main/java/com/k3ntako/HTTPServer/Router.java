@@ -21,8 +21,8 @@ public class Router {
       request.setRouteParams(route.getRouteParams());
     }
 
-    var jsonIO = new JsonIO(new Gson());
-    var response = new Response(jsonIO);
+    var jsonConverter = new JsonConverter(new Gson());
+    var response = new Response(jsonConverter);
     return controllerMethod.getResponse(request, response);
   }
 }

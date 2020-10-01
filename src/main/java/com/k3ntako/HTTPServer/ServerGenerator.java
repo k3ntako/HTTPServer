@@ -31,7 +31,7 @@ public class ServerGenerator {
   }
 
   private Router registerRoutes() throws Exception {
-    var jsonIO = new JsonIO(new Gson());
+    var jsonConverter = new JsonConverter(new Gson());
     String dataDir = (String) config.get("data_directory");
 
     if (dataDir == null) {
@@ -39,7 +39,7 @@ public class ServerGenerator {
     }
 
     var dataDirectoryIO = new DataDirectoryIO(fileIO, dataDir);
-    var reminderIO = new ReminderIO(dataDirectoryIO, jsonIO, new UUID());
+    var reminderIO = new ReminderIO(dataDirectoryIO, jsonConverter, new UUID());
     var routeRegistrar = new RouteRegistrar(new RouteRegistry(), fileIO, dataDirectoryIO, reminderIO);
     var routeRegistry = routeRegistrar.registerRoutes();
     return new Router(routeRegistry);

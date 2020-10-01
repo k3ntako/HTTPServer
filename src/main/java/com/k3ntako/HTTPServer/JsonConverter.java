@@ -2,10 +2,10 @@ package com.k3ntako.HTTPServer;
 
 import com.google.gson.Gson;
 
-public class JsonIO implements JsonIOInterface {
+public class JsonConverter implements JsonConverterInterface {
   final private Gson gson;
 
-  public JsonIO(Gson gson) {
+  public JsonConverter(Gson gson) {
     this.gson = gson;
   }
 

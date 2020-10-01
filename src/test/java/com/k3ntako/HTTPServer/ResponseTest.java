@@ -2,7 +2,7 @@ package com.k3ntako.HTTPServer;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import com.k3ntako.HTTPServer.mocks.JsonIOMock;
+import com.k3ntako.HTTPServer.mocks.JsonConverterMock;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -11,8 +11,8 @@ class ResponseTest {
 
   @Test
   void createEmptyResponse() {
-    var jsonIO = new JsonIO(new Gson());
-    var response = new Response(jsonIO);
+    var jsonConverter = new JsonConverter(new Gson());
+    var response = new Response(jsonConverter);
 
     var responseBytes = response.createResponse();
 
@@ -23,8 +23,8 @@ class ResponseTest {
 
   @Test
   void createResponseWithBody() throws HTTPError {
-    var jsonIO = new JsonIO(new Gson());
-    var response = new Response(jsonIO);
+    var jsonConverter = new JsonConverter(new Gson());
+    var response = new Response(jsonConverter);
     response.setBody("This\nis\nthe\nresponse\nbody!!");
 
     var responseBytes = response.createResponse();
@@ -37,8 +37,8 @@ class ResponseTest {
 
   @Test
   void createResponseWithJsonBody() throws HTTPError {
-    var jsonIO = new JsonIO(new Gson());
-    var response = new Response(jsonIO);
+    var jsonConverter = new JsonConverter(new Gson());
+    var response = new Response(jsonConverter);
 
     var reminderCreator = ReminderJsonCreator.createReminder("123", "Do chores");
     response.setBody(reminderCreator);
@@ -53,8 +53,8 @@ class ResponseTest {
 
   @Test
   void createResponseWithBinaryBody() throws HTTPError {
-    var jsonIOMock = new JsonIOMock();
-    var response = new Response(jsonIOMock);
+    var jsonConverterMock = new JsonConverterMock();
+    var response = new Response(jsonConverterMock);
 
     var bodyBytes = "binary body".getBytes();
     response.setBody(bodyBytes);
@@ -77,8 +77,8 @@ class ResponseTest {
 
   @Test
   void setStatus() {
-    var jsonIO = new JsonIO(new Gson());
-    var response = new Response(jsonIO);
+    var jsonConverter = new JsonConverter(new Gson());
+    var response = new Response(jsonConverter);
     response.setStatus(404);
 
     var headerStr = response.createResponse();
@@ -90,8 +90,8 @@ class ResponseTest {
 
   @Test
   void addHeader() {
-    var jsonIO = new JsonIO(new Gson());
-    var response = new Response(jsonIO);
+    var jsonConverter = new JsonConverter(new Gson());
+    var response = new Response(jsonConverter);
     response.setStatus(301);
     response.addHeader("Location", "/simple_get");
 
@@ -106,8 +106,8 @@ class ResponseTest {
 
   @Test
   void setRedirect() {
-    var jsonIO = new JsonIO(new Gson());
-    var response = new Response(jsonIO);
+    var jsonConverter = new JsonConverter(new Gson());
+    var response = new Response(jsonConverter);
     response.setRedirect("/test", 302);
 
     var headerStr = response.createResponse();
@@ -121,8 +121,8 @@ class ResponseTest {
 
   @Test
   void throwErrorIfBodyIsNull() {
-    var jsonIO = new JsonIO(new Gson());
-    var response = new Response(jsonIO);
+    var jsonConverter = new JsonConverter(new Gson());
+    var response = new Response(jsonConverter);
 
     HTTPError exception = assertThrows(
         HTTPError.class, () -> response.setBody((String) null)
@@ -134,8 +134,8 @@ class ResponseTest {
 
   @Test
   void throwErrorIfJsonBodyIsNull() {
-    var jsonIO = new JsonIO(new Gson());
-    var response = new Response(jsonIO);
+    var jsonConverter = new JsonConverter(new Gson());
+    var response = new Response(jsonConverter);
 
     HTTPError exception = assertThrows(
         HTTPError.class, () -> response.setBody((JsonElement) null)
@@ -147,8 +147,8 @@ class ResponseTest {
 
   @Test
   void throwErrorIfBinaryBodyIsNull() {
-    var jsonIO = new JsonIO(new Gson());
-    var response = new Response(jsonIO);
+    var jsonConverter = new JsonConverter(new Gson());
+    var response = new Response(jsonConverter);
 
     HTTPError exception = assertThrows(
         HTTPError.class, () -> response.setBody((byte[]) null)

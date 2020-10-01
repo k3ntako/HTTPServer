@@ -11,10 +11,10 @@ public class Response implements ResponseInterface {
   private byte[] body = new byte[]{};
   private int status = 200;
   final private HashMap<String, String> additionalHeaders = new HashMap<>();
-  final private JsonIOInterface jsonIO;
+  final private JsonConverterInterface jsonConverter;
 
-  public Response(JsonIOInterface jsonIO) {
-    this.jsonIO = jsonIO;
+  public Response(JsonConverterInterface jsonConverter) {
+    this.jsonConverter = jsonConverter;
   }
 
   @Override
@@ -56,7 +56,7 @@ public class Response implements ResponseInterface {
   @Override
   public void setBody(JsonElement body) throws HTTPError {
     validateBody(body);
-    this.body = this.jsonIO.toJson(body).getBytes();
+    this.body = this.jsonConverter.toJson(body).getBytes();
   }
 
   @Override

@@ -7,13 +7,13 @@ import java.io.IOException;
 
 public class ReminderIO implements ReminderIOInterface {
   final private DataDirectoryIO dataDirectoryIO;
-  final private JsonIOInterface jsonIO;
+  final private JsonConverterInterface jsonConverter;
   final private UUIDInterface uuid;
   final private String remindersDir = "/reminders/";
 
-  public ReminderIO(DataDirectoryIO dataDirectoryIO, JsonIOInterface jsonIO, UUIDInterface uuid) {
+  public ReminderIO(DataDirectoryIO dataDirectoryIO, JsonConverterInterface jsonConverter, UUIDInterface uuid) {
     this.dataDirectoryIO = dataDirectoryIO;
-    this.jsonIO = jsonIO;
+    this.jsonConverter = jsonConverter;
     this.uuid = uuid;
   }
 
@@ -23,7 +23,7 @@ public class ReminderIO implements ReminderIOInterface {
     var reminderList = ReminderJsonCreator.createReminderList(uuid);
 
     var filePath = this.generatePath(uuid);
-    var fileStr = jsonIO.toJson(reminderList);
+    var fileStr = jsonConverter.toJson(reminderList);
     dataDirectoryIO.write(filePath, fileStr);
 
     return reminderList;
@@ -98,7 +98,7 @@ public class ReminderIO implements ReminderIOInterface {
 
   private void writeToFile(String listId, JsonObject reminderList) throws IOException {
     var filePath = this.generatePath(listId);
-    var fileStr = jsonIO.toJson(reminderList); // might be an issue
+    var fileStr = jsonConverter.toJson(reminderList); // might be an issue
     dataDirectoryIO.write(filePath, fileStr);
   }
 }

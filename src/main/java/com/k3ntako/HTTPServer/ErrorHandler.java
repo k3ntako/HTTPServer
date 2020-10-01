@@ -14,8 +14,8 @@ public class ErrorHandler implements ErrorHandlerInterface {
   }
 
   private ResponseInterface generateErrorResponse(int status, Exception exception) throws HTTPError {
-    var jsonIO = new JsonIO(new Gson());
-    var response = new Response(jsonIO);
+    var jsonConverter = new JsonConverter(new Gson());
+    var response = new Response(jsonConverter);
     response.setStatus(status);
 
     var message = exception.getMessage();

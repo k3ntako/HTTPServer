@@ -6,7 +6,6 @@ import com.k3ntako.HTTPServer.mocks.UUIDMock;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,8 +22,8 @@ class ReminderIOTest {
 
     var fileIO = new FileIOMock(mockJson);
     var dataDirectoryIO = new DataDirectoryIO(fileIO, "./mock/data");
-    var jsonIO = new JsonIO(new Gson());
-    var reminderIO = new ReminderIO(dataDirectoryIO, jsonIO, new UUID());
+    var jsonConverter = new JsonConverter(new Gson());
+    var reminderIO = new ReminderIO(dataDirectoryIO, jsonConverter, new UUID());
 
     var reminder = reminderIO.getReminderByIds("reminder-list-1", "reminder-123");
 
@@ -38,8 +37,8 @@ class ReminderIOTest {
   void getReminderByIdsThrowsErrorIfListIsNotFound() {
     var fileIO = new FileIOMock((String) null);
     var dataDirectoryIO = new DataDirectoryIO(fileIO, "./mock/data");
-    var jsonIO = new JsonIO(new Gson());
-    var reminderIO = new ReminderIO(dataDirectoryIO, jsonIO, new UUID());
+    var jsonConverter = new JsonConverter(new Gson());
+    var reminderIO = new ReminderIO(dataDirectoryIO, jsonConverter, new UUID());
 
     HTTPError exception = assertThrows(HTTPError.class, () -> reminderIO.getReminderByIds(
         "reminder-list-2",
@@ -61,8 +60,8 @@ class ReminderIOTest {
 
     var fileIO = new FileIOMock(mockJson);
     var dataDirectoryIO = new DataDirectoryIO(fileIO, "./mock/data");
-    var jsonIO = new JsonIO(new Gson());
-    var reminderIO = new ReminderIO(dataDirectoryIO, jsonIO, new UUID());
+    var jsonConverter = new JsonConverter(new Gson());
+    var reminderIO = new ReminderIO(dataDirectoryIO, jsonConverter, new UUID());
 
     HTTPError exception = assertThrows(HTTPError.class, () -> reminderIO.getReminderByIds(
         "reminder-list-1",
@@ -77,9 +76,9 @@ class ReminderIOTest {
   void createNewList() throws IOException {
     var fileIO = new FileIOMock();
     var dataDirectoryIO = new DataDirectoryIO(fileIO, "./mock/data");
-    var jsonIO = new JsonIO(new Gson());
+    var jsonConverter = new JsonConverter(new Gson());
     var uuid = new UUIDMock();
-    var reminderIO = new ReminderIO(dataDirectoryIO, jsonIO, uuid);
+    var reminderIO = new ReminderIO(dataDirectoryIO, jsonConverter, uuid);
 
     var returnedReminderList = reminderIO.createNewList();
 
@@ -107,9 +106,9 @@ class ReminderIOTest {
 
     var fileIO = new FileIOMock(mockJson);
     var dataDirectoryIO = new DataDirectoryIO(fileIO, "./mock/data");
-    var jsonIO = new JsonIO(new Gson());
+    var jsonConverter = new JsonConverter(new Gson());
     var uuid = new UUIDMock();
-    var reminderIO = new ReminderIO(dataDirectoryIO, jsonIO, uuid);
+    var reminderIO = new ReminderIO(dataDirectoryIO, jsonConverter, uuid);
 
     var reminder = reminderIO.addReminder("reminder-list-1", "Do this task!");
 
@@ -136,8 +135,8 @@ class ReminderIOTest {
   void addReminderThrowsErrorIfListIsNotFound() {
     var fileIO = new FileIOMock((String) null);
     var dataDirectoryIO = new DataDirectoryIO(fileIO, "./mock/data");
-    var jsonIO = new JsonIO(new Gson());
-    var reminderIO = new ReminderIO(dataDirectoryIO, jsonIO, new UUID());
+    var jsonConverter = new JsonConverter(new Gson());
+    var reminderIO = new ReminderIO(dataDirectoryIO, jsonConverter, new UUID());
 
     HTTPError exception = assertThrows(HTTPError.class, () -> reminderIO.addReminder(
         "reminder-list-2",
@@ -163,9 +162,9 @@ class ReminderIOTest {
 
     var fileIO = new FileIOMock(mockJson);
     var dataDirectoryIO = new DataDirectoryIO(fileIO, "./mock/data");
-    var jsonIO = new JsonIO(new Gson());
+    var jsonConverter = new JsonConverter(new Gson());
     var uuid = new UUIDMock();
-    var reminderIO = new ReminderIO(dataDirectoryIO, jsonIO, uuid);
+    var reminderIO = new ReminderIO(dataDirectoryIO, jsonConverter, uuid);
 
     var reminder = reminderIO.updateReminder("reminder-list-1", "reminder-1", "Updated task!");
 
@@ -192,8 +191,8 @@ class ReminderIOTest {
   void updateReminderThrowsErrorIfListIsNotFound() {
     var fileIO = new FileIOMock((String) null);
     var dataDirectoryIO = new DataDirectoryIO(fileIO, "./mock/data");
-    var jsonIO = new JsonIO(new Gson());
-    var reminderIO = new ReminderIO(dataDirectoryIO, jsonIO, new UUID());
+    var jsonConverter = new JsonConverter(new Gson());
+    var reminderIO = new ReminderIO(dataDirectoryIO, jsonConverter, new UUID());
 
     HTTPError exception = assertThrows(HTTPError.class, () -> reminderIO.updateReminder(
         "reminder-list-2",
@@ -216,8 +215,8 @@ class ReminderIOTest {
 
     var fileIO = new FileIOMock(mockJson);
     var dataDirectoryIO = new DataDirectoryIO(fileIO, "./mock/data");
-    var jsonIO = new JsonIO(new Gson());
-    var reminderIO = new ReminderIO(dataDirectoryIO, jsonIO, new UUID());
+    var jsonConverter = new JsonConverter(new Gson());
+    var reminderIO = new ReminderIO(dataDirectoryIO, jsonConverter, new UUID());
 
     HTTPError exception = assertThrows(HTTPError.class, () -> reminderIO.updateReminder(
         "reminder-list-1",
@@ -244,9 +243,9 @@ class ReminderIOTest {
 
     var fileIO = new FileIOMock(mockJson);
     var dataDirectoryIO = new DataDirectoryIO(fileIO, "./mock/data");
-    var jsonIO = new JsonIO(new Gson());
+    var jsonConverter = new JsonConverter(new Gson());
     var uuid = new UUIDMock();
-    var reminderIO = new ReminderIO(dataDirectoryIO, jsonIO, uuid);
+    var reminderIO = new ReminderIO(dataDirectoryIO, jsonConverter, uuid);
 
     reminderIO.deleteReminder("reminder-list-1", "reminder-1");
 
@@ -264,8 +263,8 @@ class ReminderIOTest {
   void deleteReminderThrowsErrorIfListIsNotFound() {
     var fileIO = new FileIOMock((String) null);
     var dataDirectoryIO = new DataDirectoryIO(fileIO, "./mock/data");
-    var jsonIO = new JsonIO(new Gson());
-    var reminderIO = new ReminderIO(dataDirectoryIO, jsonIO, new UUID());
+    var jsonConverter = new JsonConverter(new Gson());
+    var reminderIO = new ReminderIO(dataDirectoryIO, jsonConverter, new UUID());
 
     HTTPError exception = assertThrows(HTTPError.class, () -> reminderIO.deleteReminder(
         "reminder-list-2",
@@ -287,8 +286,8 @@ class ReminderIOTest {
 
     var fileIO = new FileIOMock(mockJson);
     var dataDirectoryIO = new DataDirectoryIO(fileIO, "./mock/data");
-    var jsonIO = new JsonIO(new Gson());
-    var reminderIO = new ReminderIO(dataDirectoryIO, jsonIO, new UUID());
+    var jsonConverter = new JsonConverter(new Gson());
+    var reminderIO = new ReminderIO(dataDirectoryIO, jsonConverter, new UUID());
 
     HTTPError exception = assertThrows(HTTPError.class, () -> reminderIO.deleteReminder(
         "reminder-list-1",

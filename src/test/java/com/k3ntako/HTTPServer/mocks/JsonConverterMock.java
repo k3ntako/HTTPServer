@@ -1,10 +1,10 @@
 package com.k3ntako.HTTPServer.mocks;
 
-import com.k3ntako.HTTPServer.JsonIOInterface;
+import com.k3ntako.HTTPServer.JsonConverterInterface;
 
 import java.lang.reflect.InvocationTargetException;
 
-public class JsonIOMock implements JsonIOInterface {
+public class JsonConverterMock implements JsonConverterInterface {
   public String fromJsonStr;
   public Class fromJsonType;
   public Object toJsonArg;
