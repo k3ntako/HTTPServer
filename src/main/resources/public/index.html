@@ -122,20 +122,33 @@
             <td>/api/images/:image_name</td>
             <td>
                 <ul>
-                    <li>Retrieve image that was previously uploaded via the POST endpoint.</li>
+                    <li>Retrieves image that was previously uploaded via the POST endpoint.</li>
+                    <li>Currently, only supports PNG files.</li>
                     <li>Returns 404 if image is not found.</li>
                 </ul>
             </td>
         </tr>
         <tr>
             <td>POST</td>
-            <td>/api/images/</td>
+            <td>/api/images</td>
             <td>
                 <ul>
                     <li>Upload a PNG image.</li>
+                    <li>Currently, only supports PNG files and does not work with Postman. However, it does work with curl, and the issue is being investigated.</li>
                     <li>Returns a JSON with the filename. The image can be accessed using that filename with the GET
                         endpoint.
                     </li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>DELETE</td>
+            <td>/api/images/:image_name</td>
+            <td>
+                <ul>
+                    <li>Deletes image that was previously uploaded via the POST endpoint.</li>
+                    <li>Currently, only supports PNG files.</li>
+                    <li>Returns 404 if image is not found.</li>
                 </ul>
             </td>
         </tr>
