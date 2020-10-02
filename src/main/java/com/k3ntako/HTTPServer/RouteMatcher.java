@@ -6,61 +6,44 @@ import java.util.HashMap;
 public class RouteMatcher {
 
   public Route matchRoute(
-      HashMap<String, HashMap<String, ControllerMethodInterface>> routes,
+      ArrayList<RegisteredRoute> registeredRoutes,
       RequestInterface request
   ) {
-    var verb = request.getMethod();
-    var routesForMethod = routes.get(verb);
+    Route exactMatch = null;
 
-    if (routesForMethod == null) {
-      return null;
+    for (RegisteredRoute registeredRoute : registeredRoutes) {
+      var methodMatches = registeredRoute.method.equals(request.getMethod());
+      var matches = methodMatches && registeredRoute.url.equals(request.getRoute());
+
+      if (matches) {
+        exactMatch = new Route(registeredRoute.url);
+        exactMatch.setControllerMethod(registeredRoute.controller);
+      }
     }
-
-    var exactMatch = this.getExactMatch(routesForMethod, request);
 
     if (exactMatch != null) {
       return exactMatch;
     }
 
-    return getVariableRoute(routesForMethod, request.getRoute());
+
+    return getVariableRoute(registeredRoutes, request);
   }
 
-  private Route getExactMatch(
-      HashMap<String, ControllerMethodInterface> routes,
-      RequestInterface request
-  ) {
-    var controllerMethod = routes.get(request.getRoute());
+  private Route getVariableRoute(ArrayList<RegisteredRoute> registeredRoutes, RequestInterface request) {
+    var route = new Route(request.getRoute());
+    var requestParts = convertToArray(request.getRoute());
 
-    if (controllerMethod != null) {
-      var route = new Route(request.getRoute());
-      route.setControllerMethod(controllerMethod);
+    for (RegisteredRoute registeredRoute : registeredRoutes) {
+      if (!registeredRoute.method.equals(request.getMethod())) {
+        continue;
+      }
 
-      return route;
-    }
+      var registeredRouteParts = convertToArray(registeredRoute.url);
 
-    return null;
-  }
-
-
-  private Route getVariableRoute(
-      HashMap<String, ControllerMethodInterface> routesForMethod,
-      String requestRoute
-  ) {
-    var route = new Route(requestRoute);
-    var requestParts = convertToArray(requestRoute);
-
-    for (String registeredRoute : routesForMethod.keySet()) {
-      var registeredParts = convertToArray(registeredRoute);
-
-      var doPartsMatch = partsMatch(registeredParts, requestParts);
+      var doPartsMatch = partsMatch(registeredRouteParts, requestParts);
       if (doPartsMatch) {
-        var controllerMethod = routesForMethod.get(registeredRoute);
-        if (controllerMethod == null) {
-          return null;
-        }
-
-        route.setControllerMethod(controllerMethod);
-        route.setRouteParams(this.parseRouteParams(registeredRoute, requestRoute));
+        route.setControllerMethod(registeredRoute.controller);
+        route.setRouteParams(this.parseRouteParams(registeredRoute.url, request.getRoute()));
         return route;
       }
     }

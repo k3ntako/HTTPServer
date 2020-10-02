@@ -14,7 +14,7 @@ class RouteTest {
   @Test
   void getRoutePath() {
     var route = new Route("/reminders/123");
-    assertEquals("/reminders/123", route.getRoutePath());
+    assertEquals("/reminders/123", route.getRouteUrl());
   }
 
   @Test

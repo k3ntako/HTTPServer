@@ -32,7 +32,7 @@ public class PublicFiles {
         contentType = fileIO.probeResourceContentType(fileName);
       }
     }
-    
+
     if (fileBytes == null) {
       throw new HTTPError(404, "Not found");
     }
