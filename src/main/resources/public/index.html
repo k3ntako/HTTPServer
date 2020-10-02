@@ -9,8 +9,8 @@
 <div class="page">
     <h1>HTTP Server</h1>
     <p>
-        The HTTP Server is hosted on <a href="http://httpserver-env-1.eba-eac65tjd.us-east-1.elasticbeanstalk.com/"
-                                        target="_blank">AWS Elastic Beanstalk</a>
+        The HTTP Server is hosted on <a href="http://www.httpserver.k3ntako.com/" target="_blank">AWS Elastic
+        Beanstalk</a>
         and source code can be found on <a href="https://github.com/k3ntako/HTTPServer" target="_blank">Github</a>.
     </p>
 
@@ -134,7 +134,9 @@
             <td>
                 <ul>
                     <li>Upload a PNG image.</li>
-                    <li>Currently, only supports PNG files and does not work with Postman. However, it does work with curl, and the issue is being investigated.</li>
+                    <li>Currently, only supports PNG files and does not work with Postman. However, it does work with
+                        curl, and the issue is being investigated.
+                    </li>
                     <li>Returns a JSON with the filename. The image can be accessed using that filename with the GET
                         endpoint.
                     </li>
@@ -161,14 +163,16 @@
     </p>
     <ol>
         <li>
-            When looking for content to return, it will first look for an <i>index.html</i> inside the directory specified.
+            When looking for content to return, it will first look for an <i>index.html</i> inside the directory
+            specified.
             For example, if you request <i>/example/dogs</i>, it will first look for <i>resources/example/dogs/index.html</i>.
             <ul>
                 <li>
                     If the HTML file is found, it will return it as a page, not text.
                 </li>
                 <li>
-                    This occurs even if the specified route is not a directory, because Unix directories are a type of file.
+                    This occurs even if the specified route is not a directory, because Unix directories are a type of
+                    file.
                     As a result, it is difficult to differentiate between a directory and a file.
                     However, files should never have an <i>index.html</i> inside, so this should not cause any problems.
                 </li>
