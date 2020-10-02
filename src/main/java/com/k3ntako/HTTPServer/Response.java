@@ -9,7 +9,7 @@ import java.util.Map;
 import javax.ws.rs.core.Response.Status;
 
 public class Response implements ResponseInterface {
-  private byte[] body = new byte[]{};
+  private byte[] body = null;
   private int status = 200;
   final private HashMap<String, String> additionalHeaders = new HashMap<>();
   final private JsonConverterInterface jsonConverter;
@@ -20,8 +20,13 @@ public class Response implements ResponseInterface {
 
   @Override
   public byte[] createResponse() {
-    var header = this.createHeader(body.length);
-    return concatByteArrays(header, body);
+    var header = this.createHeader();
+
+    if (body != null) {
+      return concatByteArrays(header, body);
+    }
+
+    return header;
   }
 
   private byte[] concatByteArrays(byte[] first, byte[] second) {
@@ -31,19 +36,21 @@ public class Response implements ResponseInterface {
     return combined;
   }
 
-  private byte[] createHeader(int contentLength) {
+  private byte[] createHeader() {
     var status = this.status;
 
-    if (body.length == 0 && status >= 200 && status <= 299) {
+    if (body == null && status >= 200 && status <= 299) {
       status = 204;
     }
 
     var header = "HTTP/1.1 " + status + " " + Status.fromStatusCode(status) + "\r\n";
+    header += stringifyAdditionHeaders();
 
-    var additionalHeaders = stringifyAdditionHeaders();
-    header += additionalHeaders;
+    if (body != null) {
+      header += "Content-Length: " + body.length + "\r\n";
+    }
 
-    header += "Content-Length: " + contentLength + "\r\n\r\n";
+    header += "\r\n";
 
     return header.getBytes();
   }
@@ -57,6 +64,7 @@ public class Response implements ResponseInterface {
   @Override
   public void setBody(JsonElement body) throws HTTPError {
     validateBody(body);
+    addHeader("Content-Type", "application/json");
     this.body = this.jsonConverter.toJson(body).getBytes();
   }
 

@@ -56,6 +56,7 @@ class RouterTest {
     var responseBytes = response.createResponse();
 
     var expectedResponse = "HTTP/1.1 200 OK\r\n" +
+        "Content-Type: application/json\r\n" +
         "Content-Length: 36\r\n\r\n" +
         "{\"id\":\"mock-new-list-id\",\"items\":{}}";
 
@@ -64,9 +65,6 @@ class RouterTest {
 
   @Test
   void notFoundRoute() throws Exception {
-    var fileIO = new FileIOMock();
-    var dataDirectoryIO = new DataDirectoryIO(fileIO, "./data");
-
     var routeRegistrar = new RouteRegistrarMock();
     var routeRegistry = routeRegistrar.registerRoutes();
 
@@ -75,8 +73,7 @@ class RouterTest {
     var response = router.routeRequest(request);
     var responseBytes = response.createResponse();
 
-    var expectedResponse = "HTTP/1.1 404 Not Found\r\n" +
-        "Content-Length: 0\r\n\r\n";
+    var expectedResponse = "HTTP/1.1 404 Not Found\r\n\r\n";
 
     assertEquals(expectedResponse, new String(responseBytes));
   }

@@ -51,6 +51,73 @@ class RouteMatcherTest {
   }
 
   @Test
+  void matchVariableRouteWithStar() {
+    var request = new RequestMock("GET", "/pictures/dogs");
+    var routes = new HashMap<String, HashMap<String, ControllerMethodInterface>>();
+    var routesForMethod = new HashMap<String, ControllerMethodInterface>();
+
+    routesForMethod.put("/pictures/*", (RequestInterface req, ResponseInterface res) -> new Reminders(new ReminderIOMock()).get(req, res));
+
+    routes.put("GET", routesForMethod);
+
+    var routeMatcher = new RouteMatcher();
+    var route = routeMatcher.matchRoute(routes, request);
+
+    assertNotNull(route.getControllerMethod());
+    assertEquals("/pictures/dogs", route.getRoutePath());
+  }
+
+  @Test
+  void matchVariableRouteWithStarWithMoreThanOneSlash() {
+    var request = new RequestMock("GET", "/pictures/dogs/shepherd");
+    var routes = new HashMap<String, HashMap<String, ControllerMethodInterface>>();
+    var routesForMethod = new HashMap<String, ControllerMethodInterface>();
+
+    routesForMethod.put("/pictures/*", (RequestInterface req, ResponseInterface res) -> new Reminders(new ReminderIOMock()).get(req, res));
+
+    routes.put("GET", routesForMethod);
+
+    var routeMatcher = new RouteMatcher();
+    var route = routeMatcher.matchRoute(routes, request);
+
+    assertNotNull(route.getControllerMethod());
+    assertEquals("/pictures/dogs/shepherd", route.getRoutePath());
+  }
+
+  @Test
+  void matchVariableRouteWithMultipleStars() {
+    var request = new RequestMock("GET", "/pictures/dogs/shepherd");
+    var routes = new HashMap<String, HashMap<String, ControllerMethodInterface>>();
+    var routesForMethod = new HashMap<String, ControllerMethodInterface>();
+
+    routesForMethod.put("/*/dogs/*", (RequestInterface req, ResponseInterface res) -> new Reminders(new ReminderIOMock()).get(req, res));
+
+    routes.put("GET", routesForMethod);
+
+    var routeMatcher = new RouteMatcher();
+    var route = routeMatcher.matchRoute(routes, request);
+
+    assertNotNull(route.getControllerMethod());
+    assertEquals("/pictures/dogs/shepherd", route.getRoutePath());
+  }
+
+  @Test
+  void doesNotMatchVariableRouteWithStar() {
+    var request = new RequestMock("GET", "/pictures/dogs/shepherd");
+    var routes = new HashMap<String, HashMap<String, ControllerMethodInterface>>();
+    var routesForMethod = new HashMap<String, ControllerMethodInterface>();
+
+    routesForMethod.put("/*/dogs/corgi", (RequestInterface req, ResponseInterface res) -> new Reminders(new ReminderIOMock()).get(req, res));
+
+    routes.put("GET", routesForMethod);
+
+    var routeMatcher = new RouteMatcher();
+    var route = routeMatcher.matchRoute(routes, request);
+
+    assertNull(route);
+  }
+
+  @Test
   void noVerbMatchShouldReturnNull() {
     var request = new RequestMock("GET", "/reminders");
     var routes = new HashMap<String, HashMap<String, ControllerMethodInterface>>();

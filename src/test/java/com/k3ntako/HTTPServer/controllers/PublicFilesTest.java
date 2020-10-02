@@ -6,75 +6,82 @@ import com.k3ntako.HTTPServer.mocks.RequestMock;
 import com.k3ntako.HTTPServer.mocks.ResponseMock;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class PublicFilesTest {
 
   @Test
-  void get() throws HTTPError {
+  void get() throws HTTPError, IOException {
     final var request = new RequestMock("GET", "/index.html");
 
-    final var fileIO = new FileIOMock("<html></html>", false);
+    final var fileIO = new FileIOMock(new String[]{null, "<html></html>"});
     final var publicFiles = new PublicFiles(fileIO);
     final var response = (ResponseMock) publicFiles.get(request, new ResponseMock());
 
-    assertEquals("public/index.html", fileIO.getLastIsResourceDirectoryFileName());
     assertEquals("public/index.html", fileIO.getLastGetResourceIfExistsFileName());
 
     assertNull(response.getSetJsonBodyArg);
-    assertEquals("<html></html>", response.getSetBodyArg);
+    assertEquals("<html></html>", new String(response.getSetBinaryBodyArg));
     final var headers = response.headers;
-    assertEquals("text/html; charset=UTF-8", headers.get("Content-Type"));
   }
 
   @Test
-  void getDirectoryDefaultsToIndexHTML() throws HTTPError {
+  void getDirectoryDefaultsToIndexHTML() throws HTTPError, IOException {
     final var request = new RequestMock("GET", "/");
 
-    final var fileIO = new FileIOMock("<html></html>", true);
+    final var fileIO = new FileIOMock("<html></html>");
     final var publicFiles = new PublicFiles(fileIO);
     final var response = (ResponseMock) publicFiles.get(request, new ResponseMock());
 
-    assertEquals("public/", fileIO.getLastIsResourceDirectoryFileName());
     assertEquals("public/index.html", fileIO.getLastGetResourceIfExistsFileName());
 
     assertNull(response.getSetJsonBodyArg);
-    assertEquals("<html></html>", response.getSetBodyArg);
-    final var headers = response.headers;
-    assertEquals("text/html; charset=UTF-8", headers.get("Content-Type"));
+    assertEquals("<html></html>", new String(response.getSetBinaryBodyArg));
   }
 
   @Test
-  void getDirectoryFallsBackToDirectoryContent() throws HTTPError {
-    final var request = new RequestMock("GET", "/");
+  void getNestRoutes() throws HTTPError, IOException {
+    final var request = new RequestMock("GET", "/images/dogs/mocha.png");
 
-    final var fileIO = new FileIOMock(
-        new String[]{null, "index.html\nindex.css"},
-        new Boolean[]{true}
-    );
+    var mockReturns = new byte[][]{null, new byte[]{1, 2, 3, 4, 5, 6}};
+    final var fileIO = new FileIOMock(mockReturns);
     final var publicFiles = new PublicFiles(fileIO);
     final var response = (ResponseMock) publicFiles.get(request, new ResponseMock());
 
-    assertEquals("public/", fileIO.getLastIsResourceDirectoryFileName());
+    assertEquals("public/images/dogs/mocha.png", fileIO.getLastGetResourceIfExistsFileName());
+
+    assertNull(response.getSetJsonBodyArg);
+    assertArrayEquals(new byte[]{1, 2, 3, 4, 5, 6}, response.getSetBinaryBodyArg);
+  }
+
+  @Test
+  void getDirectoryFallsBackToDirectoryContent() throws HTTPError, IOException {
+    final var request = new RequestMock("GET", "/");
+
+    final var fileIO = new FileIOMock(new byte[][]{null, "index.html\nindex.css".getBytes()});
+    final var publicFiles = new PublicFiles(fileIO);
+    final var response = (ResponseMock) publicFiles.get(request, new ResponseMock());
+
     assertEquals("public/", fileIO.getLastGetResourceIfExistsFileName());
 
     assertNull(response.getSetJsonBodyArg);
 
-    assertEquals("index.html\nindex.css", response.getSetBodyArg);
+    assertEquals("index.html\nindex.css", new String(response.getSetBinaryBodyArg));
     final var headers = response.headers;
-    assertEquals("text/html; charset=UTF-8", headers.get("Content-Type"));
   }
 
   @Test
   void getDirectoryReturns404IfFileNotFound() {
     final var request = new RequestMock("GET", "/index.html");
 
-    final var fileIO = new FileIOMock(null, false);
+    final var fileIO = new FileIOMock((byte[]) null);
     final var publicFiles = new PublicFiles(fileIO);
 
     HTTPError exception = assertThrows(HTTPError.class, () -> publicFiles.get(request, new ResponseMock()));
 
-    assertEquals("File was not found", exception.getMessage());
+    assertEquals("Not found", exception.getMessage());
     assertEquals(404, exception.getStatus());
   }
 
@@ -82,12 +89,12 @@ class PublicFilesTest {
   void getDirectoryReturns404IfDirectoryNotFound() {
     final var request = new RequestMock("GET", "/");
 
-    final var fileIO = new FileIOMock(null, (Boolean) null);
+    final var fileIO = new FileIOMock((byte[]) null);
     final var publicFiles = new PublicFiles(fileIO);
 
     HTTPError exception = assertThrows(HTTPError.class, () -> publicFiles.get(request, new ResponseMock()));
 
-    assertEquals("File was not found", exception.getMessage());
+    assertEquals("Not found", exception.getMessage());
     assertEquals(404, exception.getStatus());
   }
 }

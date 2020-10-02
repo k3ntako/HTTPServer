@@ -52,10 +52,6 @@ public class RouteMatcher {
     for (String registeredRoute : routesForMethod.keySet()) {
       var registeredParts = convertToArray(registeredRoute);
 
-      if (registeredParts.length != requestParts.length) {
-        continue;
-      }
-
       var doPartsMatch = partsMatch(registeredParts, requestParts);
       if (doPartsMatch) {
         var controllerMethod = routesForMethod.get(registeredRoute);
@@ -95,6 +91,10 @@ public class RouteMatcher {
     for (int i = 0; i < registeredParts.length; i++) {
       var registeredPart = registeredParts[i];
       var requestPart = requestParts[i];
+
+      if (registeredPart.equals("*")) {
+        continue;
+      }
 
       if (registeredPart.charAt(0) == ':') {
         continue;

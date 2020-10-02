@@ -18,9 +18,9 @@ class ResponseTest {
 
     var responseBytes = response.createResponse();
 
-    var expected = "HTTP/1.1 204 No Content\r\n" +
-        "Content-Length: 0\r\n\r\n";
-    assertArrayEquals(expected.getBytes(), responseBytes);
+    var expected = "HTTP/1.1 204 No Content\r\n\r\n";
+
+    assertEquals(expected, new String(responseBytes));
   }
 
   @Test
@@ -34,7 +34,8 @@ class ResponseTest {
     var expected = "HTTP/1.1 200 OK\r\n" +
         "Content-Length: 27\r\n\r\n" +
         "This\nis\nthe\nresponse\nbody!!";
-    assertArrayEquals(expected.getBytes(), responseBytes);
+
+    assertEquals(expected, new String(responseBytes));
   }
 
   @Test
@@ -48,9 +49,11 @@ class ResponseTest {
     var responseBytes = response.createResponse();
 
     var expected = "HTTP/1.1 200 OK\r\n" +
+        "Content-Type: application/json\r\n" +
         "Content-Length: 31\r\n\r\n" +
         "{\"id\":\"123\",\"task\":\"Do chores\"}";
-    assertArrayEquals(expected.getBytes(), responseBytes);
+
+    assertEquals(expected, new String(responseBytes));
   }
 
   @Test
@@ -83,11 +86,10 @@ class ResponseTest {
     var response = new Response(jsonConverter);
     response.setStatus(404);
 
-    var headerStr = response.createResponse();
-    var expected = "HTTP/1.1 404 Not Found\r\n" +
-        "Content-Length: 0\r\n\r\n";
+    var headerBytes = response.createResponse();
+    var expected = "HTTP/1.1 404 Not Found\r\n\r\n";
 
-    assertArrayEquals(expected.getBytes(), headerStr);
+    assertEquals(expected, new String(headerBytes));
   }
 
   @Test
@@ -97,13 +99,12 @@ class ResponseTest {
     response.setStatus(301);
     response.addHeader("Location", "/simple_get");
 
-    var headerStr = response.createResponse();
+    var headerBytes = response.createResponse();
 
     var expected = "HTTP/1.1 301 Moved Permanently\r\n" +
-        "Location: /simple_get\r\n" +
-        "Content-Length: 0\r\n\r\n";
+        "Location: /simple_get\r\n\r\n";
 
-    assertArrayEquals(expected.getBytes(), headerStr);
+    assertEquals(expected, new String(headerBytes));
   }
 
   @Test
@@ -112,13 +113,12 @@ class ResponseTest {
     var response = new Response(jsonConverter);
     response.setRedirect("/test", 302);
 
-    var headerStr = response.createResponse();
+    var headerBytes = response.createResponse();
 
     var expected = "HTTP/1.1 302 Found\r\n" +
-        "Location: /test\r\n" +
-        "Content-Length: 0\r\n\r\n";
+        "Location: /test\r\n\r\n";
 
-    assertArrayEquals(expected.getBytes(), headerStr);
+    assertEquals(expected, new String(headerBytes));
   }
 
   @Test
