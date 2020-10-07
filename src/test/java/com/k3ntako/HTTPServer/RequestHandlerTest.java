@@ -25,11 +25,12 @@ class RequestHandlerTest {
     var requestHandler = new RequestHandler(router, new RequestGeneratorMock(), new ErrorHandler());
 
     var expectedResponse = "HTTP/1.1 200 OK\r\n" +
+        "Content-Type: text/plain\r\n" +
         "Content-Length: 11\r\n\r\n" +
         "Hello world";
 
-    var responseStr = requestHandler.handleRequest(new ClientSocketIOMock(""));
-    assertArrayEquals(expectedResponse.getBytes(), responseStr);
+    var responseBytes = requestHandler.handleRequest(new ClientSocketIOMock(""));
+    assertEquals(expectedResponse, new String(responseBytes));
   }
 
   @Test
@@ -50,10 +51,11 @@ class RequestHandlerTest {
     var requestHandler = new RequestHandler(router, new RequestGeneratorMockThrowsError(), new ErrorHandler());
 
     var expectedResponse = "HTTP/1.1 500 Internal Server Error\r\n" +
+        "Content-Type: text/plain\r\n" +
         "Content-Length: 20\r\n\r\n" +
         "This is a test error";
 
     var responseStr = requestHandler.handleRequest(new ClientSocketIOMock(""));
-    assertArrayEquals(expectedResponse.getBytes(), responseStr);
+    assertEquals(expectedResponse, new String(responseStr));
   }
 }

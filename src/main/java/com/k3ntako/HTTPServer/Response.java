@@ -2,6 +2,7 @@ package com.k3ntako.HTTPServer;
 
 
 import com.google.gson.JsonElement;
+import com.k3ntako.HTTPServer.utilities.FileTypeResolverInterface;
 import com.k3ntako.HTTPServer.utilities.JsonConverterInterface;
 
 import java.util.HashMap;
@@ -13,9 +14,11 @@ public class Response implements ResponseInterface {
   private int status = 200;
   final private HashMap<String, String> additionalHeaders = new HashMap<>();
   final private JsonConverterInterface jsonConverter;
-
-  public Response(JsonConverterInterface jsonConverter) {
+  private FileTypeResolverInterface fileTypeResolver;
+  
+  public Response(JsonConverterInterface jsonConverter, FileTypeResolverInterface fileTypeResolver) {
     this.jsonConverter = jsonConverter;
+    this.fileTypeResolver = fileTypeResolver;
   }
 
   @Override
@@ -58,19 +61,29 @@ public class Response implements ResponseInterface {
   @Override
   public void setBody(String body) throws HTTPError {
     validateBody(body);
-    this.body = body.getBytes();
+    setBody(body.getBytes(), "text/plain");
   }
 
   @Override
   public void setBody(JsonElement body) throws HTTPError {
     validateBody(body);
-    addHeader("Content-Type", "application/json");
-    this.body = this.jsonConverter.toJson(body).getBytes();
+    setBody(this.jsonConverter.toJson(body).getBytes(), "application/json");
   }
 
   @Override
   public void setBody(byte[] body) throws HTTPError {
     validateBody(body);
+    var fileType = fileTypeResolver.guessContentTypeFromBytes(body);
+    setBody(body, fileType);
+  }
+
+  @Override
+  public void setBody(byte[] body, String contentType) throws HTTPError {
+    validateBody(body);
+    if(contentType != null){
+      addHeader("Content-Type", contentType);
+    }
+
     this.body = body;
   }
 

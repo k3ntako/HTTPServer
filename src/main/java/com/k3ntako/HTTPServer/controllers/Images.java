@@ -25,8 +25,6 @@ public class Images {
     }
 
     response.setBody(image);
-    response.addHeader("Content-Type", "image/png");
-
     return response;
   }
 
