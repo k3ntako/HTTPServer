@@ -3,16 +3,16 @@ package com.k3ntako.HTTPServer;
 import java.util.HashMap;
 
 public class Route {
-  final private String path;
+  final private String url;
   private ControllerMethodInterface controllerMethod;
   private HashMap<String, String> routeParams = new HashMap<>();
 
-  public Route(String path) {
-    this.path = path;
+  public Route(String url) {
+    this.url = url;
   }
 
-  public String getRoutePath() {
-    return path;
+  public String getRouteUrl() {
+    return url;
   }
 
   public void setControllerMethod(ControllerMethodInterface controllerMethod) {

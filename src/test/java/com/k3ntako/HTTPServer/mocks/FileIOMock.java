@@ -16,16 +16,12 @@ public class FileIOMock implements FileIOInterface {
   private Path lastReadPath;
   private String lastGetResourceFileName;
   private String lastGetResourceIfExistsFileName;
-  private String lastIsResourceDirectoryFileName;
-  private Object[] mockFileContentArr;
+  private byte[][] mockFileContentArr;
   private int mockFileContentArrIdx = 0;
-  private Boolean[] mockIsDirectoryArr;
-  private int mockIsDirectoryArrIdx = 0;
   private IOException mockException;
 
   public FileIOMock() {
-    this.mockFileContentArr = new String[]{"Mock file content was not set"};
-    this.mockIsDirectoryArr = new Boolean[]{null};
+    this.mockFileContentArr = new byte[][]{"Mock file content was not set".getBytes()};
   }
 
   public FileIOMock(IOException exception) {
@@ -33,21 +29,32 @@ public class FileIOMock implements FileIOInterface {
   }
 
   public FileIOMock(String mockFileContent) {
-    this.mockFileContentArr = new String[]{mockFileContent};
+    if (mockFileContent == null) {
+      this.mockFileContentArr = new byte[][]{null};
+    } else {
+      this.mockFileContentArr = new byte[][]{mockFileContent.getBytes()};
+    }
   }
 
   public FileIOMock(byte[] mockFileContent) {
     this.mockFileContentArr = new byte[][]{mockFileContent};
   }
 
-  public FileIOMock(String mockFileContent, Boolean mockIsDirectory) {
-    this.mockFileContentArr = new String[]{mockFileContent};
-    this.mockIsDirectoryArr = new Boolean[]{mockIsDirectory};
+  public FileIOMock(byte[][] mockFileContentArr) {
+    this.mockFileContentArr = mockFileContentArr;
   }
 
-  public FileIOMock(String[] mockFileContentArr, Boolean[] mockIsDirectoryArr) {
-    this.mockFileContentArr = mockFileContentArr;
-    this.mockIsDirectoryArr = mockIsDirectoryArr;
+  public FileIOMock(String[] mockFileContentArr) {
+    var byteArrays = new byte[mockFileContentArr.length][];
+    for (int i = 0; i < mockFileContentArr.length; i++) {
+      var mockStr = mockFileContentArr[i];
+      if (mockStr == null) {
+        byteArrays[i] = null;
+      } else {
+        byteArrays[i] = mockStr.getBytes();
+      }
+    }
+    this.mockFileContentArr = byteArrays;
   }
 
   @Override
@@ -69,9 +76,14 @@ public class FileIOMock implements FileIOInterface {
     throwIfExceptionExists();
     lastReadPath = path;
 
-    var mockReturn = (String) mockFileContentArr[mockFileContentArrIdx];
+    var mockReturn = mockFileContentArr[mockFileContentArrIdx];
     incrementMockContent();
-    return mockReturn;
+
+    if (mockReturn == null) {
+      return null;
+    }
+
+    return new String(mockReturn);
   }
 
   @Override
@@ -79,13 +91,7 @@ public class FileIOMock implements FileIOInterface {
     throwIfExceptionExists();
     lastReadPath = path;
 
-    byte[] mockReturn;
-
-    if (mockFileContentArr[mockFileContentArrIdx] instanceof String) {
-      mockReturn = ((String) mockFileContentArr[mockFileContentArrIdx]).getBytes();
-    } else {
-      mockReturn = (byte[]) mockFileContentArr[mockFileContentArrIdx];
-    }
+    byte[] mockReturn = mockFileContentArr[mockFileContentArrIdx];
 
     incrementMockContent();
     return mockReturn;
@@ -118,36 +124,26 @@ public class FileIOMock implements FileIOInterface {
 
     var mockReturn = mockFileContentArr[mockFileContentArrIdx];
     incrementMockContent();
-    return (String) mockReturn;
+    return new String(mockReturn);
   }
 
   @Override
-  public String getResourceIfExists(String fileName) {
+  public byte[] getResourceIfExists(String fileName) {
     lastGetResourceIfExistsFileName = fileName;
 
-    var mockReturn = (String) mockFileContentArr[mockFileContentArrIdx];
+    var mockReturn = mockFileContentArr[mockFileContentArrIdx];
     incrementMockContent();
     return mockReturn;
   }
 
   @Override
-  public Boolean isResourceDirectory(String fileName) {
-    lastIsResourceDirectoryFileName = fileName;
-
-    var mockReturn = mockIsDirectoryArr[mockIsDirectoryArrIdx];
-    incrementIsDirectory();
-    return mockReturn;
+  public String probeResourceContentType(String fileName) {
+    return null;
   }
 
   private void incrementMockContent() {
     if (mockFileContentArrIdx < mockFileContentArr.length - 1) {
       mockFileContentArrIdx++;
-    }
-  }
-
-  private void incrementIsDirectory() {
-    if (mockIsDirectoryArrIdx < mockIsDirectoryArr.length - 1) {
-      mockIsDirectoryArrIdx++;
     }
   }
 
@@ -189,10 +185,6 @@ public class FileIOMock implements FileIOInterface {
 
   public String getLastGetResourceIfExistsFileName() {
     return lastGetResourceIfExistsFileName;
-  }
-
-  public String getLastIsResourceDirectoryFileName() {
-    return lastIsResourceDirectoryFileName;
   }
 
   private void throwIfExceptionExists() throws IOException {

@@ -1,7 +1,10 @@
 package com.k3ntako.HTTPServer.fileSystemsIO;
 
+import com.k3ntako.HTTPServer.HTTPError;
+
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -42,17 +45,18 @@ public class FileIO implements FileIOInterface {
 
     return Files.readAllBytes(path);
   }
-    
-  public String getResourceIfExists(String fileName) {
+
+  public byte[] getResourceIfExists(String fileName) throws IOException {
     var inputStream = this.getClass().getClassLoader().getResourceAsStream(fileName);
 
     if (inputStream == null) {
       return null;
     }
 
-    var scanner = new Scanner(inputStream).useDelimiter("\\A");
-    return scanner.hasNext() ? scanner.next() : "";
+    var targetArray = new byte[inputStream.available()];
+    inputStream.read(targetArray);
 
+    return targetArray;
   }
 
   public String getResource(String fileName) throws IOException {
@@ -66,18 +70,22 @@ public class FileIO implements FileIOInterface {
     return scanner.hasNext() ? scanner.next() : "";
   }
 
-  @Override
-  public Boolean isResourceDirectory(String fileName) {
-    var resourceURL = this.getClass().getClassLoader().getResource(fileName);
+  public String probeResourceContentType(String fileName) throws HTTPError {
+    try {
+      var url = this.getClass().getClassLoader().getResource(fileName);
 
-    if (resourceURL == null) {
-      return null;
+      if (url == null) {
+        throw new HTTPError(404, "Resource not found");
+      }
+
+      Path path = new File(url.toURI()).toPath();
+
+      return Files.probeContentType(path);
+    } catch (IOException e) {
+      throw new HTTPError(404, e.getMessage());
+    } catch (URISyntaxException e) {
+      throw new HTTPError(500, e.getMessage());
     }
-
-    // file.isDirectory() does not work for resource directories/files in a Jar file
-    var resourceUrlStr = resourceURL.toString();
-    var lastChar = resourceUrlStr.substring(resourceUrlStr.length() - 1);
-    return lastChar.equals("/");
   }
 
   public void patchNewLine(Path path, String str) throws IOException {

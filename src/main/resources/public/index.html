@@ -9,8 +9,8 @@
 <div class="page">
     <h1>HTTP Server</h1>
     <p>
-        The HTTP Server is hosted on <a href="http://httpserver-env-1.eba-eac65tjd.us-east-1.elasticbeanstalk.com/"
-                                        target="_blank">AWS Elastic Beanstalk</a>
+        The HTTP Server is hosted on <a href="http://www.httpserver.k3ntako.com/" target="_blank">AWS Elastic
+        Beanstalk</a>
         and source code can be found on <a href="https://github.com/k3ntako/HTTPServer" target="_blank">Github</a>.
     </p>
 
@@ -122,20 +122,136 @@
             <td>/api/images/:image_name</td>
             <td>
                 <ul>
-                    <li>Retrieve image that was previously uploaded via the POST endpoint.</li>
+                    <li>Retrieves image that was previously uploaded via the POST endpoint.</li>
+                    <li>Currently, only supports PNG files.</li>
                     <li>Returns 404 if image is not found.</li>
                 </ul>
             </td>
         </tr>
         <tr>
             <td>POST</td>
-            <td>/api/images/</td>
+            <td>/api/images</td>
             <td>
                 <ul>
                     <li>Upload a PNG image.</li>
+                    <li>Currently, only supports PNG files and does not work with Postman. However, it does work with
+                        curl, and the issue is being investigated.
+                    </li>
                     <li>Returns a JSON with the filename. The image can be accessed using that filename with the GET
                         endpoint.
                     </li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>DELETE</td>
+            <td>/api/images/:image_name</td>
+            <td>
+                <ul>
+                    <li>Deletes image that was previously uploaded via the POST endpoint.</li>
+                    <li>Currently, only supports PNG files.</li>
+                    <li>Returns 404 if image is not found.</li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+
+    <h3>Public Folder</h3>
+    <p>
+        Public folder is a directory in <i>main/java/resources</i> that is publicly accessible.
+        For a <i>GET</i> request, if none of the above endpoints match, it will fallback to this option.
+    </p>
+    <ol>
+        <li>
+            When looking for content to return, it will first look for an <i>index.html</i> inside the directory
+            specified.
+            For example, if you request <i>/example/dogs</i>, it will first look for <i>resources/example/dogs/index.html</i>.
+            <ul>
+                <li>
+                    If the HTML file is found, it will return it as a page, not text.
+                </li>
+                <li>
+                    This occurs even if the specified route is not a directory, because Unix directories are a type of
+                    file.
+                    As a result, it is difficult to differentiate between a directory and a file.
+                    However, files should never have an <i>index.html</i> inside, so this should not cause any problems.
+                </li>
+            </ul>
+        </li>
+        <li>
+            If <i>index.html</i> is not found, it will then look for the directory or file itself.
+            <ul>
+                <li>
+                    If a file is found, it will return the contents.
+                    For example, a request to <i>/example/dogs/dog_1.png</i> will return <i>resources/example/dogs/dog_1.png</i>.
+                </li>
+                <li>
+                    If an HTML file is found, it will return it as a page, not text.
+                </li>
+                <li>
+                    If a directory is found, it will return the names of the files and directories found inside.
+                </li>
+            </ul>
+        </li>
+        <li>
+            If no matches are found, it will return a response with status 404.
+        </li>
+    </ol>
+
+    <table>
+        <tr>
+            <td>GET</td>
+            <td><a href="/">/</a></td>
+            <td>
+                <ul>
+                    <li>Returns /index.html, which is this page.</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td><a href="/index.css">/index.css</a></td>
+            <td>
+                <ul>
+                    <li>Returns the CSS used on this page.</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td><a href="/example">/example</a></td>
+            <td>
+                <ul>
+                    <li>A directory with no <i>index.html</i>.</li>
+                    <li>Returns the contents of the directory.</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td><a href="/example/dogs">/example/dogs</a></td>
+            <td>
+                <ul>
+                    <li>A directory with an <i>index.html</i>.</li>
+                    <li>Returns an HTML page.</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td><a href="/example/dogs/dog_1.png">/example/dogs/dog_1.png</a></td>
+            <td>
+                <ul>
+                    <li>Returns a PNG image file.</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td><a href="/example/dogs/dog_2.jpg">/example/dogs/dog_2.jpg</a></td>
+            <td>
+                <ul>
+                    <li>Returns a JPEG image file.</li>
                 </ul>
             </td>
         </tr>
