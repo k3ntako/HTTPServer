@@ -2,7 +2,9 @@ package com.k3ntako.HTTPServer.mocks;
 
 import com.k3ntako.HTTPServer.fileSystemsIO.FileIOInterface;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class FileIOMock implements FileIOInterface {
@@ -14,11 +16,13 @@ public class FileIOMock implements FileIOInterface {
   private Path lastOverwritePath;
   private Path lastDeletePath;
   private Path lastReadPath;
+  private Path lastListFilesPath;
   private String lastGetResourceFileName;
   private String lastGetResourceIfExistsFileName;
   private byte[][] mockFileContentArr;
   private int mockFileContentArrIdx = 0;
   private IOException mockException;
+  private File[] mockListFilesReturn;
 
   public FileIOMock() {
     this.mockFileContentArr = new byte[][]{"Mock file content was not set".getBytes()};
@@ -34,6 +38,11 @@ public class FileIOMock implements FileIOInterface {
     } else {
       this.mockFileContentArr = new byte[][]{mockFileContent.getBytes()};
     }
+  }
+
+  public FileIOMock(byte[] mockFileContent, File[] mockListFilesReturn) {
+    this.mockFileContentArr = new byte[][]{mockFileContent};
+    this.mockListFilesReturn = mockListFilesReturn;
   }
 
   public FileIOMock(byte[] mockFileContent) {
@@ -141,6 +150,13 @@ public class FileIOMock implements FileIOInterface {
     return null;
   }
 
+  @Override
+  public File[] listFiles(Path path) {
+    lastListFilesPath = path;
+
+    return mockListFilesReturn;
+  }
+
   private void incrementMockContent() {
     if (mockFileContentArrIdx < mockFileContentArr.length - 1) {
       mockFileContentArrIdx++;
@@ -185,6 +201,10 @@ public class FileIOMock implements FileIOInterface {
 
   public String getLastGetResourceIfExistsFileName() {
     return lastGetResourceIfExistsFileName;
+  }
+
+  public Path getLastListFilesPath() {
+    return lastListFilesPath;
   }
 
   private void throwIfExceptionExists() throws IOException {

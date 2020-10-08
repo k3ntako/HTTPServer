@@ -4,6 +4,7 @@ import com.k3ntako.HTTPServer.fileSystemsIO.DataDirectoryIO;
 import com.k3ntako.HTTPServer.mocks.FileIOMock;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -60,6 +61,44 @@ class DataDirectoryIOTest {
     dataDirectoryIO.readAllBytes(strPath);
 
     assertEquals(dataDirectory + "/" + strPath, fileIO.getLastReadPath().toString());
+  }
+
+  @Test
+  void readAllBytesById() throws IOException {
+    var file = new File("./mock/data/123abc.png");
+
+    var fileIO = new FileIOMock(new byte[]{1, 2, 3}, new File[]{file});
+    var dataDirectory = "./mock/data";
+    var dataDirectoryIO = new DataDirectoryIO(fileIO, dataDirectory);
+
+    var id = "123abc";
+    dataDirectoryIO.readAllBytesById("", id);
+
+    assertEquals(dataDirectory + "/" + id + ".png", fileIO.getLastReadPath().toString());
+  }
+
+  @Test
+  void readAllBytesByIdNested() throws IOException {
+    var file = new File("./mock/data/123abc.png");
+
+    var fileIO = new FileIOMock(new byte[]{1, 2, 3}, new File[]{file});
+    var dataDirectory = "./mock/data";
+    var dataDirectoryIO = new DataDirectoryIO(fileIO, dataDirectory);
+
+    var id = "123abc";
+    dataDirectoryIO.readAllBytesById("images", id);
+
+    assertEquals(dataDirectory + "/" + id + ".png", fileIO.getLastReadPath().toString());
+  }
+
+  @Test
+  void readAllBytesByIdReturnsNull() throws IOException {
+    var fileIO = new FileIOMock(null, null);
+    var dataDirectoryIO = new DataDirectoryIO(fileIO, "./mock/data");
+
+    var id = "123abc";
+    var file = dataDirectoryIO.readAllBytesById("", id);
+    assertNull(file);
   }
 
   @Test

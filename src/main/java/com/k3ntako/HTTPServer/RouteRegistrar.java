@@ -39,9 +39,9 @@ public class RouteRegistrar implements RouteRegistrarInterface {
     route("GET", "/api/reminders/:list_id/:reminder_id", (RequestInterface req, ResponseInterface res) -> new Reminders(reminderIO).get(req, res));
     route("PUT", "/api/reminders/:list_id/:reminder_id", (RequestInterface req, ResponseInterface res) -> new Reminders(reminderIO).put(req, res));
     route("DELETE", "/api/reminders/:list_id/:reminder_id", (RequestInterface req, ResponseInterface res) -> new Reminders(reminderIO).delete(req, res));
-    route("GET", "/api/images/:image_name", (RequestInterface req, ResponseInterface res) -> new Images(dataDirectoryIO, new UUID(), fileExt).get(req, res));
+    route("GET", "/api/images/:image_id", (RequestInterface req, ResponseInterface res) -> new Images(dataDirectoryIO, new UUID(), fileExt).get(req, res));
     route("POST", "/api/images", (RequestInterface req, ResponseInterface res) -> new Images(dataDirectoryIO, new UUID(), fileExt).post(req, res));
-    route("DELETE", "/api/images/:image_name", (RequestInterface req, ResponseInterface res) -> new Images(dataDirectoryIO, new UUID(), fileExt).delete(req, res));
+    route("DELETE", "/api/images/:image_id", (RequestInterface req, ResponseInterface res) -> new Images(dataDirectoryIO, new UUID(), fileExt).delete(req, res));
 
     route("GET", "/account", (RequestInterface req, ResponseInterface res) -> new Account().get(req, res));
     route("GET", "/", (RequestInterface req, ResponseInterface res) -> new PublicFiles(fileIO).get(req, res));
