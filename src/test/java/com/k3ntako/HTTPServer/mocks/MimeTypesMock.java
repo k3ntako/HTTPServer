@@ -38,7 +38,7 @@ public class MimeTypesMock implements MimeTypesInterface {
   }
 
   @Override
-  public String guessContentType(InputStream fileContent, String fileName) {
+  public String guessContentType(byte[] fileBytes, String fileName) {
     guessContentType = true;
     return returnMock;
   }

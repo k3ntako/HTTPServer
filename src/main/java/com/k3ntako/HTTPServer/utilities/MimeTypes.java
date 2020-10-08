@@ -6,26 +6,10 @@ import java.io.InputStream;
 import java.net.URLConnection;
 
 public class MimeTypes implements MimeTypesInterface {
-
   @Override
-  public String guessContentTypeFromBytes(byte[] fileContent) {
-    if(fileContent == null) {
-      return null;
-    }
-
-    var byteStream = new ByteArrayInputStream(fileContent);
-
+  public String guessContentTypeFromStream(InputStream fileInputStream) {
     try {
-      return URLConnection.guessContentTypeFromStream(byteStream);
-    } catch (IOException e) {
-      return null;
-    }
-  }
-
-  @Override
-  public String guessContentTypeFromStream(InputStream fileContent) {
-    try {
-      return URLConnection.guessContentTypeFromStream(fileContent);
+      return URLConnection.guessContentTypeFromStream(fileInputStream);
     } catch (IOException e) {
       return null;
     }
@@ -37,8 +21,19 @@ public class MimeTypes implements MimeTypesInterface {
   }
 
   @Override
-  public String guessContentType(InputStream fileContent, String fileName) {
-    var mimeTypes = guessContentTypeFromStream(fileContent);
+  public String guessContentTypeFromBytes(byte[] fileBytes) {
+    if(fileBytes == null) {
+      return null;
+    }
+
+    var byteStream = new ByteArrayInputStream(fileBytes);
+
+    return guessContentTypeFromStream(byteStream);
+  }
+
+  @Override
+  public String guessContentType(byte[] fileBytes, String fileName) {
+    var mimeTypes = guessContentTypeFromBytes(fileBytes);
 
     if(mimeTypes != null){
       return mimeTypes;

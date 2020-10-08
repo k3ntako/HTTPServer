@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public interface MimeTypesInterface {
-  String guessContentTypeFromBytes(byte[] fileContent);
+  String guessContentTypeFromBytes(byte[] fileBytes);
 
-  String guessContentTypeFromStream(InputStream fileContent);
+  String guessContentTypeFromStream(InputStream fileInputStream);
 
   String guessContentTypeFromName(String fileName);
 
-  String guessContentType(InputStream fileContent, String fileName);
+  String guessContentType(byte[] fileBytes, String fileName);
 }
