@@ -1,5 +1,9 @@
 package com.k3ntako.HTTPServer;
 
+import com.k3ntako.HTTPServer.utilities.FileTypes;
+import com.k3ntako.HTTPServer.utilities.MimeTypes;
+import com.k3ntako.HTTPServer.utilities.MimeTypesInterface;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Objects;
@@ -12,13 +16,20 @@ public class Request implements RequestInterface {
   private Object body;
   final private ClientSocketIOInterface clientSocketIO;
   private HashMap<String, String> routeParams;
+  private MimeTypesInterface mimeTypes;
 
   public Request(ClientSocketIOInterface clientSocketIO) {
     this.clientSocketIO = clientSocketIO;
     this.headers = new HashMap<>();
   }
 
-  public void parseRequest() throws IOException {
+  public Request(ClientSocketIOInterface clientSocketIO, MimeTypesInterface mimeTypes) {
+    this.clientSocketIO = clientSocketIO;
+    this.headers = new HashMap<>();
+    this.mimeTypes = mimeTypes;
+  }
+
+  public void parseRequest() throws IOException, HTTPError {
     this.parseHeader();
 
     var contentLength = 0;
@@ -26,10 +37,12 @@ public class Request implements RequestInterface {
       contentLength = Integer.parseInt(this.headers.get("Content-Length"));
     }
 
+    var headerContentType = headers.get("Content-Type");
     if (contentLength > 0) {
-      var contentType = this.headers.get("Content-Type");
-      this.parseBody(contentType, contentLength);
+      this.parseBody(headerContentType, contentLength);
     }
+
+    verifyContentType(headerContentType);
   }
 
   private void parseHeader() throws IOException {
@@ -40,6 +53,13 @@ public class Request implements RequestInterface {
       } else if (line.length() > 0) {
         this.parseRequestLine(line);
       }
+    }
+  }
+
+  private void verifyContentType(String headerContentType) throws HTTPError {
+    var bodyContentType = mimeTypes.guessContentTypeFromBytes((byte[]) this.body);
+    if(bodyContentType != null && !headerContentType.equals(bodyContentType)){
+      throw new HTTPError(400, "Bad Request");
     }
   }
 

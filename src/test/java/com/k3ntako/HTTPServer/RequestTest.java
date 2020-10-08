@@ -1,6 +1,8 @@
 package com.k3ntako.HTTPServer;
 
 import com.k3ntako.HTTPServer.mocks.ClientSocketIOMock;
+import com.k3ntako.HTTPServer.mocks.MimeTypesMock;
+import com.k3ntako.HTTPServer.utilities.MimeTypes;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -12,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class RequestTest {
 
   @Test
-  void parseRequest() throws IOException {
+  void parseRequest() throws IOException, HTTPError {
     var headerStr = "GET / HTTP/1.1\r\n" +
         "Host: localhost:5000\r\n" +
         "User-Agent: curl/7.64.1\r\n" +
@@ -33,7 +35,7 @@ class RequestTest {
   }
 
   @Test
-  void parseBody() throws IOException {
+  void parseBody() throws IOException, HTTPError {
     var header = "GET / HTTP/1.1\r\n" +
         "Content-Length: 68\r\n\r\n";
     var bodyStr = "Body line 1: abc\n" +
@@ -95,7 +97,7 @@ class RequestTest {
   }
 
   @Test
-  void parseBinaryBody() throws IOException {
+  void parseBinaryBody() throws IOException, HTTPError {
     var header = "GET / HTTP/1.1\r\n" +
         "Content-Type: image/png\r\n" +
         "Content-Length: 5\r\n\r\n";
@@ -112,6 +114,24 @@ class RequestTest {
     assertArrayEquals(bodyBytes, (byte[]) request.getBody());
     assertEquals(5, ((byte[]) request.getBody()).length);
     assertEquals("5", request.getHeaders().get("Content-Length"));
+  }
+
+  @Test
+  void verifyContentTypeThrowsError() {
+    var header = "GET / HTTP/1.1\r\n" +
+        "Content-Type: image/jpg\r\n" +
+        "Content-Length: 5\r\n\r\n";
+
+    var pngBytes = new byte[]{-119, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 5, -32, 2, 107, 43, -5, 26, 117, 0, 0, 0, 0, 73, 69, 78, 68, -82, 66, 96, -126};
+
+    var clientSocketIO = new ClientSocketIOMock(header, pngBytes);
+    clientSocketIO.init(new Socket());
+    var request = new Request(clientSocketIO, new MimeTypesMock("image/png"));
+
+
+    HTTPError exception = assertThrows(HTTPError.class, () -> request.parseRequest());
+    assertEquals(400, exception.getStatus());
+    assertEquals("Bad Request", exception.getMessage());
   }
 
 }

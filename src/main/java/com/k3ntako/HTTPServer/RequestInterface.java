@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public interface RequestInterface {
-  void parseRequest() throws IOException;
+  void parseRequest() throws IOException, HTTPError;
 
   void setRouteParams(HashMap<String, String> routeParams);
 
