@@ -1,7 +1,7 @@
 package com.k3ntako.HTTPServer;
 
 import com.google.gson.Gson;
-import com.k3ntako.HTTPServer.utilities.FileTypeResolver;
+import com.k3ntako.HTTPServer.utilities.MimeTypes;
 import com.k3ntako.HTTPServer.utilities.JsonConverter;
 
 public class ErrorHandler implements ErrorHandlerInterface {
@@ -17,7 +17,7 @@ public class ErrorHandler implements ErrorHandlerInterface {
 
   private ResponseInterface generateErrorResponse(int status, Exception exception) throws HTTPError {
     var jsonConverter = new JsonConverter(new Gson());
-    var response = new Response(jsonConverter, new FileTypeResolver());
+    var response = new Response(jsonConverter, new MimeTypes());
     response.setStatus(status);
 
     var message = exception.getMessage();

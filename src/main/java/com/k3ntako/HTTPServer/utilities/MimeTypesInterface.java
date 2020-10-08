@@ -3,7 +3,7 @@ package com.k3ntako.HTTPServer.utilities;
 import java.io.IOException;
 import java.io.InputStream;
 
-public interface FileTypeResolverInterface {
+public interface MimeTypesInterface {
   String guessContentTypeFromBytes(byte[] fileContent);
 
   String guessContentTypeFromStream(InputStream fileContent);

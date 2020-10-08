@@ -1,21 +1,21 @@
 package com.k3ntako.HTTPServer.mocks;
 
-import com.k3ntako.HTTPServer.utilities.FileTypeResolverInterface;
+import com.k3ntako.HTTPServer.utilities.MimeTypesInterface;
 
 import java.io.InputStream;
 
-public class FileTypeResolverMock implements FileTypeResolverInterface {
+public class MimeTypesMock implements MimeTypesInterface {
   private String returnMock;
   private Boolean guessContentTypeFromBytesCalled = false;
   private Boolean guessContentTypeFromStreamCalled = false;
   private Boolean guessContentTypeFromName = false;
   private Boolean guessContentType = false;
 
-  public FileTypeResolverMock() {
-    this.returnMock = "FileTypeMock: Mock file type not set.";
+  public MimeTypesMock() {
+    this.returnMock = "MimeTypesMock: Mock file type not set.";
   }
 
-  public FileTypeResolverMock(String returnMock) {
+  public MimeTypesMock(String returnMock) {
     this.returnMock = returnMock;
   }
 

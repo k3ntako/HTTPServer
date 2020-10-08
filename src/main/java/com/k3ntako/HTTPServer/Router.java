@@ -2,7 +2,7 @@ package com.k3ntako.HTTPServer;
 
 import com.google.gson.Gson;
 import com.k3ntako.HTTPServer.controllers.NotFound;
-import com.k3ntako.HTTPServer.utilities.FileTypeResolver;
+import com.k3ntako.HTTPServer.utilities.MimeTypes;
 import com.k3ntako.HTTPServer.utilities.JsonConverter;
 
 import java.io.IOException;
@@ -24,7 +24,7 @@ public class Router {
     }
 
     var jsonConverter = new JsonConverter(new Gson());
-    var response = new Response(jsonConverter, new FileTypeResolver());
+    var response = new Response(jsonConverter, new MimeTypes());
     return controllerMethod.getResponse(request, response);
   }
 }

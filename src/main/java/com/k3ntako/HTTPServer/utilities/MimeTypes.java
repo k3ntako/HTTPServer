@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLConnection;
 
-public class FileTypeResolver implements FileTypeResolverInterface {
+public class MimeTypes implements MimeTypesInterface {
 
   @Override
   public String guessContentTypeFromBytes(byte[] fileContent) {
@@ -33,10 +33,10 @@ public class FileTypeResolver implements FileTypeResolverInterface {
 
   @Override
   public String guessContentType(InputStream fileContent, String fileName) {
-    var fileTypeResolver = guessContentTypeFromStream(fileContent);
+    var mimeTypes = guessContentTypeFromStream(fileContent);
 
-    if(fileTypeResolver != null){
-      return fileTypeResolver;
+    if(mimeTypes != null){
+      return mimeTypes;
     }
 
     return guessContentTypeFromName(fileName);

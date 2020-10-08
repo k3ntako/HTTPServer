@@ -2,7 +2,7 @@ package com.k3ntako.HTTPServer;
 
 
 import com.google.gson.JsonElement;
-import com.k3ntako.HTTPServer.utilities.FileTypeResolverInterface;
+import com.k3ntako.HTTPServer.utilities.MimeTypesInterface;
 import com.k3ntako.HTTPServer.utilities.JsonConverterInterface;
 
 import java.util.HashMap;
@@ -14,11 +14,11 @@ public class Response implements ResponseInterface {
   private int status = 200;
   final private HashMap<String, String> additionalHeaders = new HashMap<>();
   final private JsonConverterInterface jsonConverter;
-  private FileTypeResolverInterface fileTypeResolver;
+  private MimeTypesInterface mimeTypes;
   
-  public Response(JsonConverterInterface jsonConverter, FileTypeResolverInterface fileTypeResolver) {
+  public Response(JsonConverterInterface jsonConverter, MimeTypesInterface mimeTypes) {
     this.jsonConverter = jsonConverter;
-    this.fileTypeResolver = fileTypeResolver;
+    this.mimeTypes = mimeTypes;
   }
 
   @Override
@@ -73,8 +73,8 @@ public class Response implements ResponseInterface {
   @Override
   public void setBody(byte[] body) throws HTTPError {
     validateBody(body);
-    var fileType = fileTypeResolver.guessContentTypeFromBytes(body);
-    setBody(body, fileType);
+    var mimeType = mimeTypes.guessContentTypeFromBytes(body);
+    setBody(body, mimeType);
   }
 
   @Override
