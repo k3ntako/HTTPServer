@@ -7,6 +7,7 @@ import com.k3ntako.HTTPServer.mocks.FileIOMock;
 import com.k3ntako.HTTPServer.mocks.RequestMock;
 import com.k3ntako.HTTPServer.mocks.ResponseMock;
 import com.k3ntako.HTTPServer.mocks.UUIDMock;
+import com.k3ntako.HTTPServer.utilities.FileExtensions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -17,16 +18,18 @@ import static org.junit.jupiter.api.Assertions.*;
 class ImagesTest {
 
   @Test
-  void post() throws IOException, HTTPError {
+  void postPng() throws IOException, HTTPError {
+    var headers = new HashMap<String, String>();
+    headers.put("Content-Type", "image/png");
     final var bytes = "This is the body".getBytes();
-    var request = new RequestMock("POST", "/api/images", bytes);
+    var request = new RequestMock("POST", "/api/images", "HTTP/1.1", headers, bytes);
 
     final var fileIO = new FileIOMock();
     final var dataDirectoryIO = new DataDirectoryIO(fileIO, "./mock/data");
     final var uuidMock = new UUIDMock();
 
 
-    var images = new Images(dataDirectoryIO, uuidMock);
+    var images = new Images(dataDirectoryIO, uuidMock, new FileExtensions());
     var response = (ResponseMock) images.post(request, new ResponseMock());
 
     var expected = "./mock/data/images/" + uuidMock.getDefaultUUID() + ".png";
@@ -37,6 +40,51 @@ class ImagesTest {
     var id = responseJson.get("id").getAsString();
 
     assertEquals(uuidMock.getDefaultUUID(), id);
+  }
+
+  @Test
+  void postJpg() throws IOException, HTTPError {
+    final var bytes = "This is the body".getBytes();
+
+    var headers = new HashMap<String, String>();
+    headers.put("Content-Type", "image/jpeg");
+
+    var request = new RequestMock("POST", "/api/images", "HTTP/1.1", headers, bytes);
+
+    final var fileIO = new FileIOMock();
+    final var dataDirectoryIO = new DataDirectoryIO(fileIO, "./mock/data");
+    final var uuidMock = new UUIDMock();
+
+    var images = new Images(dataDirectoryIO, uuidMock, new FileExtensions());
+    var response = (ResponseMock) images.post(request, new ResponseMock());
+
+    var expected = "./mock/data/images/" + uuidMock.getDefaultUUID() + ".jpg";
+    assertEquals(expected, fileIO.getLastWritePath().toString());
+
+    var responseJson = (JsonObject) response.getSetJsonBodyArg;
+    var id = responseJson.get("id").getAsString();
+
+    assertEquals(uuidMock.getDefaultUUID(), id);
+  }
+
+  @Test
+  void postThrowsErrorIfExtensionNotFound() {
+    final var bytes = "This is the body".getBytes();
+
+    var headers = new HashMap<String, String>();
+    headers.put("Content-Type", "fake/type");
+
+    var request = new RequestMock("POST", "/api/images", "HTTP/1.1", headers, bytes);
+
+    final var fileIO = new FileIOMock();
+    final var dataDirectoryIO = new DataDirectoryIO(fileIO, "./mock/data");
+    final var uuidMock = new UUIDMock();
+
+    var images = new Images(dataDirectoryIO, uuidMock, new FileExtensions());
+
+    HTTPError exception = assertThrows(HTTPError.class, () -> images.post(request, new ResponseMock()));
+    assertEquals("Invalid image type", exception.getMessage());
+    assertEquals(400, exception.getStatus());
   }
 
   @Test
@@ -51,7 +99,7 @@ class ImagesTest {
     final var fileIO = new FileIOMock(imageBytes);
     final var dataDirectoryIO = new DataDirectoryIO(fileIO, "./mock/data");
 
-    var images = new Images(dataDirectoryIO, new UUIDMock());
+    var images = new Images(dataDirectoryIO, new UUIDMock(), new FileExtensions());
     var response = (ResponseMock) images.get(request, new ResponseMock());
 
     var expected = "./mock/data/images/mock-name.png";
@@ -72,7 +120,7 @@ class ImagesTest {
     final var fileIO = new FileIOMock((byte[]) null);
     final var dataDirectoryIO = new DataDirectoryIO(fileIO, "./mock/data");
 
-    var images = new Images(dataDirectoryIO, new UUIDMock());
+    var images = new Images(dataDirectoryIO, new UUIDMock(), new FileExtensions());
 
     HTTPError exception = assertThrows(HTTPError.class, () -> images.get(request, new ResponseMock()));
     assertEquals("Image was not found.", exception.getMessage());
@@ -90,7 +138,7 @@ class ImagesTest {
     final var fileIO = new FileIOMock();
     final var dataDirectoryIO = new DataDirectoryIO(fileIO, "./mock/data");
 
-    var images = new Images(dataDirectoryIO, new UUIDMock());
+    var images = new Images(dataDirectoryIO, new UUIDMock(), new FileExtensions());
     var response = (ResponseMock) images.delete(request, new ResponseMock());
 
     var expected = "./mock/data/images/mock-name.png";
@@ -109,7 +157,7 @@ class ImagesTest {
     final var fileIO = new FileIOMock(new IOException("File does not exist"));
     final var dataDirectoryIO = new DataDirectoryIO(fileIO, "./mock/data");
 
-    var images = new Images(dataDirectoryIO, new UUIDMock());
+    var images = new Images(dataDirectoryIO, new UUIDMock(), new FileExtensions());
 
     HTTPError exception = assertThrows(HTTPError.class, () -> images.delete(request, new ResponseMock()));
     assertEquals("Image was not found.", exception.getMessage());

@@ -21,14 +21,14 @@ class RequestBodyParserTest {
     var socket = new SocketMock(bodyStr);
 
     var requestBodyParser = new RequestBodyParser();
-    var body = (String) requestBodyParser.parseBody(
+    var body = requestBodyParser.parseBody(
         new BufferedReader(new StringReader(bodyStr)),
         socket,
         "text",
         bodyStr.length()
     );
 
-    assertEquals(bodyStr, body);
+    assertEquals(bodyStr, new String(body));
   }
 
   @Test

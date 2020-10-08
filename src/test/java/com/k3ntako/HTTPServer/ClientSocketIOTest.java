@@ -21,9 +21,9 @@ class ClientSocketIOTest {
     var requestBodyParser = new RequestBodyParserMock(bodyStr);
     var clientSocketIO = new ClientSocketIO(requestBodyParser);
     clientSocketIO.init(socket);
-    var body = (String) clientSocketIO.parseBody("text/plain", bodyStr.length());
+    var body = clientSocketIO.parseBody("text/plain", bodyStr.length());
 
-    assertEquals(bodyStr, body);
+    assertEquals(bodyStr, new String(body));
     assertEquals(bodyStr.length(), requestBodyParser.contentLength);
     assertEquals("text", requestBodyParser.contentTypeCategory);
   }

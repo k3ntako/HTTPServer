@@ -54,6 +54,20 @@ public class RequestMock implements RequestInterface {
     this.body = body;
   }
 
+  public RequestMock(
+      String method,
+      String route,
+      String protocol,
+      HashMap<String, String> headers,
+      byte[] body
+  ) {
+    this.method = method;
+    this.route = route;
+    this.protocol = protocol;
+    this.headers = headers;
+    this.body = body;
+  }
+
   public void parseRequest() {
   }
 

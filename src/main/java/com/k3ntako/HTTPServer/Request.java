@@ -1,7 +1,5 @@
 package com.k3ntako.HTTPServer;
 
-import com.k3ntako.HTTPServer.utilities.FileTypes;
-import com.k3ntako.HTTPServer.utilities.MimeTypes;
 import com.k3ntako.HTTPServer.utilities.MimeTypesInterface;
 
 import java.io.IOException;
@@ -13,15 +11,10 @@ public class Request implements RequestInterface {
   private String route;
   private String protocol;
   final private HashMap<String, String> headers;
-  private Object body;
+  private byte[] body;
   final private ClientSocketIOInterface clientSocketIO;
   private HashMap<String, String> routeParams;
   private MimeTypesInterface mimeTypes;
-
-  public Request(ClientSocketIOInterface clientSocketIO) {
-    this.clientSocketIO = clientSocketIO;
-    this.headers = new HashMap<>();
-  }
 
   public Request(ClientSocketIOInterface clientSocketIO, MimeTypesInterface mimeTypes) {
     this.clientSocketIO = clientSocketIO;
@@ -57,8 +50,8 @@ public class Request implements RequestInterface {
   }
 
   private void verifyContentType(String headerContentType) throws HTTPError {
-    var bodyContentType = mimeTypes.guessContentTypeFromBytes((byte[]) this.body);
-    if(bodyContentType != null && !headerContentType.equals(bodyContentType)){
+    var bodyContentType = mimeTypes.guessContentTypeFromBytes(this.body);
+    if(bodyContentType != null && !headerContentType.toLowerCase().equals(bodyContentType.toLowerCase())){
       throw new HTTPError(400, "Bad Request");
     }
   }
@@ -123,9 +116,9 @@ public class Request implements RequestInterface {
     return this.headers;
   }
 
-  public Object getBody() {
+  public byte[] getBody() {
     if (Objects.isNull(this.body)) {
-      return "";
+      return new byte[0];
     } else {
       return this.body;
     }

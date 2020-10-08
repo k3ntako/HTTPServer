@@ -9,7 +9,12 @@ public class MimeTypes implements MimeTypesInterface {
 
   @Override
   public String guessContentTypeFromBytes(byte[] fileContent) {
+    if(fileContent == null) {
+      return null;
+    }
+
     var byteStream = new ByteArrayInputStream(fileContent);
+
     try {
       return URLConnection.guessContentTypeFromStream(byteStream);
     } catch (IOException e) {

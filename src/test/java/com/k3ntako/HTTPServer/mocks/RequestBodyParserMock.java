@@ -6,12 +6,12 @@ import java.io.BufferedReader;
 import java.net.Socket;
 
 public class RequestBodyParserMock implements RequestBodyParserInterface {
-  private Object mockBody;
+  private byte[] mockBody;
   public String contentTypeCategory;
   public int contentLength;
 
   public RequestBodyParserMock(String mockBody) {
-    this.mockBody = mockBody;
+    this.mockBody = mockBody.getBytes();
   }
 
   public RequestBodyParserMock(byte[] mockBody) {
@@ -19,7 +19,7 @@ public class RequestBodyParserMock implements RequestBodyParserInterface {
   }
 
   @Override
-  public Object parseBody(
+  public byte[] parseBody(
       BufferedReader bufferedReader,
       Socket clientSocket,
       String contentTypeCategory,

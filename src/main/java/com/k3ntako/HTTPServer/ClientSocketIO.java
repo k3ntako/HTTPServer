@@ -30,7 +30,7 @@ public class ClientSocketIO implements ClientSocketIOInterface {
     return bufferedReader.readLine();
   }
 
-  public Object parseBody(String contentType, int contentLength) throws IOException {
+  public byte[] parseBody(String contentType, int contentLength) throws IOException {
     final var contentTypeArr = contentType.split("/");
     final var contentTypeCategory = contentTypeArr[0].toLowerCase();
 

@@ -22,7 +22,7 @@ class RequestTest {
     var clientSocketIO = new ClientSocketIOMock(headerStr);
     clientSocketIO.init(new Socket());
 
-    var request = new Request(clientSocketIO);
+    var request = new Request(clientSocketIO, new MimeTypes());
 
     request.parseRequest();
     assertEquals("GET", request.getMethod());
@@ -37,6 +37,7 @@ class RequestTest {
   @Test
   void parseBody() throws IOException, HTTPError {
     var header = "GET / HTTP/1.1\r\n" +
+        "Content-Type: text/plain\r\n" +
         "Content-Length: 68\r\n\r\n";
     var bodyStr = "Body line 1: abc\n" +
         "Body line 2: abc\n" +
@@ -45,11 +46,11 @@ class RequestTest {
 
     var clientSocketIO = new ClientSocketIOMock(header, bodyStr);
     clientSocketIO.init(new Socket());
-    var request = new Request(clientSocketIO);
+    var request = new Request(clientSocketIO, new MimeTypes());
 
     request.parseRequest();
 
-    assertEquals(bodyStr, request.getBody());
+    assertEquals(bodyStr, new String(request.getBody()));
   }
 
   @Test
@@ -61,7 +62,7 @@ class RequestTest {
     var clientSocketIO = new ClientSocketIOMock(headerStr);
     clientSocketIO.init(new Socket());
 
-    var request = new Request(clientSocketIO);
+    var request = new Request(clientSocketIO, new MimeTypes());
 
     var routeParams = new HashMap<String, String>();
     routeParams.put("id", "123");
@@ -84,7 +85,7 @@ class RequestTest {
     var clientSocketIO = new ClientSocketIOMock(headerStr);
     clientSocketIO.init(new Socket());
 
-    var request = new Request(clientSocketIO);
+    var request = new Request(clientSocketIO, new MimeTypes());
 
     var routeParams = new HashMap<String, String>();
     routeParams.put("id", "123");
@@ -107,12 +108,12 @@ class RequestTest {
 
     var clientSocketIO = new ClientSocketIOMock(header, bodyBytes);
     clientSocketIO.init(new Socket());
-    var request = new Request(clientSocketIO);
+    var request = new Request(clientSocketIO, new MimeTypes());
 
     request.parseRequest();
 
-    assertArrayEquals(bodyBytes, (byte[]) request.getBody());
-    assertEquals(5, ((byte[]) request.getBody()).length);
+    assertArrayEquals(bodyBytes, request.getBody());
+    assertEquals(5, (request.getBody()).length);
     assertEquals("5", request.getHeaders().get("Content-Length"));
   }
 
