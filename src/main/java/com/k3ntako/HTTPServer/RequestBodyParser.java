@@ -9,27 +9,9 @@ import java.net.Socket;
 public class RequestBodyParser implements RequestBodyParserInterface {
   @Override
   public byte[] parseBody(
-      BufferedReader bufferedReader,
       Socket clientSocket,
-      String contentTypeCategory,
       int contentLength
   ) throws IOException {
-    return this.readBinaryBody(clientSocket, contentLength);
-  }
-
-//
-//  private String readTextBody(BufferedReader bufferedReader, int contentLength) throws IOException {
-//    var bodyStr = "";
-//    char character;
-//
-//    while (bodyStr.length() < contentLength) {
-//      character = (char) bufferedReader.read();
-//      bodyStr = bodyStr.concat(String.valueOf(character));
-//    }
-//    return bodyStr;
-//  }
-
-  private byte[] readBinaryBody(Socket clientSocket, int contentLength) throws IOException {
     final var bufferedInputStream = new BufferedInputStream(clientSocket.getInputStream());
     final var outputStream = new ByteArrayOutputStream();
 

@@ -21,12 +21,7 @@ class RequestBodyParserTest {
     var socket = new SocketMock(bodyStr);
 
     var requestBodyParser = new RequestBodyParser();
-    var body = requestBodyParser.parseBody(
-        new BufferedReader(new StringReader(bodyStr)),
-        socket,
-        "text",
-        bodyStr.length()
-    );
+    var body = requestBodyParser.parseBody(socket, bodyStr.length());
 
     assertEquals(bodyStr, new String(body));
   }
@@ -38,12 +33,7 @@ class RequestBodyParserTest {
     var socket = new SocketMock(bodyBinary);
 
     var requestBodyParser = new RequestBodyParser();
-    var body = (byte[]) requestBodyParser.parseBody(
-        new BufferedReader(new StringReader("")),
-        socket,
-        "image",
-        bodyBinary.length
-    );
+    var body = (byte[]) requestBodyParser.parseBody(socket, bodyBinary.length);
 
     assertArrayEquals(bodyBinary, body);
   }
@@ -55,12 +45,7 @@ class RequestBodyParserTest {
     var socket = new SocketMock(bodyBinary);
 
     var requestBodyParser = new RequestBodyParser();
-    var body = (byte[]) requestBodyParser.parseBody(
-        new BufferedReader(new StringReader("")),
-        socket,
-        "image",
-        bodyBinary.length - 1
-    );
+    var body = (byte[]) requestBodyParser.parseBody(socket, bodyBinary.length - 1);
 
     assertEquals(bodyBinary.length - 1, body.length);
   }
@@ -70,12 +55,7 @@ class RequestBodyParserTest {
     var socket = new SocketMock("");
 
     var requestBodyParser = new RequestBodyParser();
-    var body = (byte[]) requestBodyParser.parseBody(
-        new BufferedReader(new StringReader("")),
-        socket,
-        "image",
-        0
-    );
+    var body = (byte[]) requestBodyParser.parseBody(socket, 0);
 
     assertArrayEquals(new byte[]{}, body);
   }

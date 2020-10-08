@@ -35,7 +35,7 @@ public class ClientSocketIOMock implements ClientSocketIOInterface {
   }
 
   @Override
-  public byte[] parseBody(String contentType, int contentLength) {
+  public byte[] parseBody(int contentLength) {
     return mockBody;
   }
 

@@ -8,7 +8,7 @@ public interface ClientSocketIOInterface {
 
   String readLine() throws IOException;
 
-  byte[] parseBody(String contentType, int contentLength) throws IOException;
+  byte[] parseBody(int contentLength) throws IOException;
 
   void sendData(byte[] data) throws IOException;
 

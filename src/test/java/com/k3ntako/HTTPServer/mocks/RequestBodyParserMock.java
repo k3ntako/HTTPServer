@@ -7,7 +7,6 @@ import java.net.Socket;
 
 public class RequestBodyParserMock implements RequestBodyParserInterface {
   private byte[] mockBody;
-  public String contentTypeCategory;
   public int contentLength;
 
   public RequestBodyParserMock(String mockBody) {
@@ -19,13 +18,7 @@ public class RequestBodyParserMock implements RequestBodyParserInterface {
   }
 
   @Override
-  public byte[] parseBody(
-      BufferedReader bufferedReader,
-      Socket clientSocket,
-      String contentTypeCategory,
-      int contentLength
-  ) {
-    this.contentTypeCategory = contentTypeCategory;
+  public byte[] parseBody(Socket clientSocket, int contentLength) {
     this.contentLength = contentLength;
 
     return mockBody;

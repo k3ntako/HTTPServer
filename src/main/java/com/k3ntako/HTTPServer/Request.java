@@ -30,12 +30,11 @@ public class Request implements RequestInterface {
       contentLength = Integer.parseInt(this.headers.get("Content-Length"));
     }
 
-    var headerContentType = headers.get("Content-Type");
     if (contentLength > 0) {
-      this.parseBody(headerContentType, contentLength);
+      this.parseBody(contentLength);
     }
 
-    verifyContentType(headerContentType);
+    verifyContentType(headers.get("Content-Type"));
   }
 
   private void parseHeader() throws IOException {
@@ -84,8 +83,8 @@ public class Request implements RequestInterface {
     }
   }
 
-  private void parseBody(String contentType, int contentLength) throws IOException {
-    this.body = clientSocketIO.parseBody(contentType, contentLength);
+  private void parseBody(int contentLength) throws IOException {
+    this.body = clientSocketIO.parseBody(contentLength);
   }
 
   public void setRouteParams(HashMap<String, String> routeParams) {
