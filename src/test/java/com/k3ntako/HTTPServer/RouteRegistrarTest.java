@@ -5,6 +5,7 @@ import com.k3ntako.HTTPServer.mocks.FileIOMock;
 import com.k3ntako.HTTPServer.mocks.ReminderIOMock;
 import com.k3ntako.HTTPServer.mocks.RequestMock;
 import com.k3ntako.HTTPServer.utilities.FileExtensions;
+import com.k3ntako.HTTPServer.utilities.MimeTypes;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,7 +22,8 @@ class RouteRegistrarTest {
         fileIO,
         dataDirectoryIO,
         new ReminderIOMock(),
-        new FileExtensions()
+        new FileExtensions(),
+        new MimeTypes()
     );
     var routeRegistry = routeRegistrar.registerRoutes();
     var request = new RequestMock("GET", "/api/simple_get");
@@ -40,7 +42,8 @@ class RouteRegistrarTest {
         fileIO,
         dataDirectoryIO,
         new ReminderIOMock(),
-        new FileExtensions()
+        new FileExtensions(),
+        new MimeTypes()
     );
     var routeRegistry = routeRegistrar.registerRoutes();
     var request = new RequestMock("GET", "/api/simple_get_with_body");

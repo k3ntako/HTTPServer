@@ -70,24 +70,6 @@ public class FileIO implements FileIOInterface {
     return scanner.hasNext() ? scanner.next() : "";
   }
 
-  public String probeResourceContentType(String fileName) throws HTTPError {
-    try {
-      var url = this.getClass().getClassLoader().getResource(fileName);
-
-      if (url == null) {
-        throw new HTTPError(404, "Resource not found");
-      }
-
-      Path path = new File(url.toURI()).toPath();
-
-      return Files.probeContentType(path);
-    } catch (IOException e) {
-      throw new HTTPError(404, e.getMessage());
-    } catch (URISyntaxException e) {
-      throw new HTTPError(500, e.getMessage());
-    }
-  }
-
   public void patchNewLine(Path path, String str) throws IOException {
     if (!doesFileExist(path)) {
       throw new IOException("File does not exist");

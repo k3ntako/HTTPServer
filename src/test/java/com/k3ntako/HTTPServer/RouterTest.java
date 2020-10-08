@@ -6,6 +6,7 @@ import com.k3ntako.HTTPServer.mocks.ReminderIOMock;
 import com.k3ntako.HTTPServer.mocks.RequestMock;
 import com.k3ntako.HTTPServer.mocks.RouteRegistrarMock;
 import com.k3ntako.HTTPServer.utilities.FileExtensions;
+import com.k3ntako.HTTPServer.utilities.MimeTypes;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -23,7 +24,8 @@ class RouterTest {
         fileIO,
         dataDirectoryIO,
         new ReminderIOMock(),
-        new FileExtensions()
+        new FileExtensions(),
+        new MimeTypes()
     );
     var routeRegistry = routeRegistrar.registerRoutes();
 
@@ -50,7 +52,8 @@ class RouterTest {
         fileIO,
         dataDirectoryIO,
         new ReminderIOMock(),
-        new FileExtensions()
+        new FileExtensions(),
+        new MimeTypes()
     );
     var routeRegistry = routeRegistrar.registerRoutes();
 
