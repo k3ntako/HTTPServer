@@ -4,6 +4,7 @@ import com.k3ntako.HTTPServer.HTTPError;
 import com.k3ntako.HTTPServer.mocks.FileIOMock;
 import com.k3ntako.HTTPServer.mocks.RequestMock;
 import com.k3ntako.HTTPServer.mocks.ResponseMock;
+import com.k3ntako.HTTPServer.utilities.MimeTypes;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -17,7 +18,7 @@ class PublicFilesTest {
     final var request = new RequestMock("GET", "/index.html");
 
     final var fileIO = new FileIOMock(new String[]{null, "<html></html>"});
-    final var publicFiles = new PublicFiles(fileIO);
+    final var publicFiles = new PublicFiles(fileIO, new MimeTypes());
     final var response = (ResponseMock) publicFiles.get(request, new ResponseMock());
 
     assertEquals("public/index.html", fileIO.getLastGetResourceIfExistsFileName());
@@ -32,7 +33,7 @@ class PublicFilesTest {
     final var request = new RequestMock("GET", "/");
 
     final var fileIO = new FileIOMock("<html></html>");
-    final var publicFiles = new PublicFiles(fileIO);
+    final var publicFiles = new PublicFiles(fileIO, new MimeTypes());
     final var response = (ResponseMock) publicFiles.get(request, new ResponseMock());
 
     assertEquals("public/index.html", fileIO.getLastGetResourceIfExistsFileName());
@@ -47,7 +48,7 @@ class PublicFilesTest {
 
     var mockReturns = new byte[][]{null, new byte[]{1, 2, 3, 4, 5, 6}};
     final var fileIO = new FileIOMock(mockReturns);
-    final var publicFiles = new PublicFiles(fileIO);
+    final var publicFiles = new PublicFiles(fileIO, new MimeTypes());
     final var response = (ResponseMock) publicFiles.get(request, new ResponseMock());
 
     assertEquals("public/images/dogs/mocha.png", fileIO.getLastGetResourceIfExistsFileName());
@@ -61,7 +62,7 @@ class PublicFilesTest {
     final var request = new RequestMock("GET", "/");
 
     final var fileIO = new FileIOMock(new byte[][]{null, "index.html\nindex.css".getBytes()});
-    final var publicFiles = new PublicFiles(fileIO);
+    final var publicFiles = new PublicFiles(fileIO, new MimeTypes());
     final var response = (ResponseMock) publicFiles.get(request, new ResponseMock());
 
     assertEquals("public/", fileIO.getLastGetResourceIfExistsFileName());
@@ -77,7 +78,7 @@ class PublicFilesTest {
     final var request = new RequestMock("GET", "/index.html");
 
     final var fileIO = new FileIOMock((byte[]) null);
-    final var publicFiles = new PublicFiles(fileIO);
+    final var publicFiles = new PublicFiles(fileIO, new MimeTypes());
 
     HTTPError exception = assertThrows(HTTPError.class, () -> publicFiles.get(request, new ResponseMock()));
 
@@ -90,7 +91,7 @@ class PublicFilesTest {
     final var request = new RequestMock("GET", "/");
 
     final var fileIO = new FileIOMock((byte[]) null);
-    final var publicFiles = new PublicFiles(fileIO);
+    final var publicFiles = new PublicFiles(fileIO, new MimeTypes());
 
     HTTPError exception = assertThrows(HTTPError.class, () -> publicFiles.get(request, new ResponseMock()));
 

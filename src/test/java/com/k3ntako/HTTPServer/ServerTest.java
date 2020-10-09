@@ -3,6 +3,7 @@ package com.k3ntako.HTTPServer;
 import com.k3ntako.HTTPServer.fileSystemsIO.DataDirectoryIO;
 import com.k3ntako.HTTPServer.mocks.*;
 import com.k3ntako.HTTPServer.utilities.FileExtensions;
+import com.k3ntako.HTTPServer.utilities.MimeTypes;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,7 +29,8 @@ class ServerTest {
         fileIO,
         dataDirectoryIO,
         new ReminderIOMock(),
-        new FileExtensions()
+        new FileExtensions(),
+        new MimeTypes()
     );
     var routeRegistry = routeRegistrar.registerRoutes();
     var router = new Router(routeRegistry);
@@ -66,7 +68,8 @@ class ServerTest {
         fileIO,
         dataDirectoryIO,
         new ReminderIOMock(),
-        new FileExtensions()
+        new FileExtensions(),
+        new MimeTypes()
     );
     var routeRegistry = routeRegistrar.registerRoutes();
     var router = new Router(routeRegistry);
@@ -109,7 +112,8 @@ class ServerTest {
         fileIO,
         dataDirectoryIO,
         new ReminderIOMock(),
-        new FileExtensions()
+        new FileExtensions(),
+        new MimeTypes()
     );
     var routeRegistry = routeRegistrar.registerRoutes();
     var router = new Router(routeRegistry);

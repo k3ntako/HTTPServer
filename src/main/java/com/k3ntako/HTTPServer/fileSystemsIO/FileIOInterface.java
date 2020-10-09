@@ -25,7 +25,5 @@ public interface FileIOInterface {
 
   byte[] getResourceIfExists(String fileName) throws IOException;
 
-  String probeResourceContentType(String fileName) throws HTTPError;
-
   File[] listFiles(Path path);
 }

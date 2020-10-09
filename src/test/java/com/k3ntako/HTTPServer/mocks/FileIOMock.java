@@ -146,11 +146,6 @@ public class FileIOMock implements FileIOInterface {
   }
 
   @Override
-  public String probeResourceContentType(String fileName) {
-    return null;
-  }
-
-  @Override
   public File[] listFiles(Path path) {
     lastListFilesPath = path;
 

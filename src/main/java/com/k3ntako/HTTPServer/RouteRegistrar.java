@@ -14,19 +14,22 @@ public class RouteRegistrar implements RouteRegistrarInterface {
   final private DataDirectoryIO dataDirectoryIO;
   final private ReminderIOInterface reminderIO;
   final private FileExtensions fileExt;
+  final private MimeTypes mimeTypes;
 
   public RouteRegistrar(
       RouteRegistry routeRegistry,
       FileIOInterface fileIO,
       DataDirectoryIO dataDirectoryIO,
       ReminderIOInterface reminderIO,
-      FileExtensions fileExt
-      ) {
+      FileExtensions fileExt,
+      MimeTypes mimeTypes
+  ) {
     this.routeRegistry = routeRegistry;
     this.fileIO = fileIO;
     this.dataDirectoryIO = dataDirectoryIO;
     this.reminderIO = reminderIO;
     this.fileExt = fileExt;
+    this.mimeTypes = mimeTypes;
   }
 
   @Override
@@ -44,8 +47,8 @@ public class RouteRegistrar implements RouteRegistrarInterface {
     route("DELETE", "/api/images/:image_id", (RequestInterface req, ResponseInterface res) -> new Images(dataDirectoryIO, new UUID(), fileExt).delete(req, res));
 
     route("GET", "/account", (RequestInterface req, ResponseInterface res) -> new Account().get(req, res));
-    route("GET", "/", (RequestInterface req, ResponseInterface res) -> new PublicFiles(fileIO).get(req, res));
-    route("GET", "/*", (RequestInterface req, ResponseInterface res) -> new PublicFiles(fileIO).get(req, res));
+    route("GET", "/", (RequestInterface req, ResponseInterface res) -> new PublicFiles(fileIO, mimeTypes).get(req, res));
+    route("GET", "/*", (RequestInterface req, ResponseInterface res) -> new PublicFiles(fileIO, mimeTypes).get(req, res));
 
     return routeRegistry;
   }
