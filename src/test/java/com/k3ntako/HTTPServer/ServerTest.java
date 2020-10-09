@@ -2,6 +2,7 @@ package com.k3ntako.HTTPServer;
 
 import com.k3ntako.HTTPServer.fileSystemsIO.DataDirectoryIO;
 import com.k3ntako.HTTPServer.mocks.*;
+import com.k3ntako.HTTPServer.utilities.FileExtensions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,7 +27,8 @@ class ServerTest {
         new RouteRegistry(),
         fileIO,
         dataDirectoryIO,
-        new ReminderIOMock()
+        new ReminderIOMock(),
+        new FileExtensions()
     );
     var routeRegistry = routeRegistrar.registerRoutes();
     var router = new Router(routeRegistry);
@@ -63,7 +65,8 @@ class ServerTest {
         new RouteRegistry(),
         fileIO,
         dataDirectoryIO,
-        new ReminderIOMock()
+        new ReminderIOMock(),
+        new FileExtensions()
     );
     var routeRegistry = routeRegistrar.registerRoutes();
     var router = new Router(routeRegistry);
@@ -73,10 +76,11 @@ class ServerTest {
     app.run();
 
     var expected = "HTTP/1.1 200 OK\r\n" +
+        "Content-Type: text/plain\r\n" +
         "Content-Length: 11\r\n\r\n" +
         "Hello world";
 
-    assertArrayEquals(expected.getBytes(), clientSocketIO.getSentData());
+    assertEquals(expected, new String(clientSocketIO.getSentData()));
   }
 
   @Test
@@ -104,7 +108,8 @@ class ServerTest {
         new RouteRegistry(),
         fileIO,
         dataDirectoryIO,
-        new ReminderIOMock()
+        new ReminderIOMock(),
+        new FileExtensions()
     );
     var routeRegistry = routeRegistrar.registerRoutes();
     var router = new Router(routeRegistry);
@@ -114,9 +119,10 @@ class ServerTest {
     app.run();
 
     var expected = "HTTP/1.1 500 Internal Server Error\r\n" +
+        "Content-Type: text/plain\r\n" +
         "Content-Length: 20\r\n\r\n" +
         "This is a test error";
 
-    assertArrayEquals(expected.getBytes(), clientSocketIO.getSentData());
+    assertEquals(expected, new String(clientSocketIO.getSentData()));
   }
 }

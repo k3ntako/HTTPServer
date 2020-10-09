@@ -6,18 +6,18 @@ import java.io.*;
 import java.net.Socket;
 
 public class ClientSocketIOMock implements ClientSocketIOInterface {
-  final private Object mockBody;
+  final private byte[] mockBody;
   final private BufferedReader headerBufferedReader;
   private ClientOutputStreamMock clientOutputStreamMock;
 
   public ClientSocketIOMock(String mockHeader) {
     this.headerBufferedReader = new BufferedReader(new StringReader(mockHeader));
-    this.mockBody = "";
+    this.mockBody = "".getBytes();
   }
 
   public ClientSocketIOMock(String mockHeader, String mockBody) {
     this.headerBufferedReader = new BufferedReader(new StringReader(mockHeader));
-    this.mockBody = mockBody;
+    this.mockBody = mockBody.getBytes();
   }
 
   public ClientSocketIOMock(String mockHeader, byte[] mockBody) {
@@ -35,7 +35,7 @@ public class ClientSocketIOMock implements ClientSocketIOInterface {
   }
 
   @Override
-  public Object parseBody(String contentType, int contentLength) {
+  public byte[] parseBody(int contentLength) {
     return mockBody;
   }
 

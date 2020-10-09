@@ -2,6 +2,7 @@ package com.k3ntako.HTTPServer;
 
 import com.k3ntako.HTTPServer.fileSystemsIO.DataDirectoryIO;
 import com.k3ntako.HTTPServer.mocks.*;
+import com.k3ntako.HTTPServer.utilities.FileExtensions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,7 +17,8 @@ class RequestHandlerTest {
         new RouteRegistry(),
         fileIO,
         dataDirectoryIO,
-        new ReminderIOMock()
+        new ReminderIOMock(),
+        new FileExtensions()
     );
     var routeRegistry = routeRegistrar.registerRoutes();
 
@@ -25,11 +27,12 @@ class RequestHandlerTest {
     var requestHandler = new RequestHandler(router, new RequestGeneratorMock(), new ErrorHandler());
 
     var expectedResponse = "HTTP/1.1 200 OK\r\n" +
+        "Content-Type: text/plain\r\n" +
         "Content-Length: 11\r\n\r\n" +
         "Hello world";
 
-    var responseStr = requestHandler.handleRequest(new ClientSocketIOMock(""));
-    assertArrayEquals(expectedResponse.getBytes(), responseStr);
+    var responseBytes = requestHandler.handleRequest(new ClientSocketIOMock(""));
+    assertEquals(expectedResponse, new String(responseBytes));
   }
 
   @Test
@@ -41,7 +44,8 @@ class RequestHandlerTest {
         new RouteRegistry(),
         fileIO,
         dataDirectoryIO,
-        new ReminderIOMock()
+        new ReminderIOMock(),
+        new FileExtensions()
     );
     var routeRegistry = routeRegistrar.registerRoutes();
 
@@ -50,10 +54,11 @@ class RequestHandlerTest {
     var requestHandler = new RequestHandler(router, new RequestGeneratorMockThrowsError(), new ErrorHandler());
 
     var expectedResponse = "HTTP/1.1 500 Internal Server Error\r\n" +
+        "Content-Type: text/plain\r\n" +
         "Content-Length: 20\r\n\r\n" +
         "This is a test error";
 
     var responseStr = requestHandler.handleRequest(new ClientSocketIOMock(""));
-    assertArrayEquals(expectedResponse.getBytes(), responseStr);
+    assertEquals(expectedResponse, new String(responseStr));
   }
 }

@@ -25,9 +25,9 @@ public class Server {
 
     clientSocketIO.init(clientSocket);
 
-    var responseStr = requestHandler.handleRequest(clientSocketIO);
+    var responseBytes = requestHandler.handleRequest(clientSocketIO);
 
-    clientSocketIO.sendData(responseStr);
+    clientSocketIO.sendData(responseBytes);
     this.close(clientSocket);
   }
 

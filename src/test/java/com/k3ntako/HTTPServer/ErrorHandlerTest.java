@@ -15,10 +15,11 @@ class ErrorHandlerTest {
     var responseStr = response.createResponse();
 
     var expectedResponse = "HTTP/1.1 404 Not Found\r\n" +
+        "Content-Type: text/plain\r\n" +
         "Content-Length: 18\r\n\r\n" +
         "File was not found";
 
-    assertArrayEquals(expectedResponse.getBytes(), responseStr);
+    assertEquals(expectedResponse, new String(responseStr));
   }
 
   @Test
@@ -30,9 +31,10 @@ class ErrorHandlerTest {
     var responseStr = response.createResponse();
 
     var expectedResponse = "HTTP/1.1 500 Internal Server Error\r\n" +
+        "Content-Type: text/plain\r\n" +
         "Content-Length: 20\r\n\r\n" +
         "Something went wrong";
 
-    assertArrayEquals(expectedResponse.getBytes(), responseStr);
+    assertEquals(expectedResponse, new String(responseStr));
   }
 }

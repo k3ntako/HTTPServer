@@ -1,5 +1,7 @@
 package com.k3ntako.HTTPServer;
 
+import com.k3ntako.HTTPServer.utilities.MimeTypesInterface;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Objects;
@@ -9,16 +11,18 @@ public class Request implements RequestInterface {
   private String route;
   private String protocol;
   final private HashMap<String, String> headers;
-  private Object body;
+  private byte[] body;
   final private ClientSocketIOInterface clientSocketIO;
   private HashMap<String, String> routeParams;
+  private MimeTypesInterface mimeTypes;
 
-  public Request(ClientSocketIOInterface clientSocketIO) {
+  public Request(ClientSocketIOInterface clientSocketIO, MimeTypesInterface mimeTypes) {
     this.clientSocketIO = clientSocketIO;
     this.headers = new HashMap<>();
+    this.mimeTypes = mimeTypes;
   }
 
-  public void parseRequest() throws IOException {
+  public void parseRequest() throws IOException, HTTPError {
     this.parseHeader();
 
     var contentLength = 0;
@@ -27,9 +31,10 @@ public class Request implements RequestInterface {
     }
 
     if (contentLength > 0) {
-      var contentType = this.headers.get("Content-Type");
-      this.parseBody(contentType, contentLength);
+      this.parseBody(contentLength);
     }
+
+    verifyContentType(headers.get("Content-Type"));
   }
 
   private void parseHeader() throws IOException {
@@ -40,6 +45,13 @@ public class Request implements RequestInterface {
       } else if (line.length() > 0) {
         this.parseRequestLine(line);
       }
+    }
+  }
+
+  private void verifyContentType(String headerContentType) throws HTTPError {
+    var bodyContentType = mimeTypes.guessContentTypeFromBytes(this.body);
+    if(bodyContentType != null && !headerContentType.toLowerCase().equals(bodyContentType.toLowerCase())){
+      throw new HTTPError(400, "Bad Request");
     }
   }
 
@@ -71,8 +83,8 @@ public class Request implements RequestInterface {
     }
   }
 
-  private void parseBody(String contentType, int contentLength) throws IOException {
-    this.body = clientSocketIO.parseBody(contentType, contentLength);
+  private void parseBody(int contentLength) throws IOException {
+    this.body = clientSocketIO.parseBody(contentLength);
   }
 
   public void setRouteParams(HashMap<String, String> routeParams) {
@@ -103,9 +115,9 @@ public class Request implements RequestInterface {
     return this.headers;
   }
 
-  public Object getBody() {
+  public byte[] getBody() {
     if (Objects.isNull(this.body)) {
-      return "";
+      return new byte[0];
     } else {
       return this.body;
     }

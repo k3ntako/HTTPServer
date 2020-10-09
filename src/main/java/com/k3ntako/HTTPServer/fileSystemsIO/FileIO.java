@@ -113,6 +113,12 @@ public class FileIO implements FileIOInterface {
     Files.delete(path);
   }
 
+  public File[] listFiles(Path path) {
+    File folder = new File(path.toString());
+
+    return folder.listFiles();
+  }
+
   private Boolean doesFileExist(Path path) {
     var file = new File(path.toString());
     return file.exists();

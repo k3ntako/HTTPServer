@@ -16,23 +16,23 @@ public class RequestHandler {
   }
 
   public byte[] handleRequest(ClientSocketIOInterface clientSocketIO) throws Exception {
-    byte[] responseByte;
+    byte[] responseBytes;
     try {
       var request = this.requestGenerator.generateRequest(clientSocketIO);
       var response = this.router.routeRequest(request);
-      responseByte = response.createResponse();
+      responseBytes = response.createResponse();
     } catch (HTTPError httpError) {
       var response = this.errorHandler.handleError(httpError);
-      responseByte = response.createResponse();
+      responseBytes = response.createResponse();
     } catch (Exception exception) {
       var response = this.errorHandler.handleError(exception);
-      responseByte = response.createResponse();
+      responseBytes = response.createResponse();
     }
 
-    if (responseByte == null) {
+    if (responseBytes == null) {
       throw new Exception("Response is null");
     }
 
-    return responseByte;
+    return responseBytes;
   }
 }

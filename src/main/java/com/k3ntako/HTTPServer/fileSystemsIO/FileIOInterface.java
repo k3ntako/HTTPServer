@@ -2,6 +2,7 @@ package com.k3ntako.HTTPServer.fileSystemsIO;
 
 import com.k3ntako.HTTPServer.HTTPError;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
@@ -25,4 +26,6 @@ public interface FileIOInterface {
   byte[] getResourceIfExists(String fileName) throws IOException;
 
   String probeResourceContentType(String fileName) throws HTTPError;
+
+  File[] listFiles(Path path);
 }

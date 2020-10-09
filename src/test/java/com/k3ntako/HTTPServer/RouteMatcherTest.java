@@ -6,6 +6,7 @@ import com.k3ntako.HTTPServer.fileSystemsIO.DataDirectoryIO;
 import com.k3ntako.HTTPServer.mocks.FileIOMock;
 import com.k3ntako.HTTPServer.mocks.ReminderIOMock;
 import com.k3ntako.HTTPServer.mocks.RequestMock;
+import com.k3ntako.HTTPServer.utilities.FileExtensions;
 import com.k3ntako.HTTPServer.utilities.UUID;
 import org.junit.jupiter.api.Test;
 
@@ -66,7 +67,7 @@ class RouteMatcherTest {
     var imageRoute = new RegisteredRoute(
         "GET",
         "/pictures/*",
-        (RequestInterface req, ResponseInterface res) -> new Images(dataDirectory, new UUID()).get(req, res)
+        (RequestInterface req, ResponseInterface res) -> new Images(dataDirectory, new UUID(), new FileExtensions()).get(req, res)
     );
 
     registeredRoutes.add(imageRoute);
@@ -86,7 +87,7 @@ class RouteMatcherTest {
     var imageRoute = new RegisteredRoute(
         "GET",
         "/pictures/*",
-        (RequestInterface req, ResponseInterface res) -> new Images(dataDirectory, new UUID()).get(req, res)
+        (RequestInterface req, ResponseInterface res) -> new Images(dataDirectory, new UUID(), new FileExtensions()).get(req, res)
     );
 
     registeredRoutes.add(imageRoute);
@@ -106,7 +107,7 @@ class RouteMatcherTest {
     var imageRoute = new RegisteredRoute(
         "GET",
         "/*/dogs/*",
-        (RequestInterface req, ResponseInterface res) -> new Images(dataDirectory, new UUID()).get(req, res)
+        (RequestInterface req, ResponseInterface res) -> new Images(dataDirectory, new UUID(), new FileExtensions()).get(req, res)
     );
 
     registeredRoutes.add(imageRoute);
@@ -127,7 +128,7 @@ class RouteMatcherTest {
     var registeredRoutes = new ArrayList<RegisteredRoute>();
 
     ControllerMethodInterface imageControllerMethod =
-        (RequestInterface req, ResponseInterface res) -> new Images(dataDirectory, new UUID()).get(req, res);
+        (RequestInterface req, ResponseInterface res) -> new Images(dataDirectory, new UUID(), new FileExtensions()).get(req, res);
     var imageRoute = new RegisteredRoute(
         "GET",
         "/*/dogs/*",
@@ -162,7 +163,7 @@ class RouteMatcherTest {
     var registeredRoutes = new ArrayList<RegisteredRoute>();
 
     ControllerMethodInterface imageControllerMethod =
-        (RequestInterface req, ResponseInterface res) -> new Images(dataDirectory, new UUID()).get(req, res);
+        (RequestInterface req, ResponseInterface res) -> new Images(dataDirectory, new UUID(), new FileExtensions()).get(req, res);
     var imageRoute = new RegisteredRoute(
         "GET",
         "/*/dogs/*",
@@ -197,7 +198,7 @@ class RouteMatcherTest {
     var imageRoute = new RegisteredRoute(
         "GET",
         "/*/dogs/corgi",
-        (RequestInterface req, ResponseInterface res) -> new Images(dataDirectory, new UUID()).get(req, res)
+        (RequestInterface req, ResponseInterface res) -> new Images(dataDirectory, new UUID(), new FileExtensions()).get(req, res)
     );
 
     registeredRoutes.add(imageRoute);

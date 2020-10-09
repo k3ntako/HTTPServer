@@ -5,6 +5,7 @@ import com.k3ntako.HTTPServer.fileSystemsIO.DataDirectoryIO;
 import com.k3ntako.HTTPServer.fileSystemsIO.FileIOInterface;
 import com.k3ntako.HTTPServer.fileSystemsIO.ReminderIO;
 import com.k3ntako.HTTPServer.fileSystemsIO.YamlIOInterface;
+import com.k3ntako.HTTPServer.utilities.FileExtensions;
 import com.k3ntako.HTTPServer.utilities.JsonConverter;
 import com.k3ntako.HTTPServer.utilities.UUID;
 import com.k3ntako.HTTPServer.wrappers.ServerSocketWrapper;
@@ -46,7 +47,7 @@ public class ServerGenerator {
 
     var dataDirectoryIO = new DataDirectoryIO(fileIO, dataDir);
     var reminderIO = new ReminderIO(dataDirectoryIO, jsonConverter, new UUID());
-    var routeRegistrar = new RouteRegistrar(new RouteRegistry(), fileIO, dataDirectoryIO, reminderIO);
+    var routeRegistrar = new RouteRegistrar(new RouteRegistry(), fileIO, dataDirectoryIO, reminderIO, new FileExtensions());
     var routeRegistry = routeRegistrar.registerRoutes();
     return new Router(routeRegistry);
   }

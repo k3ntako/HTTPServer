@@ -5,10 +5,8 @@ import java.io.IOException;
 import java.net.Socket;
 
 public interface RequestBodyParserInterface {
-  Object parseBody(
-      BufferedReader bufferedReader,
+  byte[] parseBody(
       Socket clientSocket,
-      String contentTypeCategory,
       int contentLength
   ) throws IOException;
 }

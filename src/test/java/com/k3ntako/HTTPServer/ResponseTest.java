@@ -2,6 +2,7 @@ package com.k3ntako.HTTPServer;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import com.k3ntako.HTTPServer.mocks.MimeTypesMock;
 import com.k3ntako.HTTPServer.mocks.JsonConverterMock;
 import com.k3ntako.HTTPServer.utilities.JsonConverter;
 import com.k3ntako.HTTPServer.utilities.ReminderJsonCreator;
@@ -14,7 +15,7 @@ class ResponseTest {
   @Test
   void createEmptyResponse() {
     var jsonConverter = new JsonConverter(new Gson());
-    var response = new Response(jsonConverter);
+    var response = new Response(jsonConverter, new MimeTypesMock());
 
     var responseBytes = response.createResponse();
 
@@ -26,12 +27,13 @@ class ResponseTest {
   @Test
   void createResponseWithBody() throws HTTPError {
     var jsonConverter = new JsonConverter(new Gson());
-    var response = new Response(jsonConverter);
+    var response = new Response(jsonConverter, new MimeTypesMock());
     response.setBody("This\nis\nthe\nresponse\nbody!!");
 
     var responseBytes = response.createResponse();
 
     var expected = "HTTP/1.1 200 OK\r\n" +
+        "Content-Type: text/plain\r\n" +
         "Content-Length: 27\r\n\r\n" +
         "This\nis\nthe\nresponse\nbody!!";
 
@@ -41,7 +43,7 @@ class ResponseTest {
   @Test
   void createResponseWithJsonBody() throws HTTPError {
     var jsonConverter = new JsonConverter(new Gson());
-    var response = new Response(jsonConverter);
+    var response = new Response(jsonConverter, new MimeTypesMock());
 
     var reminderCreator = ReminderJsonCreator.createReminder("123", "Do chores");
     response.setBody(reminderCreator);
@@ -59,7 +61,7 @@ class ResponseTest {
   @Test
   void createResponseWithBinaryBody() throws HTTPError {
     var jsonConverterMock = new JsonConverterMock();
-    var response = new Response(jsonConverterMock);
+    var response = new Response(jsonConverterMock, new MimeTypesMock(null));
 
     var bodyBytes = "binary body".getBytes();
     response.setBody(bodyBytes);
@@ -83,7 +85,7 @@ class ResponseTest {
   @Test
   void setStatus() {
     var jsonConverter = new JsonConverter(new Gson());
-    var response = new Response(jsonConverter);
+    var response = new Response(jsonConverter, new MimeTypesMock());
     response.setStatus(404);
 
     var headerBytes = response.createResponse();
@@ -95,7 +97,7 @@ class ResponseTest {
   @Test
   void addHeader() {
     var jsonConverter = new JsonConverter(new Gson());
-    var response = new Response(jsonConverter);
+    var response = new Response(jsonConverter, new MimeTypesMock());
     response.setStatus(301);
     response.addHeader("Location", "/simple_get");
 
@@ -110,7 +112,7 @@ class ResponseTest {
   @Test
   void setRedirect() {
     var jsonConverter = new JsonConverter(new Gson());
-    var response = new Response(jsonConverter);
+    var response = new Response(jsonConverter, new MimeTypesMock());
     response.setRedirect("/test", 302);
 
     var headerBytes = response.createResponse();
@@ -122,9 +124,68 @@ class ResponseTest {
   }
 
   @Test
+  void setBodySetsContentType() throws HTTPError {
+    var jsonConverter = new JsonConverter(new Gson());
+    var response = new Response(jsonConverter, new MimeTypesMock("image/jpeg"));
+
+    var imageBytes = new byte[] {5, 27, 19, 95};
+    response.setBody(imageBytes);
+
+    var responseBytes = response.createResponse();
+
+    var responseString = new String(responseBytes);
+
+    assertTrue(responseString.contains("image/jpeg"));
+  }
+
+  @Test
+  void setBodyDoesNotSetsContentTypeIfNull() throws HTTPError {
+    var jsonConverter = new JsonConverter(new Gson());
+    var response = new Response(jsonConverter, new MimeTypesMock(null));
+
+    var imageBytes = new byte[] {5, 27, 19, 95};
+    response.setBody(imageBytes);
+
+    var responseBytes = response.createResponse();
+
+    var responseString = new String(responseBytes);
+
+    assertFalse(responseString.contains("Content-Type"));
+  }
+
+  @Test
+  void setBodySetsContentTypeIfString() throws HTTPError {
+    var jsonConverter = new JsonConverter(new Gson());
+    var response = new Response(jsonConverter, new MimeTypesMock(null));
+
+    var str = "body string";
+    response.setBody(str);
+
+    var responseBytes = response.createResponse();
+
+    var responseString = new String(responseBytes);
+
+    assertTrue(responseString.contains("text/plain"));
+  }
+
+  void setBodyWithCustomContentType() throws HTTPError {
+    var jsonConverter = new JsonConverter(new Gson());
+    var response = new Response(jsonConverter, new MimeTypesMock());
+
+    var str = "body string";
+    response.setBody(str.getBytes(), "mock/mock-type");
+
+    var responseBytes = response.createResponse();
+
+    var responseString = new String(responseBytes);
+
+    assertTrue(responseString.contains("mock/mock-type"));
+  }
+
+  @Test
   void throwErrorIfBodyIsNull() {
     var jsonConverter = new JsonConverter(new Gson());
-    var response = new Response(jsonConverter);
+    var response = new Response(jsonConverter, new MimeTypesMock());
 
     HTTPError exception = assertThrows(
         HTTPError.class, () -> response.setBody((String) null)
@@ -137,7 +198,7 @@ class ResponseTest {
   @Test
   void throwErrorIfJsonBodyIsNull() {
     var jsonConverter = new JsonConverter(new Gson());
-    var response = new Response(jsonConverter);
+    var response = new Response(jsonConverter, new MimeTypesMock());
 
     HTTPError exception = assertThrows(
         HTTPError.class, () -> response.setBody((JsonElement) null)
@@ -150,7 +211,7 @@ class ResponseTest {
   @Test
   void throwErrorIfBinaryBodyIsNull() {
     var jsonConverter = new JsonConverter(new Gson());
-    var response = new Response(jsonConverter);
+    var response = new Response(jsonConverter, new MimeTypesMock());
 
     HTTPError exception = assertThrows(
         HTTPError.class, () -> response.setBody((byte[]) null)

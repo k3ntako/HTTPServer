@@ -14,8 +14,9 @@ import java.util.Comparator;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FileIOTest {
-  final private Path path = Paths.get("./file.txt");
-  final private Path pathInFolder = Paths.get("./data/test/file.txt");
+  final private Path path = Paths.get("./mock_file.txt");
+  final private Path pathOfFolder = Paths.get("./mock_data");
+  final private Path pathInFolder = Paths.get(pathOfFolder.toString() + "/file.txt");
 
   @Test
   void write() throws IOException {
@@ -168,12 +169,35 @@ class FileIOTest {
     assertEquals("File does not exist", exception.getMessage());
   }
 
+  @Test
+  void listFiles() throws IOException {
+    var file = new File(pathInFolder.toString());
+    file.mkdirs();
+    file.createNewFile();
+
+    assertTrue(Files.exists(pathInFolder));
+
+    final var fileIO = new FileIO();
+    var files = fileIO.listFiles(pathOfFolder);
+
+    assertEquals(1, files.length);
+    assertEquals("file.txt", files[0].getName());
+  }
+
+  @Test
+  void listFilesReturnsNullIfNotFound() {
+    final var fileIO = new FileIO();
+    var files = fileIO.listFiles(pathOfFolder);
+
+    assertNull(files);
+  }
+
   @AfterEach
   void tearDown() throws IOException {
     Files.deleteIfExists(path);
 
     if (Files.exists(pathInFolder.getParent())) {
-      Files.walk(pathInFolder.getParent())
+      Files.walk(pathOfFolder)
           .sorted(Comparator.reverseOrder())
           .map(Path::toFile)
           .forEach(File::delete);

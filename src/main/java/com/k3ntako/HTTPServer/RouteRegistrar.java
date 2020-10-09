@@ -4,6 +4,8 @@ import com.k3ntako.HTTPServer.fileSystemsIO.DataDirectoryIO;
 import com.k3ntako.HTTPServer.fileSystemsIO.FileIOInterface;
 import com.k3ntako.HTTPServer.fileSystemsIO.ReminderIOInterface;
 import com.k3ntako.HTTPServer.controllers.*;
+import com.k3ntako.HTTPServer.utilities.FileExtensions;
+import com.k3ntako.HTTPServer.utilities.MimeTypes;
 import com.k3ntako.HTTPServer.utilities.UUID;
 
 public class RouteRegistrar implements RouteRegistrarInterface {
@@ -11,17 +13,20 @@ public class RouteRegistrar implements RouteRegistrarInterface {
   final private FileIOInterface fileIO;
   final private DataDirectoryIO dataDirectoryIO;
   final private ReminderIOInterface reminderIO;
+  final private FileExtensions fileExt;
 
   public RouteRegistrar(
       RouteRegistry routeRegistry,
       FileIOInterface fileIO,
       DataDirectoryIO dataDirectoryIO,
-      ReminderIOInterface reminderIO
-  ) {
+      ReminderIOInterface reminderIO,
+      FileExtensions fileExt
+      ) {
     this.routeRegistry = routeRegistry;
     this.fileIO = fileIO;
     this.dataDirectoryIO = dataDirectoryIO;
     this.reminderIO = reminderIO;
+    this.fileExt = fileExt;
   }
 
   @Override
@@ -34,9 +39,9 @@ public class RouteRegistrar implements RouteRegistrarInterface {
     route("GET", "/api/reminders/:list_id/:reminder_id", (RequestInterface req, ResponseInterface res) -> new Reminders(reminderIO).get(req, res));
     route("PUT", "/api/reminders/:list_id/:reminder_id", (RequestInterface req, ResponseInterface res) -> new Reminders(reminderIO).put(req, res));
     route("DELETE", "/api/reminders/:list_id/:reminder_id", (RequestInterface req, ResponseInterface res) -> new Reminders(reminderIO).delete(req, res));
-    route("GET", "/api/images/:image_name", (RequestInterface req, ResponseInterface res) -> new Images(dataDirectoryIO, new UUID()).get(req, res));
-    route("POST", "/api/images", (RequestInterface req, ResponseInterface res) -> new Images(dataDirectoryIO, new UUID()).post(req, res));
-    route("DELETE", "/api/images/:image_name", (RequestInterface req, ResponseInterface res) -> new Images(dataDirectoryIO, new UUID()).delete(req, res));
+    route("GET", "/api/images/:image_id", (RequestInterface req, ResponseInterface res) -> new Images(dataDirectoryIO, new UUID(), fileExt).get(req, res));
+    route("POST", "/api/images", (RequestInterface req, ResponseInterface res) -> new Images(dataDirectoryIO, new UUID(), fileExt).post(req, res));
+    route("DELETE", "/api/images/:image_id", (RequestInterface req, ResponseInterface res) -> new Images(dataDirectoryIO, new UUID(), fileExt).delete(req, res));
 
     route("GET", "/account", (RequestInterface req, ResponseInterface res) -> new Account().get(req, res));
     route("GET", "/", (RequestInterface req, ResponseInterface res) -> new PublicFiles(fileIO).get(req, res));
