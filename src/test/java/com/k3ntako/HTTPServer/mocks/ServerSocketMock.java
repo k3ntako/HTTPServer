@@ -24,7 +24,7 @@ public class ServerSocketMock implements ServerSocketWrapperInterface {
 
   @Override
   public int port() {
-    return 3000;
+    return 5000;
   }
 }
 

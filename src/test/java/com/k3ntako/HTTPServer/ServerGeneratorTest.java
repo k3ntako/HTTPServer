@@ -18,7 +18,7 @@ class ServerGeneratorTest {
     var fileIO = new FileIOMock(mockConfigStr);
 
     var mockConfig = new LinkedHashMap<String, Object>();
-    mockConfig.put("port", 3000);
+    mockConfig.put("port", 5000);
     mockConfig.put("data_directory", "./mock/data");
     var yamlIO = new YamlIOMock(mockConfig);
 
