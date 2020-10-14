@@ -24,6 +24,7 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    environment "ENV_NAME", "test"
 }
 
 jar {

@@ -8,7 +8,7 @@ class ErrorHandlerTest {
 
   @Test
   void handleHTTPError() throws HTTPError {
-    var httpError = new HTTPError(404, "File was not found");
+    var httpError = new HTTPError(404, "Mock error");
     var errorHandler = new ErrorHandler();
 
     var response = errorHandler.handleError(httpError);
@@ -16,15 +16,15 @@ class ErrorHandlerTest {
 
     var expectedResponse = "HTTP/1.1 404 Not Found\r\n" +
         "Content-Type: text/plain\r\n" +
-        "Content-Length: 18\r\n\r\n" +
-        "File was not found";
+        "Content-Length: 10\r\n\r\n" +
+        "Mock error";
 
     assertEquals(expectedResponse, new String(responseStr));
   }
 
   @Test
   void handleServerError() throws HTTPError {
-    var error = new Exception("Something went wrong");
+    var error = new Exception("Mock error");
     var errorHandler = new ErrorHandler();
 
     var response = errorHandler.handleError(error);
@@ -32,8 +32,8 @@ class ErrorHandlerTest {
 
     var expectedResponse = "HTTP/1.1 500 Internal Server Error\r\n" +
         "Content-Type: text/plain\r\n" +
-        "Content-Length: 20\r\n\r\n" +
-        "Something went wrong";
+        "Content-Length: 10\r\n\r\n" +
+        "Mock error";
 
     assertEquals(expectedResponse, new String(responseStr));
   }
