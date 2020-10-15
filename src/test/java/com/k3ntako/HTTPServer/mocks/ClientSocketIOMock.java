@@ -13,23 +13,22 @@ public class ClientSocketIOMock implements ClientSocketIOInterface {
   public ClientSocketIOMock(String mockHeader) {
     this.headerBufferedReader = new BufferedReader(new StringReader(mockHeader));
     this.mockBody = "".getBytes();
+    clientOutputStreamMock = new ClientOutputStreamMock();
   }
 
   public ClientSocketIOMock(String mockHeader, String mockBody) {
     this.headerBufferedReader = new BufferedReader(new StringReader(mockHeader));
     this.mockBody = mockBody.getBytes();
+    clientOutputStreamMock = new ClientOutputStreamMock();
   }
 
   public ClientSocketIOMock(String mockHeader, byte[] mockBody) {
     this.headerBufferedReader = new BufferedReader(new StringReader(mockHeader));
     this.mockBody = mockBody;
-  }
-
-  public void init(Socket socket) {
-    // Socket is ignored
     clientOutputStreamMock = new ClientOutputStreamMock();
   }
 
+  @Override
   public String readLine() throws IOException {
     return headerBufferedReader.readLine();
   }
@@ -44,6 +43,7 @@ public class ClientSocketIOMock implements ClientSocketIOInterface {
     clientOutputStreamMock.close();
   }
 
+  @Override
   public void close() throws IOException {
     this.headerBufferedReader.close();
   }

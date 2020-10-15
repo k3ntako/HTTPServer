@@ -11,12 +11,11 @@ public class ClientSocketIO implements ClientSocketIOInterface {
   private BufferedReader bufferedReader;
   private ClientOutputStream clientOutputStream;
 
-  public ClientSocketIO(RequestBodyParserInterface requestBodyParser) {
+  public ClientSocketIO(
+      RequestBodyParserInterface requestBodyParser,
+      Socket clientSocket
+  ) throws IOException {
     this.requestBodyParser = requestBodyParser;
-  }
-
-
-  public void init(Socket clientSocket) throws IOException {
     this.clientSocket = clientSocket;
 
     var inputStreamReader = new InputStreamReader(clientSocket.getInputStream());

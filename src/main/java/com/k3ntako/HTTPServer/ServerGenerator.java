@@ -28,10 +28,7 @@ public class ServerGenerator {
     final var serverSocket = new ServerSocketWrapper((int) config.get("port"));
 
     var router = this.registerRoutes();
-    var requestHandler = new RequestHandler(router, new RequestGenerator(), new ErrorHandler());
-    var clientSocketIO = new ClientSocketIO(new RequestBodyParser());
-
-    return new Server(clientSocketIO, requestHandler, serverSocket);
+    return new Server(serverSocket, router);
   }
 
   private LinkedHashMap<String, Object> getConfig() throws Exception {
