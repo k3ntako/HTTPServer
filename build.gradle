@@ -24,7 +24,7 @@ dependencies {
 
 test {
     useJUnitPlatform()
-    environment "ENV_NAME", "test"
+    environment "ERR_LOGGING", "true"
 }
 
 jar {

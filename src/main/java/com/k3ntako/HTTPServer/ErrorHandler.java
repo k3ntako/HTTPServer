@@ -9,7 +9,9 @@ import java.io.PrintStream;
 
 public class ErrorHandler implements ErrorHandlerInterface {
   public ErrorHandler() {
-    if(System.getenv().get("ENV_NAME").equals("test")){
+    var enableErrLogging = System.getenv().get("ERR_LOGGING");
+
+    if(enableErrLogging != null && enableErrLogging.equals("true")){
       disableErrLogging();
     }
   }
