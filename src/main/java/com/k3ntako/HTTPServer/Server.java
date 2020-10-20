@@ -3,16 +3,19 @@ package com.k3ntako.HTTPServer;
 import com.k3ntako.HTTPServer.wrappers.ServerSocketWrapperInterface;
 
 import java.io.IOException;
-import java.net.Socket;
+import java.util.concurrent.ExecutorService;
 
 public class Server {
+  final private ExecutorService threadPool;
   final private ServerSocketWrapperInterface serverSocket;
   final private Router router;
 
   public Server(
+      ExecutorService threadPool,
       ServerSocketWrapperInterface serverSocket,
       Router router
   ) {
+    this.threadPool = threadPool;
     this.serverSocket = serverSocket;
     this.router = router;
   }
@@ -22,13 +25,12 @@ public class Server {
       var clientSocket = serverSocket.accept();
       var clientSocketIO = new ClientSocketIO(new RequestBodyParser(), clientSocket);
 
-      Thread object = new Thread(new RequestHandler(
+      threadPool.execute(new RequestHandler(
           router,
           new RequestGenerator(),
           new ErrorHandler(),
           clientSocketIO
       ));
-      object.start();
     } catch (IOException e) {
       e.printStackTrace();
     }

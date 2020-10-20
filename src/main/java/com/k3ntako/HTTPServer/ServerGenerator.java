@@ -12,6 +12,7 @@ import com.k3ntako.HTTPServer.utilities.UUID;
 import com.k3ntako.HTTPServer.wrappers.ServerSocketWrapper;
 
 import java.util.LinkedHashMap;
+import java.util.concurrent.Executors;
 
 public class ServerGenerator {
   final private FileIOInterface fileIO;
@@ -28,7 +29,8 @@ public class ServerGenerator {
     final var serverSocket = new ServerSocketWrapper((int) config.get("port"));
 
     var router = this.registerRoutes();
-    return new Server(serverSocket, router);
+    var threadPool = Executors.newCachedThreadPool();
+    return new Server(threadPool, serverSocket, router);
   }
 
   private LinkedHashMap<String, Object> getConfig() throws Exception {
