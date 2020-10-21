@@ -131,19 +131,21 @@ class ImagesTest {
 
   @Test
   void delete() throws HTTPError {
-    final var request = new RequestMock("DELETE", "/api/images/mock-name.png");
+    final var request = new RequestMock("DELETE", "/api/images/mock-name2");
 
     final var routeParams = new HashMap<String, String>();
-    routeParams.put("image_id", "mock-name.png");
+    routeParams.put("image_id", "mock-name2");
     request.setRouteParams(routeParams);
 
-    final var fileIO = new FileIOMock();
+    var file1 = new File("./mock/data/images/mock-name1.png");
+    var file2 = new File("./mock/data/images/mock-name2.png");
+    final var fileIO = new FileIOMock(new byte[]{1, 2, 3}, new File[]{file1, file2});
     final var dataDirectoryIO = new DataDirectoryIO(fileIO, "./mock/data");
 
     var images = new Images(dataDirectoryIO, new UUIDMock(), new FileExtensions());
     var response = (ResponseMock) images.delete(request, new ResponseMock());
 
-    var expected = "./mock/data/images/mock-name.png";
+    var expected = "./mock/data/images/mock-name2.png";
     assertEquals(expected, fileIO.getLastDeletePath().toString());
     assertTrue(response.isBodyNull());
   }
