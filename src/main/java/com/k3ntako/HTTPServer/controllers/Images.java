@@ -56,7 +56,7 @@ public class Images {
   public ResponseInterface delete(RequestInterface request, ResponseInterface response) throws HTTPError {
     var imageId = request.getRouteParam("image_id");
     try {
-      dataDirectoryIO.delete("images/" + imageId);
+      dataDirectoryIO.deleteById("images", imageId);
     } catch (IOException e) {
       throw new HTTPError(404, "Image was not found.");
     }

@@ -112,4 +112,17 @@ class DataDirectoryIOTest {
 
     assertEquals(dataDirectory + "/" + strPath, fileIO.getLastDeletePath().toString());
   }
+
+  @Test
+  void deleteById() throws IOException {
+    var file = new File("./mock/data/text/1.txt");
+
+    var fileIO = new FileIOMock(new byte[]{1, 2, 3}, new File[]{file});
+    var dataDirectory = "./mock/data";
+    var dataDirectoryIO = new DataDirectoryIO(fileIO, dataDirectory);
+
+    dataDirectoryIO.deleteById("text", "1");
+
+    assertEquals(dataDirectory + "/text/1.txt", fileIO.getLastDeletePath().toString());
+  }
 }

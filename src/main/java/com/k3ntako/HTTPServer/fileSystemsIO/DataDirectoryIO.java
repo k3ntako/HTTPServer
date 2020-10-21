@@ -60,6 +60,26 @@ public class DataDirectoryIO {
     fileIO.delete(path);
   }
 
+  public void deleteById(String directory, String id) throws IOException {
+    var path = generatePath(directory);
+    var files = fileIO.listFiles(path);
+
+    if (files == null) {
+      throw new IOException("File not found");
+    }
+
+    for (File file : files) {
+      var name = file.getName();
+
+      var nameParts = name.split("\\.");
+
+      if (nameParts.length == 2 && nameParts[0].equals(id)) {
+        fileIO.delete(file.toPath());
+        break;
+      }
+    }
+  }
+
   private Path generatePath(String strPath) {
     var dataStrPath = dataDirectory + "/" + strPath;
     return FileSystems.getDefault().getPath(dataStrPath);
