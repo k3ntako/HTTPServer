@@ -1,13 +1,15 @@
 branch-defaults:
   master:
     environment: HttpServer-env-1
+deploy:
+  artifact: build/libs/application.jar
 environment-defaults:
   HttpServer-env-1:
     branch: null
     repository: null
 global:
   application_name: http_server
-  default_ec2_keyname: HTTPServer
+  default_ec2_keyname: oct-2020-key
   default_platform: Corretto 11 running on 64bit Amazon Linux 2
   default_region: us-east-1
   include_git_submodules: true
@@ -17,5 +19,3 @@ global:
   profile: null
   sc: git
   workspace_type: Application
-deploy:
-  artifact: build/libs/application.jar
