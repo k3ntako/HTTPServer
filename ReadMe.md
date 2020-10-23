@@ -22,3 +22,11 @@ Tests were written using JUnit5. Use the following command to run tests:
 $ gradle test -i
 ```
 
+## Deploy
+The HTTP Server repo on Github is configured to deploy automatically when a change is made to the master branch.
+The configurations can be found in `./circleci/config.yaml`.
+
+For deploying from the CLI, use the following command from the root directory of this project while on the master branch.
+```
+$ eb deploy
+```
