@@ -20,7 +20,6 @@ class RequestTest {
         "User-Agent: curl/7.64.1\r\n" +
         "Accept: */*\r\n\r\n";
     var clientSocketIO = new ClientSocketIOMock(headerStr);
-    clientSocketIO.init(new Socket());
 
     var request = new Request(clientSocketIO, new MimeTypes());
 
@@ -45,7 +44,6 @@ class RequestTest {
         "Body line 4: abc\n";
 
     var clientSocketIO = new ClientSocketIOMock(header, bodyStr);
-    clientSocketIO.init(new Socket());
     var request = new Request(clientSocketIO, new MimeTypes());
 
     request.parseRequest();
@@ -60,7 +58,6 @@ class RequestTest {
         "User-Agent: curl/7.64.1\r\n" +
         "Accept: */*\r\n\r\n";
     var clientSocketIO = new ClientSocketIOMock(headerStr);
-    clientSocketIO.init(new Socket());
 
     var request = new Request(clientSocketIO, new MimeTypes());
 
@@ -83,7 +80,6 @@ class RequestTest {
         "User-Agent: curl/7.64.1\r\n" +
         "Accept: */*\r\n\r\n";
     var clientSocketIO = new ClientSocketIOMock(headerStr);
-    clientSocketIO.init(new Socket());
 
     var request = new Request(clientSocketIO, new MimeTypes());
 
@@ -107,7 +103,6 @@ class RequestTest {
 
 
     var clientSocketIO = new ClientSocketIOMock(header, bodyBytes);
-    clientSocketIO.init(new Socket());
     var request = new Request(clientSocketIO, new MimeTypes());
 
     request.parseRequest();
@@ -126,7 +121,6 @@ class RequestTest {
     var pngBytes = new byte[]{-119, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 5, -32, 2, 107, 43, -5, 26, 117, 0, 0, 0, 0, 73, 69, 78, 68, -82, 66, 96, -126};
 
     var clientSocketIO = new ClientSocketIOMock(header, pngBytes);
-    clientSocketIO.init(new Socket());
     var request = new Request(clientSocketIO, new MimeTypesMock("image/png"));
 
 

@@ -1,7 +1,5 @@
 package com.k3ntako.HTTPServer.fileSystemsIO;
 
-import com.k3ntako.HTTPServer.HTTPError;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;

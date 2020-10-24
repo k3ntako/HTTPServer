@@ -19,8 +19,7 @@ class ClientSocketIOTest {
     var socket = new SocketMock(bodyStr);
 
     var requestBodyParser = new RequestBodyParserMock(bodyStr);
-    var clientSocketIO = new ClientSocketIO(requestBodyParser);
-    clientSocketIO.init(socket);
+    var clientSocketIO = new ClientSocketIO(requestBodyParser, socket);
     var body = clientSocketIO.parseBody(bodyStr.length());
 
     assertEquals(bodyStr, new String(body));
@@ -34,8 +33,7 @@ class ClientSocketIOTest {
     var socket = new SocketMock(bodyBinary);
 
     var requestBodyParser = new RequestBodyParserMock(bodyBinary);
-    var clientSocketIO = new ClientSocketIO(requestBodyParser);
-    clientSocketIO.init(socket);
+    var clientSocketIO = new ClientSocketIO(requestBodyParser, socket);
     var body = (byte[]) clientSocketIO.parseBody(bodyBinary.length);
 
     assertArrayEquals(bodyBinary, body);

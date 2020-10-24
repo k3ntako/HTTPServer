@@ -26,14 +26,23 @@ class RequestHandlerTest {
 
     var router = new Router(routeRegistry);
 
-    var requestHandler = new RequestHandler(router, new RequestGeneratorMock(), new ErrorHandler());
+    var clientInput = "GET /simple_get HTTP/1.1\r\n" +
+        "Host: localhost:5000\r\n" +
+        "User-Agent: curl/7.64.1\r\n" +
+        "Accept: */*\r\n" +
+        "\n\r\n\r";
+
+    var clientSocketIO = new ClientSocketIOMock(clientInput);
+    var requestHandler = new RequestHandler(router, new RequestGeneratorMock(), new ErrorHandler(), clientSocketIO);
 
     var expectedResponse = "HTTP/1.1 200 OK\r\n" +
         "Content-Type: text/plain\r\n" +
         "Content-Length: 11\r\n\r\n" +
         "Hello world";
 
-    var responseBytes = requestHandler.handleRequest(new ClientSocketIOMock(""));
+    requestHandler.run();
+
+    var responseBytes = clientSocketIO.getSentData();
     assertEquals(expectedResponse, new String(responseBytes));
   }
 
@@ -54,14 +63,15 @@ class RequestHandlerTest {
 
     var router = new Router(routeRegistry);
 
-    var requestHandler = new RequestHandler(router, new RequestGeneratorMockThrowsError(), new ErrorHandler());
+    var clientSocketIO =  new ClientSocketIOMock("");
+    var requestHandler = new RequestHandler(router, new RequestGeneratorMockThrowsError(), new ErrorHandler(), clientSocketIO);
 
     var expectedResponse = "HTTP/1.1 500 Internal Server Error\r\n" +
         "Content-Type: text/plain\r\n" +
         "Content-Length: 20\r\n\r\n" +
         "This is a test error";
 
-    var responseStr = requestHandler.handleRequest(new ClientSocketIOMock(""));
-    assertEquals(expectedResponse, new String(responseStr));
+    requestHandler.run();
+    assertEquals(expectedResponse, new String(clientSocketIO.getSentData()));
   }
 }

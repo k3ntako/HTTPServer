@@ -5,17 +5,23 @@ import com.k3ntako.HTTPServer.wrappers.ServerSocketWrapperInterface;
 import java.net.Socket;
 
 public class ServerSocketMock implements ServerSocketWrapperInterface {
-  public boolean acceptCalled;
-  public boolean closeCalled;
+  public boolean acceptCalled = false;
+  public boolean closeCalled = false;
+  private SocketMock mockClientSocket;
+
 
   public ServerSocketMock() {
-    acceptCalled = false;
-    closeCalled = false;
+    this.mockClientSocket = new SocketMock();
   }
+
+  public ServerSocketMock(SocketMock mockClientSocket) {
+    this.mockClientSocket = mockClientSocket;
+  }
+
 
   public Socket accept() {
     acceptCalled = true;
-    return new SocketMock();
+    return this.mockClientSocket;
   }
 
   public void close() {

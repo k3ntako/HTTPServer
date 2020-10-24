@@ -1,10 +1,12 @@
 package com.k3ntako.HTTPServer.fileSystemsIO;
 
-import com.k3ntako.HTTPServer.HTTPError;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URISyntaxException;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -33,7 +35,18 @@ public class FileIO implements FileIOInterface {
       return null;
     }
 
-    return Files.readString(path);
+    ByteBuffer buf;
+    try (
+        var fileInputStream = new FileInputStream(path.toString());
+        var channel = fileInputStream.getChannel();
+        var lock = channel.lock(0, Long.MAX_VALUE, true)
+        // no need to release lock because channel is closed by try with resource
+    ) {
+      buf = ByteBuffer.allocate((int) channel.size());
+      channel.read(buf);
+    }
+
+    return new String(buf.array());
   }
 
 
@@ -43,7 +56,17 @@ public class FileIO implements FileIOInterface {
       return null;
     }
 
-    return Files.readAllBytes(path);
+    ByteBuffer buf;
+    try (
+        var fileInputStream = new FileInputStream(path.toString());
+        var channel = fileInputStream.getChannel();
+        var lock = channel.lock(0, Long.MAX_VALUE, true)
+    ) {
+      buf = ByteBuffer.allocate((int) channel.size());
+      channel.read(buf);
+    }
+
+    return buf.array();
   }
 
   public byte[] getResourceIfExists(String fileName) throws IOException {
@@ -75,8 +98,14 @@ public class FileIO implements FileIOInterface {
       throw new IOException("File does not exist");
     }
 
-    str = System.lineSeparator() + str;
-    Files.write(path, str.getBytes(), StandardOpenOption.APPEND);
+    try (
+        var fileOutputStream = new FileOutputStream(path.toString(), true);
+        var channel = fileOutputStream.getChannel();
+        var lock = channel.lock()
+    ) {
+      str = System.lineSeparator() + str;
+      fileOutputStream.write(str.getBytes());
+    }
   }
 
   public void overwrite(Path path, String str) throws IOException {
@@ -84,7 +113,13 @@ public class FileIO implements FileIOInterface {
       throw new IOException("File does not exist");
     }
 
-    Files.write(path, str.getBytes());
+    try (
+        var fileOutputStream = new FileOutputStream(path.toString());
+        var channel = fileOutputStream.getChannel();
+        var lock = channel.lock()
+    ) {
+      fileOutputStream.write(str.getBytes());
+    }
   }
 
   public void delete(Path path) throws IOException {
@@ -92,7 +127,9 @@ public class FileIO implements FileIOInterface {
       throw new IOException("File does not exist");
     }
 
-    Files.delete(path);
+    try (FileChannel channel = FileChannel.open(path, StandardOpenOption.DELETE_ON_CLOSE)) {
+      // Deletes file on channel close, which is closed by try with resource
+    }
   }
 
   public File[] listFiles(Path path) {

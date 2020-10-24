@@ -8,9 +8,12 @@ public class RouteRegistry {
       "GET", "HEAD", "POST", "PUT", "DELETE",
       "CONNECT", "OPTIONS", "TRACE", "PATCH"
   ));
-  final private ArrayList<RegisteredRoute> routes = new ArrayList<>();
+  private final ArrayList<RegisteredRoute> routes = new ArrayList<>();
+//  private final List<RegisteredRoute> routes;
 
   public void registerRoute(String method, String url, ControllerMethodInterface controller) throws Exception {
+//    var routes = new ArrayList<RegisteredRoute>();
+
     method = method.toUpperCase();
 
     if (!HTTP_METHODS.contains(method)) {
@@ -19,6 +22,8 @@ public class RouteRegistry {
 
     var registeredRoute = new RegisteredRoute(method, url, controller);
     routes.add(registeredRoute);
+
+//    this.routes = Collections.unmodifiableList(routes);
   }
 
   public Route getController(RequestInterface request) {

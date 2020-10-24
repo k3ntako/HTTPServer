@@ -58,6 +58,7 @@ public class Request implements RequestInterface {
   private String readLine() throws IOException {
     var line = clientSocketIO.readLine();
 
+
     if (line == null || line.length() == 0) {
       return null;
     }
